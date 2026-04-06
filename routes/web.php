@@ -10,7 +10,7 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [LoginController::class, 'index']);
-Route::get('/dashboard_pasien', [DashboardController::class, 'index']);
+Route::get('/dashboard_pasien', [Dashboard_pasienController::class, 'index']);
 Route::get('/pasien', [PasienController::class, 'index']);
 Route::view('/home', 'Homepage');
 Route::view('/register', 'Registrasi');
