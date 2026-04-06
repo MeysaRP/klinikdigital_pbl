@@ -1,3 +1,3 @@
 <div>
-    <!-- The whole future lies in uncertainty: live immediately. - Seneca -->
+    <p>SELAMAT DATANG DI REGISTRASI KLINIK DIGITAL</p>
 </div>

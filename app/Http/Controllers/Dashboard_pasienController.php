@@ -8,6 +8,6 @@ class Dashboard_pasienController extends Controller
 {
     public function index()
     {
-        return view('dashboard');
+        return view('dashboard_pasien');
     }
 }

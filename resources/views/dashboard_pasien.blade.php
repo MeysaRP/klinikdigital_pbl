@@ -1,2 +1,2 @@
-<h1>Dashboard Klinik Digital</h1>
+<h1>Dashboard pasien Klinik Digital</h1>
 <p>Selamat datang di sistem klinik.</p>

@@ -1,3 +1,3 @@
 <div>
-    <!-- We must ship. - Taylor Otwell -->
+    <p>SELAMAT DATANG DI HOMEPAGE KLINIK DIGITAL</p>
 </div>
