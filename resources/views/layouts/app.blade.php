@@ -24,7 +24,7 @@
 
 <!-- Footer -->
 <footer class="bg-green-200 mt-10 py-4 text-center text-sm text-green-900">
-    © 2026 Klinik Digital
+    © 2026 Politeknik Negeri Batam - Projek PBL IFpagi2A-02
 </footer>
 
 </body>
