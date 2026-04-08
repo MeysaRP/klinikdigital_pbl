@@ -1,52 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-    <title>Klinik Digital</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        body { background-color: #f5f7fa; }
-        .sidebar {
-            height: 100vh;
-            background: #0d6efd;
-            color: white;
-            padding: 20px;
-        }
-        .sidebar a {
-            color: white;
-            display: block;
-            margin: 10px 0;
-            text-decoration: none;
-        }
-        .sidebar a:hover {
-            background: rgba(255,255,255,0.2);
-            padding-left: 10px;
-            border-radius: 5px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>MediTech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-green-50">
 
-<div class="container-fluid">
-    <div class="row">
-
-        <!-- Sidebar -->
-        <div class="col-md-2 sidebar">
-            <h4>Klinik</h4>
-            <a href="/dashboard_admin">Admin</a>
-            <a href="/dashboard_dokter">Dokter</a>
-        </div>
-
-        <!-- Content -->
-        <div class="col-md-10 p-4">
-            @yield('content')
-        </div>
-
+<!-- Navbar -->
+<nav class="bg-green-200 px-6 py-3 flex justify-between items-center shadow-sm">
+    <h1 class="font-semibold text-lg text-green-900">MediTech</h1>
+    <div class="flex gap-4 text-green-900">
+        <a href="/" class="hover:underline">Beranda</a>
+        <a href="/registrasi" class="hover:underline">Registrasi</a>
+        <a href="/login" class="bg-green-400 px-4 py-1 rounded-full text-white">
+            Login
+        </a>
     </div>
-</div>
+</nav>
+
+<!-- Content -->
+@yield('content')
+
+<!-- Footer -->
+<footer class="bg-green-200 mt-10 py-4 text-center text-sm text-green-900">
+    © 2026 Klinik Digital
+</footer>
 
 </body>
 </html>

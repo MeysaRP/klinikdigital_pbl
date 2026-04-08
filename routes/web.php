@@ -1,18 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\PasienController;
-use App\Http\Controllers\Dashboard_pasienController;
+use App\Http\Controllers\loginController;
+use App\Http\Controllers\pasienController;
+use App\Http\Controllers\dashboard_pasienController;
+use App\Http\Controllers\homepageController; 
 
-Route::get('/', function () {
-    return view('welcome');
+// Homepage
+Route::get('/', [homepageController::class, 'index']); 
+
+// Login
+Route::get('/login', [loginController::class, 'index']);
+
+// Registrasi
+Route::get('/registrasi', function () {
+    return view('registrasi');
 });
 
-Route::get('/login', [LoginController::class, 'index']);
-Route::get('/dashboard_pasien', [Dashboard_pasienController::class, 'index']);
-Route::get('/pasien', [PasienController::class, 'index']);
-Route::view('/Homepage', 'Homepage');
-Route::view('/Registrasi', 'Registrasi');
+// Pasien
+Route::get('/pasien', [pasienController::class, 'index']);
+
+// Dashboard Pasien
+Route::get('/dashboard_pasien', [dashboard_pasienController::class, 'index']);
+
+// Dashboard Admin
 Route::view('/dashboard_admin', 'dashboard_admin');
+
+// Dashboard Dokter
 Route::view('/dashboard_dokter', 'dashboard_dokter');
