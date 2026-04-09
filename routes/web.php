@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\pasienController;
-use App\Http\Controllers\dashboard_pasienController;
+use App\Http\Controllers\DashboardPasienController;
 use App\Http\Controllers\homepageController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardDokterController;
@@ -23,7 +23,7 @@ Route::get('/registrasi', function () {
 Route::get('/pasien', [pasienController::class, 'index']);
 
 // Dashboard Pasien
-Route::get('/dashboard_pasien', [dashboard_pasienController::class, 'index']);
+Route::get('/dashboard_pasien', [DashboardPasienController::class, 'index']);
 
 // Dashboard Admin
 Route::get('/dashboard/admin', [DashboardAdminController::class, 'index'])
