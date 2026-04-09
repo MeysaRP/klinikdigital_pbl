@@ -1,18 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\loginController;
-use App\Http\Controllers\pasienController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PasienController;
 use App\Http\Controllers\DashboardPasienController;
-use App\Http\Controllers\homepageController;
+use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardDokterController;
 
 // Homepage
-Route::get('/', [homepageController::class, 'index']);
+Route::get('/', [HomepageController::class, 'index']);
 
 // Login
-Route::get('/login', [loginController::class, 'index']);
+Route::get('/login', [LoginController::class, 'index']);
 
 // Registrasi
 Route::get('/registrasi', function () {
@@ -20,7 +20,7 @@ Route::get('/registrasi', function () {
 });
 
 // Pasien
-Route::get('/pasien', [pasienController::class, 'index']);
+Route::get('/pasien', [PasienController::class, 'index']);
 
 // Dashboard Pasien
 Route::get('/dashboard_pasien', [DashboardPasienController::class, 'index']);
