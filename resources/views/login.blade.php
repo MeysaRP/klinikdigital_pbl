@@ -7,7 +7,7 @@
 </head>
 
 <body class="h-screen bg-cover bg-center flex items-center justify-center"
-      style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef');"
+      style="background-image: url('https://images.unsplash.com/photo-1629909613654-28e377c37b09');"
 
     <-- Overlay gelap -->
     <div class="absolute inset-0 bg-black/40"></div>
