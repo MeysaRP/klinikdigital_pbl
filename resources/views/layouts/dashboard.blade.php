@@ -16,10 +16,9 @@
 
         <ul class="space-y-3">
             <li class="bg-green-400 text-white p-2 rounded">Dashboard</li>
-            <li class="hover:bg-green-200 p-2 rounded">Booking Jadwal</li>
             <li class="hover:bg-green-200 p-2 rounded">Data Dokter</li>
             <li class="hover:bg-green-200 p-2 rounded">Data Pasien</li>
-            <li class="hover:bg-green-200 p-2 rounded">Resep</li>
+            <li class="hover:bg-green-200 p-2 rounded">Data Jadwal</li>
         </ul>
     </div>
 
