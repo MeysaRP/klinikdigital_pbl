@@ -26,16 +26,25 @@
     <div class="flex-1 flex flex-col">
 
         <!-- TOPBAR -->
-        <div class="bg-green-200 p-4 flex justify-between items-center shadow-sm">
-            <h2 class="text-xl font-semibold text-green-900">Dashboard Pasien</h2>
+        <div class="bg-green-200 px-6 py-4 flex justify-between items-center shadow-sm">
 
+            <h2 class="text-xl font-semibold text-green-900">
+                Dashboard Pasien
+            </h2>
+
+            <!-- HALO + AVATAR -->
             <div class="flex items-center gap-3">
-                <span class="text-green-900">Halo, Irennesa</span>
-                <img
-                    src="https://ui-avatars.com/api/?name=Haechan&background=16a34a&color=fff"
-                    class="w-8 h-8 rounded-full"
-                >
+
+                <p class="text-sm text-gray-700">
+                    Halo, <span class="font-semibold text-green-800">Andi Pratama Rayhan</span>
+                </p>
+
+                <div class="w-9 h-9 bg-green-500 hover:bg-green-600 transition text-white rounded-full flex items-center justify-center text-sm font-semibold shadow-sm">
+                    AR
+                </div>
+
             </div>
+
         </div>
 
         <!-- CONTENT -->

@@ -14,6 +14,8 @@ Route::get('/', [homepageController::class, 'index']);
 
 // Login
 Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.process');
+
 // Registrasi 
 Route::get('/registrasi', [RegistrasiController::class, 'index'])->name('registrasi');
 Route::post('/registrasi', [RegistrasiController::class, 'store'])->name('registrasi.store');
