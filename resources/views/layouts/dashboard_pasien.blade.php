@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Dashboard Pasien</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -16,9 +16,9 @@
 
         <ul class="space-y-3">
             <li class="bg-green-400 text-white p-2 rounded">Dashboard</li>
-            <li class="hover:bg-green-200 p-2 rounded">Data Dokter</li>
-            <li class="hover:bg-green-200 p-2 rounded">Data Pasien</li>
-            <li class="hover:bg-green-200 p-2 rounded">Data Jadwal</li>
+            <li class="hover:bg-green-200 p-2 rounded">Jadwal Booking</li>
+            <li class="hover:bg-green-200 p-2 rounded">Resep Obat</li>
+            <li class="hover:bg-green-200 p-2 rounded">Profil</li>
         </ul>
     </div>
 
@@ -27,15 +27,13 @@
 
         <!-- TOPBAR -->
         <div class="bg-green-200 p-4 flex justify-between items-center shadow-sm">
-            <h2 class="text-xl font-semibold text-green-900">Dashboard</h2>
+            <h2 class="text-xl font-semibold text-green-900">Dashboard Pasien</h2>
 
             <div class="flex items-center gap-3">
-                <span class="text-green-900">Halo, Admin</span>
-
+                <span class="text-green-900">Halo, Irennesa</span>
                 <img
-                    src="https://ui-avatars.com/api/?name=Admin&background=16a34a&color=fff"
+                    src="https://ui-avatars.com/api/?name=Haechan&background=16a34a&color=fff"
                     class="w-8 h-8 rounded-full"
-                    alt="profile"
                 >
             </div>
         </div>

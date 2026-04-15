@@ -17,8 +17,8 @@
         <ul class="space-y-3">
             <li class="bg-green-400 text-white p-2 rounded">Dashboard</li>
             <li class="hover:bg-green-200 p-2 rounded">Jadwal Praktik</li>
-            <li class="hover:bg-green-200 p-2 rounded">Booking Pasien</li>
             <li class="hover:bg-green-200 p-2 rounded">Daftar Pasien</li>
+            <li class="hover:bg-green-200 p-2 rounded">Profil</li>
         </ul>
     </div>
 
@@ -30,7 +30,7 @@
             <h2 class="text-xl font-semibold text-green-900">Dashboard Dokter</h2>
 
             <div class="flex items-center gap-3">
-                <span class="text-green-900">Halo, Dr. Budi</span>
+                <span class="text-green-900">Halo, Dr. Sarah Wijaya</span>
                 <img
                     src="https://ui-avatars.com/api/?name=Dr+Budi&background=16a34a&color=fff"
                     class="w-8 h-8 rounded-full"
