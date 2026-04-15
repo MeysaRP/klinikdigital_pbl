@@ -13,9 +13,8 @@ use App\Http\Controllers\RegistrasiController;
 Route::get('/', [homepageController::class, 'index']);
 
 // Login
-Route::get('/login', [LoginController::class, 'index']);
-
-// Registrasi (MVC)
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+// Registrasi 
 Route::get('/registrasi', [RegistrasiController::class, 'index'])->name('registrasi');
 Route::post('/registrasi', [RegistrasiController::class, 'store'])->name('registrasi.store');
 
