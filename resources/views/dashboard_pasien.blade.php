@@ -37,10 +37,9 @@
                 <!-- LIST JADWAL -->
                 <div class="divide-y divide-gray-100">
 
-                    <!-- ITEM 1 (Akan Datang - PERBAIKAN TOMBOL) -->
+                    <!-- ITEM 1 (Akan Datang) -->
                     <div class="p-5 hover:bg-gray-50 transition-colors">
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
-                            <!-- Kiri: Info Utama -->
                             <div class="flex-1">
                                 <div class="flex items-center gap-2 mb-2">
                                     <span class="px-2 py-1 text-xs font-bold rounded bg-blue-100 text-blue-700">Akan Datang</span>
@@ -52,7 +51,6 @@
                                 <p class="text-xs text-gray-500 italic mt-1">Keluhan: Demam tinggi</p>
                             </div>
 
-                            <!-- Kanan: Tombol Aksi (GAYA OUTLINE AGAR KELIHATAN) -->
                             <div class="flex-shrink-0">
                                 <button class="w-full md:w-auto px-5 py-2 text-sm font-bold text-[#09637E] bg-white border-2 border-[#09637E] rounded-lg hover:bg-[#09637E] hover:text-white shadow-sm transition-all">
                                     Lihat Detail
@@ -75,7 +73,6 @@
                                 <p class="text-xs text-gray-500 italic mt-1">Keluhan: Sakit kepala</p>
                             </div>
 
-                            <!-- Kanan: Tombol Batalkan -->
                             <div class="flex-shrink-0">
                                 <button class="w-full md:w-auto px-5 py-2 text-sm font-bold text-red-600 bg-white border-2 border-red-300 rounded-lg hover:bg-red-50 transition-colors">
                                     Batalkan
@@ -84,12 +81,13 @@
                         </div>
                     </div>
 
-                    <!-- ITEM 3 (Selesai) -->
-                    <div class="p-5 bg-gray-50 opacity-60">
+                    <!-- ITEM 3 (Selesai - WARNA DIUBAH JADI HIJAU) -->
+                    <div class="p-5 bg-gray-50 opacity-80 hover:opacity-100 transition-opacity">
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
                             <div class="flex-1">
                                 <div class="flex items-center gap-2 mb-2">
-                                    <span class="px-2 py-1 text-xs font-bold rounded bg-gray-200 text-gray-600">Selesai</span>
+                                    <!-- Diubah jadi Hijau -->
+                                    <span class="px-2 py-1 text-xs font-bold rounded bg-green-100 text-green-700">Selesai</span>
                                 </div>
                                 <h4 class="font-bold text-gray-900 text-lg">Dr. Andi Setiawan</h4>
                                 <p class="text-sm text-gray-600 mt-1">
@@ -120,7 +118,6 @@
                     <p class="text-sm text-gray-500">Pasien Aktif</p>
                 </div>
 
-                <!-- Data Profil (Alamat Sejajar) -->
                 <div class="text-sm space-y-3 text-gray-600 border-t border-gray-100 pt-6">
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-500">Nama</span>
@@ -142,14 +139,14 @@
                         <span class="font-medium text-gray-500">No. HP</span>
                         <span class="text-gray-900 font-semibold">0812-3456-7890</span>
                     </div>
-                    <!-- Alamat Sejajar (Samping) -->
                     <div class="flex justify-between items-start">
                         <span class="font-medium text-gray-500">Alamat</span>
                         <span class="text-gray-900 font-semibold text-right ml-2">Pekanbaru, Riau</span>
                     </div>
                 </div>
 
-                <button class="mt-6 w-full bg-white border-2 border-[#09637E] text-[#09637E] hover:bg-[#09637E] hover:text-white font-semibold py-2.5 rounded-xl transition-colors shadow-sm">
+                <!-- TOMBOL DIUBAH JADI SOLID (TIDAK PUTIH LAGI) -->
+                <button class="mt-6 w-full bg-[#09637E] text-white hover:bg-[#074d61] font-semibold py-2.5 rounded-xl transition-colors shadow-sm">
                     Ubah Profil
                 </button>
 
