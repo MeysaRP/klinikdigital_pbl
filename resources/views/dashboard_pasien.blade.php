@@ -2,121 +2,161 @@
 
 @section('content')
 
-<div class="p-6 space-y-6">
+<div class="space-y-6">
 
     <!-- HEADER -->
-    <div>
-        <h2 class="text-2xl font-bold text-gray-800">
-            Selamat datang, Andi Pratama Rayhan!
-        </h2>
-        <p class="text-sm text-gray-500">
-            Kelola kesehatan Anda dengan mudah
-        </p>
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <h2 class="text-2xl font-bold text-gray-800">Selamat datang kembali, Andi!</h2>
+        <p class="text-gray-500 mt-1">Kelola jadwal pemeriksaan kesehatan Anda di sini.</p>
     </div>
 
-    <!-- GRID -->
-    <div class="grid grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- LEFT -->
-        <div class="col-span-2 space-y-6">
+        <!-- LEFT: JADWAL -->
+        <div class="lg:col-span-2 space-y-6">
 
-            <!-- PEMESANAN -->
-            <div class="bg-white border rounded-xl p-5">
-                <h3 class="font-semibold text-gray-800 mb-4">
-                    Pemesanan Jadwal
-                </h3>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
-                <div class="space-y-3 text-sm">
-
-                    <div class="border p-3 rounded flex justify-between items-center">
-                        <div>
-                            <p class="font-semibold">22 Mei 2025</p>
-                            <p class="text-gray-500">Dr. Sarah Wijaya</p>
+                <!-- Header Filter -->
+                <div class="p-6 border-b border-gray-100 bg-gray-50/50">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <h3 class="font-bold text-lg text-gray-800">Jadwal Pemeriksaan Saya</h3>
+                        <div class="flex gap-2 items-center">
+                            <select class="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg p-2.5">
+                                <option>Semua Status</option>
+                                <option>Menunggu</option>
+                                <option>Selesai</option>
+                            </select>
+                            <button class="p-2.5 bg-[#09637E] text-white rounded-lg">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </button>
                         </div>
-                        <span class="bg-gray-200 px-3 py-1 rounded text-xs">Menunggu</span>
-                        <button class="bg-black text-white px-3 py-1 rounded text-xs">
-                            Lihat
-                        </button>
+                    </div>
+                </div>
+
+                <!-- LIST JADWAL -->
+                <div class="divide-y divide-gray-100">
+
+                    <!-- ITEM 1 (Akan Datang - PERBAIKAN TOMBOL) -->
+                    <div class="p-5 hover:bg-gray-50 transition-colors">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4">
+                            <!-- Kiri: Info Utama -->
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="px-2 py-1 text-xs font-bold rounded bg-blue-100 text-blue-700">Akan Datang</span>
+                                </div>
+                                <h4 class="font-bold text-gray-900 text-lg">Dr. Sarah Wijaya</h4>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <span class="font-bold text-[#09637E]">22 Mei 2025</span> &bull; 08:00 - 08:30 WIB
+                                </p>
+                                <p class="text-xs text-gray-500 italic mt-1">Keluhan: Demam tinggi</p>
+                            </div>
+
+                            <!-- Kanan: Tombol Aksi (GAYA OUTLINE AGAR KELIHATAN) -->
+                            <div class="flex-shrink-0">
+                                <button class="w-full md:w-auto px-5 py-2 text-sm font-bold text-[#09637E] bg-white border-2 border-[#09637E] rounded-lg hover:bg-[#09637E] hover:text-white shadow-sm transition-all">
+                                    Lihat Detail
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="border p-3 rounded flex justify-between items-center">
-                        <div>
-                            <p class="font-semibold">15 Januari 2024</p>
-                            <p class="text-gray-500">Dr. Budi Hartono</p>
+                    <!-- ITEM 2 (Menunggu) -->
+                    <div class="p-5 hover:bg-gray-50 transition-colors">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="px-2 py-1 text-xs font-bold rounded bg-yellow-100 text-yellow-700">Menunggu Antrian</span>
+                                </div>
+                                <h4 class="font-bold text-gray-900 text-lg">Dr. Budi Hartono</h4>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <span class="font-bold text-[#09637E]">29 Oktober 2025</span> &bull; 10:00 - 10:30 WIB
+                                </p>
+                                <p class="text-xs text-gray-500 italic mt-1">Keluhan: Sakit kepala</p>
+                            </div>
+
+                            <!-- Kanan: Tombol Batalkan -->
+                            <div class="flex-shrink-0">
+                                <button class="w-full md:w-auto px-5 py-2 text-sm font-bold text-red-600 bg-white border-2 border-red-300 rounded-lg hover:bg-red-50 transition-colors">
+                                    Batalkan
+                                </button>
+                            </div>
                         </div>
-                        <span class="bg-green-200 px-3 py-1 rounded text-xs">Selesai</span>
-                        <button class="bg-black text-white px-3 py-1 rounded text-xs">
-                            Lihat
-                        </button>
+                    </div>
+
+                    <!-- ITEM 3 (Selesai) -->
+                    <div class="p-5 bg-gray-50 opacity-60">
+                        <div class="flex flex-col md:flex-row md:items-center gap-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="px-2 py-1 text-xs font-bold rounded bg-gray-200 text-gray-600">Selesai</span>
+                                </div>
+                                <h4 class="font-bold text-gray-900 text-lg">Dr. Andi Setiawan</h4>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    <span class="font-semibold text-gray-700">15 Januari 2024</span> &bull; 14:00 - 14:30 WIB
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <button class="text-sm text-[#09637E] font-semibold hover:underline">
+                                    Lihat Rekam Medis
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
             </div>
-
-            <!-- RIWAYAT -->
-            <div class="bg-white border rounded-xl p-5">
-                <h3 class="font-semibold text-gray-800 mb-4">
-                    Riwayat Pemeriksaan
-                </h3>
-
-                <div class="space-y-3 text-sm">
-
-                    <div class="border p-3 rounded flex justify-between">
-                        <span>Demam dan Batuk</span>
-                        <button class="bg-black text-white px-3 py-1 rounded text-xs">
-                            Detail
-                        </button>
-                    </div>
-
-                    <div class="border p-3 rounded flex justify-between">
-                        <span>Sakit Kepala</span>
-                        <button class="bg-black text-white px-3 py-1 rounded text-xs">
-                            Detail
-                        </button>
-                    </div>
-
-                    <div class="border p-3 rounded flex justify-between">
-                        <span>Nyeri Perut</span>
-                        <button class="bg-black text-white px-3 py-1 rounded text-xs">
-                            Detail
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
 
-        <div class="bg-white border rounded-xl p-6">
+        <!-- RIGHT: PROFIL -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
 
-            <h3 class="font-semibold text-gray-800 mb-6">
-                Profil
-            </h3>
-
-            <div class="flex justify-center mb-6">
-                <div class="w-20 h-20 bg-green-500 text-white flex items-center justify-center rounded-full text-xl font-bold shadow">
-                    AR
+                <div class="flex flex-col items-center text-center mb-6">
+                    <div class="w-24 h-24 rounded-full bg-[#09637E] flex items-center justify-center text-white text-3xl font-bold shadow-lg border-4 border-white mb-4">
+                        AR
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900">Andi Pratama Rayhan</h3>
+                    <p class="text-sm text-gray-500">Pasien Aktif</p>
                 </div>
+
+                <!-- Data Profil (Alamat Sejajar) -->
+                <div class="text-sm space-y-3 text-gray-600 border-t border-gray-100 pt-6">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-gray-500">Nama</span>
+                        <span class="text-gray-900 font-semibold">Andi Pratama Rayhan</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-gray-500">Tanggal Lahir</span>
+                        <span class="text-gray-900 font-semibold">15 Maret 2001</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-gray-500">Umur</span>
+                        <span class="text-gray-900 font-semibold">23 Tahun</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-gray-500">Jenis Kelamin</span>
+                        <span class="text-gray-900 font-semibold">Laki-laki</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium text-gray-500">No. HP</span>
+                        <span class="text-gray-900 font-semibold">0812-3456-7890</span>
+                    </div>
+                    <!-- Alamat Sejajar (Samping) -->
+                    <div class="flex justify-between items-start">
+                        <span class="font-medium text-gray-500">Alamat</span>
+                        <span class="text-gray-900 font-semibold text-right ml-2">Pekanbaru, Riau</span>
+                    </div>
+                </div>
+
+                <button class="mt-6 w-full bg-white border-2 border-[#09637E] text-[#09637E] hover:bg-[#09637E] hover:text-white font-semibold py-2.5 rounded-xl transition-colors shadow-sm">
+                    Ubah Profil
+                </button>
+
             </div>
-
-            <!-- DATA -->
-            <div class="text-sm space-y-3 text-gray-700">
-                <p><span class="font-semibold">Nama:</span> Andi Pratama Rayhan</p>
-                <p><span class="font-semibold">Tanggal Lahir:</span> 15 Maret 2001</p>
-                <p><span class="font-semibold">Umur:</span> 23 Tahun</p>
-                <p><span class="font-semibold">Jenis Kelamin:</span> Laki-laki</p>
-                <p><span class="font-semibold">No HP:</span> 0812-3456-7890</p>
-                <p><span class="font-semibold">Alamat:</span> Pekanbaru</p>
-            </div>
-
-            <button class="mt-6 w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded text-sm shadow-sm hover:shadow-md">
-                Ubah Profil
-            </button>
-
         </div>
 
     </div>
-
 </div>
 
 @endsection

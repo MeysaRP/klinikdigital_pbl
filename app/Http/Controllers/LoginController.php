@@ -55,4 +55,17 @@ class LoginController extends Controller
 
         return back()->with('error', 'Username atau password salah!');
     }
+
+    // TAMBAHKAN FUNGSI INI
+    public function logout(Request $request)
+    {
+        Auth::logout(); // Proses logout user
+
+        // Agar session lama tidak bisa dipakai lagi (keamanan)
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Kembali ke halaman utama
+        return redirect('/');
+    }
 }

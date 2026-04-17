@@ -16,7 +16,10 @@ Route::get('/', [homepageController::class, 'index']);
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.process');
 
-// Registrasi 
+// Logout
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Registrasi
 Route::get('/registrasi', [RegistrasiController::class, 'index'])->name('registrasi');
 Route::post('/registrasi', [RegistrasiController::class, 'store'])->name('registrasi.store');
 
