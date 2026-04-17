@@ -2,170 +2,139 @@
 
 @section('content')
 
-<div class="max-w-7xl mx-auto space-y-8">
+<div class="space-y-6">
 
     <!-- HEADER -->
-    <div class="bg-white border rounded-2xl p-6 shadow-sm">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
         <h2 class="text-2xl font-bold text-gray-800">
             Selamat datang, Dr. Sarah Wijaya
         </h2>
-        <p class="text-sm text-gray-500 mt-1">
-            Kelola jadwal, periksa pasien, dan berikan pelayanan terbaik.
+        <p class="text-gray-500 mt-1">
+            Kelola jadwal praktik dan pasien Anda hari ini
         </p>
     </div>
 
-    <!-- MAIN GRID -->
-    <div class="grid grid-cols-12 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- LEFT CONTENT -->
-        <div class="col-span-8 space-y-6">
+        <!-- LEFT: JADWAL -->
+        <div class="lg:col-span-2 space-y-6">
 
-            <!-- JADWAL -->
-            <div class="bg-white border rounded-2xl p-6 shadow-sm">
-                <div class="flex justify-between items-center mb-5">
-                    <h3 class="font-semibold text-gray-800 text-lg">Jadwal Praktik</h3>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+
+                <!-- HEADER -->
+                <div class="p-6 border-b border-gray-100 bg-gray-50/50">
+                    <h3 class="font-bold text-lg text-gray-800">
+                        Jadwal Praktik Hari Ini
+                    </h3>
                 </div>
 
-                <div class="overflow-hidden rounded-xl border">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 text-gray-500">
-                            <tr>
-                                <th class="py-3 px-4 text-left">Waktu</th>
-                                <th class="px-4 text-left">Pasien</th>
-                                <th class="px-4 text-left">Keluhan</th>
-                                <th class="px-4 text-left">Status</th>
-                                <th class="px-4 text-right">Aksi</th>
-                            </tr>
-                        </thead>
+                <!-- LIST -->
+                <div class="divide-y divide-gray-100">
 
-                        <tbody class="divide-y">
-                            <tr class="hover:bg-gray-50">
-                                <td class="py-3 px-4">09:00</td>
-                                <td class="px-4">Budi Santoso</td>
-                                <td class="px-4">Demam & Batuk</td>
-                                <td class="px-4">
-                                    <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-xs">
-                                        Selesai
-                                    </span>
-                                </td>
-                                <td class="px-4 text-right text-blue-500">Lihat</td>
-                            </tr>
+                    <!-- ITEM -->
+                    <div class="p-5 hover:bg-gray-50 transition">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-500">09:00</p>
+                                <h4 class="font-bold text-gray-900">Budi Santoso</h4>
+                                <p class="text-xs text-gray-500">Demam & Batuk</p>
+                            </div>
 
-                            <tr class="hover:bg-gray-50">
-                                <td class="py-3 px-4">10:30</td>
-                                <td class="px-4">Ani Lestari</td>
-                                <td class="px-4">Sakit Kepala</td>
-                                <td class="px-4">
-                                    <span class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-xs">
-                                        Berlangsung
-                                    </span>
-                                </td>
-                                <td class="px-4 text-right text-blue-500">Lihat</td>
-                            </tr>
-
-                            <tr class="hover:bg-gray-50">
-                                <td class="py-3 px-4">13:00</td>
-                                <td class="px-4">Citra Dewi</td>
-                                <td class="px-4">Nyeri Perut</td>
-                                <td class="px-4">
-                                    <span class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs">
-                                        Menunggu
-                                    </span>
-                                </td>
-                                <td class="px-4 text-right">
-                                    <button class="bg-green-500 text-white px-3 py-1 rounded-lg text-xs">
-                                        Isi Rekam
+                            <div class="text-right">
+                                <span class="px-2 py-1 text-xs font-bold rounded bg-green-100 text-green-700">
+                                    Selesai
+                                </span>
+                                <div class="mt-2">
+                                    <button class="text-sm text-[#09637E] font-semibold hover:underline">
+                                        Lihat
                                     </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="text-right mt-4 text-sm text-green-600 cursor-pointer">
-                    Lihat semua →
-                </div>
-            </div>
-
-            <!-- PASIEN -->
-            <div class="bg-white border rounded-2xl p-6 shadow-sm">
-                <div class="flex justify-between items-center mb-5">
-                    <h3 class="font-semibold text-gray-800 text-lg">Daftar Pasien</h3>
-
-                    <div class="flex gap-2">
-                        <input type="text"
-                            placeholder="Cari pasien..."
-                            class="border rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-green-400 outline-none">
-
-                        <button class="bg-gray-100 hover:bg-gray-200 px-4 rounded-lg text-sm">
-                            Filter
-                        </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="overflow-hidden rounded-xl border">
-                    <table class="w-full text-sm">
-                        <thead class="bg-gray-50 text-gray-500">
-                            <tr>
-                                <th class="py-3 px-4 text-left">Nama</th>
-                                <th class="px-4 text-left">Usia</th>
-                                <th class="px-4 text-left">Keluhan</th>
-                                <th class="px-4 text-right">Aksi</th>
-                            </tr>
-                        </thead>
+                    <!-- ITEM -->
+                    <div class="p-5 hover:bg-gray-50 transition">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-500">10:30</p>
+                                <h4 class="font-bold text-gray-900">Ani Lestari</h4>
+                                <p class="text-xs text-gray-500">Sakit Kepala</p>
+                            </div>
 
-                        <tbody class="divide-y">
-                            <tr class="hover:bg-gray-50">
-                                <td class="py-3 px-4">Budi Santoso</td>
-                                <td class="px-4">30</td>
-                                <td class="px-4">Demam</td>
-                                <td class="px-4 text-right text-blue-500">Detail</td>
-                            </tr>
+                            <div class="text-right">
+                                <span class="px-2 py-1 text-xs font-bold rounded bg-yellow-100 text-yellow-700">
+                                    Berlangsung
+                                </span>
+                                <div class="mt-2">
+                                    <button class="text-sm text-[#09637E] font-semibold hover:underline">
+                                        Lihat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                            <tr class="hover:bg-gray-50">
-                                <td class="py-3 px-4">Ani Lestari</td>
-                                <td class="px-4">28</td>
-                                <td class="px-4">Sakit Kepala</td>
-                                <td class="px-4 text-right text-blue-500">Detail</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <!-- ITEM -->
+                    <div class="p-5 hover:bg-gray-50 transition">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-sm text-gray-500">13:00</p>
+                                <h4 class="font-bold text-gray-900">Citra Dewi</h4>
+                                <p class="text-xs text-gray-500">Nyeri Perut</p>
+                            </div>
 
-                <div class="text-right mt-4 text-sm text-green-600 cursor-pointer">
-                    Lihat semua →
+                            <div class="text-right">
+                                <span class="px-2 py-1 text-xs font-bold rounded bg-gray-200 text-gray-600">
+                                    Menunggu
+                                </span>
+                                <div class="mt-2">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
         </div>
 
-        <!-- RIGHT -->
-        <div class="col-span-4">
-            <div class="bg-white border rounded-2xl p-6 shadow-sm sticky top-6">
-                <h3 class="font-semibold text-gray-800 mb-6">Profil</h3>
+        <!-- RIGHT: PROFIL -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
 
-                <div class="flex flex-col items-center mb-6">
-                    <div class="w-20 h-20 bg-green-500 text-white flex items-center justify-center rounded-full text-xl font-bold shadow">
+                <div class="flex flex-col items-center text-center mb-6">
+                    <div class="w-24 h-24 rounded-full bg-[#09637E] flex items-center justify-center text-white text-3xl font-bold shadow-lg border-4 border-white mb-4">
                         DS
                     </div>
-
-                    <p class="mt-3 font-semibold text-gray-800">Dr. Sarah Wijaya</p>
-                    <p class="text-sm text-gray-500">Spesialis Penyakit Dalam</p>
+                    <h3 class="text-xl font-bold text-gray-900">Dr. Sarah Wijaya</h3>
+                    <p class="text-sm text-gray-500">Dokter</p>
                 </div>
 
-                <div class="text-sm space-y-3 text-gray-600">
-                    <p><strong>No. SIP:</strong> SIP.1234/2020</p>
-                    <p><strong>No. HP:</strong> 0812-3456-7890</p>
-                    <p><strong>Alamat:</strong> Pekanbaru</p>
+                <div class="text-sm space-y-3 text-gray-600 border-t border-gray-100 pt-6">
+                    <div class="flex justify-between">
+                        <span>No. SIP</span>
+                        <span class="font-semibold text-gray-900">SIP123456</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>No. HP</span>
+                        <span class="font-semibold text-gray-900">081234567890</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Alamat</span>
+                        <span class="font-semibold text-gray-900">Batam</span>
+                    </div>
                 </div>
 
-                <button class="mt-6 w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg">
-                    Edit Profil
+                <button class="mt-6 w-full bg-[#09637E] text-white py-2.5 rounded-xl hover:bg-[#074d61] transition">
+                    Ubah Profil
                 </button>
+
             </div>
         </div>
 
     </div>
+
 </div>
 
 @endsection

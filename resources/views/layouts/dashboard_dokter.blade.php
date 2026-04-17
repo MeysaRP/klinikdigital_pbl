@@ -2,55 +2,132 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Dokter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Dokter - MediTech</title>
+
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #09637E; border-radius: 3px; }
+    </style>
 </head>
 
-<body class="bg-green-50 flex flex-col min-h-screen">
+<body class="bg-gray-100 antialiased">
 
-<div class="flex flex-1">
+<div class="flex h-screen overflow-hidden">
 
     <!-- SIDEBAR -->
-    <div class="w-64 bg-green-300 p-5 text-green-900">
-        <h1 class="text-lg font-bold mb-6">MediTech</h1>
+   <aside class="fixed top-0 left-0 w-64 h-full bg-white border-r border-gray-200 p-5 flex flex-col">
 
-        <ul class="space-y-3">
-            <li class="bg-green-400 text-white p-2 rounded">Dashboard</li>
-            <li class="hover:bg-green-200 p-2 rounded">Jadwal Praktik</li>
-            <li class="hover:bg-green-200 p-2 rounded">Daftar Pasien</li>
-            <li class="hover:bg-green-200 p-2 rounded">Profil</li>
-        </ul>
+    <!-- LOGO -->
+    <h1 class="text-xl font-bold text-[#09637E] mb-8">
+        MediTech
+    </h1>
+
+    <!-- MENU -->
+    <ul class="space-y-2 text-sm flex-1">
+
+        <!-- Dashboard -->
+        <li>
+            <a href="#" class="flex items-center gap-3 p-3 rounded-xl bg-[#09637E] text-white font-semibold">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                </svg>
+                Dashboard
+            </a>
+        </li>
+
+        <!-- Jadwal -->
+        <li>
+            <a href="#" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-gray-100">
+                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/>
+                </svg>
+                Jadwal Praktik
+            </a>
+        </li>
+
+        <!-- Pasien -->
+        <li>
+            <a href="#" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-gray-100">
+                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+                </svg>
+                Daftar Pasien
+            </a>
+        </li>
+
+        <!-- Profil -->
+        <li>
+            <a href="#" class="flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-gray-100">
+                <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
+                </svg>
+                Profil
+            </a>
+        </li>
+
+    </ul>
+
+    <!-- LOGOUT -->
+    <div class="pt-4 border-t border-gray-100">
+        <button class="flex items-center gap-3 w-full p-3 text-red-600 rounded-xl hover:bg-red-50 text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            Logout
+        </button>
     </div>
+</aside>
 
     <!-- MAIN -->
-    <div class="flex-1 flex flex-col">
+    <div class="flex flex-col flex-1 ml-64">
 
         <!-- TOPBAR -->
-        <div class="bg-green-200 p-4 flex justify-between items-center shadow-sm">
-            <h2 class="text-xl font-semibold text-green-900">Dashboard Dokter</h2>
+        <header class="sticky top-0 z-30 bg-white border-b border-gray-200">
+            <div class="px-6 py-3 flex items-center justify-between">
 
-            <div class="flex items-center gap-3">
-                <span class="text-green-900">Halo, Dr. Sarah Wijaya</span>
-                <img
-                    src="https://ui-avatars.com/api/?name=Dr+Budi&background=16a34a&color=fff"
-                    class="w-8 h-8 rounded-full"
-                >
+                <h2 class="text-xl font-bold text-gray-800">
+                    Dashboard Dokter
+                </h2>
+
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-semibold text-gray-900">
+                            Dr. Sarah Wijaya
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            Dokter
+                        </p>
+                    </div>
+
+                    <!-- AVATAR TANPA ICON -->
+                    <div class="w-10 h-10 rounded-full bg-[#09637E] text-white flex items-center justify-center font-bold shadow-md border-2 border-white">
+                        DS
+                    </div>
+                </div>
+
             </div>
-        </div>
+        </header>
 
         <!-- CONTENT -->
-        <div class="p-6 flex-1">
+        <main class="flex-1 p-6 bg-gray-50 overflow-y-auto">
             @yield('content')
-        </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="bg-[#09637E] p-4 text-center">
+            <span class="text-sm text-white/70">
+                © 2026 Politeknik Negeri Batam - Projek PBL
+            </span>
+        </footer>
 
     </div>
 
 </div>
-
-<!-- FOOTER -->
-<footer class="bg-green-200 py-4 text-center text-sm text-green-900">
-    © 2026 Politeknik Negeri Batam - Projek PBL IFpagi2A-02
-</footer>
 
 </body>
 </html>
