@@ -9,6 +9,26 @@
 @source '../**/*.js';
 @source "../../node_modules/flowbite/**/*.js";
 
+/* ========================= */
+/* THEME WARNA */
+/* ========================= */
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+
+    --color-primary: #09637E;
+    --color-secondary: #1C8C95;
+    --color-accent: #7FA8A8;
+    --color-light: #C7D3D4;
 }
+
+/* FORCE CLASS BIAR LANGSUNG KELIATAN */
+.bg-primary { background-color: #09637E; }
+.bg-secondary { background-color: #1C8C95; }
+.bg-accent { background-color: #7FA8A8; }
+.bg-light { background-color: #C7D3D4; }
+
+.text-primary { color: #09637E; }
+.text-secondary { color: #1C8C95; }
+.text-accent { color: #7FA8A8; }
+
+.border-primary { border-color: #09637E; }

@@ -4,68 +4,78 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
-    // Tampilkan halaman login
+    // HALAMAN LOGIN
     public function index()
     {
         return view('login');
     }
 
-    // Proses login
+    // PROSES LOGIN
     public function login(Request $request)
     {
-        // Validasi input
         $request->validate([
             'username' => 'required',
             'password' => 'required',
-            'role' => 'required'
         ]);
 
-        // Data login
         $credentials = [
             'username' => $request->username,
             'password' => $request->password,
         ];
 
-        // Coba login
         if (Auth::attempt($credentials)) {
 
-            // Ambil user yang login
             $user = Auth::user();
 
-            // Cek role
-            if ($user->role == $request->role) {
-
-                // Redirect sesuai role
-                if ($user->role == 'admin') {
-                    return redirect('/dashboard/admin');
-                } elseif ($user->role == 'dokter') {
-                    return redirect('/dashboard/dokter');
-                } else {
-                    return redirect('/dashboard_pasien');
-                }
-
+            if ($user->role == 'admin') {
+                return redirect('/dashboard/admin')->with('success', 'Berhasil masuk sebagai Admin');
+            } elseif ($user->role == 'dokter') {
+                return redirect('/dashboard/dokter')->with('success', 'Berhasil masuk sebagai Dokter');
             } else {
-                Auth::logout();
-                return back()->with('error', 'Role tidak sesuai!');
+                return redirect('/dashboard_pasien')->with('success', 'Berhasil masuk sebagai Pasien');
             }
         }
 
         return back()->with('error', 'Username atau password salah!');
     }
 
-    // TAMBAHKAN FUNGSI INI
+    // LOGOUT
     public function logout(Request $request)
     {
-        Auth::logout(); // Proses logout user
-
-        // Agar session lama tidak bisa dipakai lagi (keamanan)
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Kembali ke halaman utama
-        return redirect('/');
+        return redirect('/login');
+    }
+
+    // FORM LUPA PASSWORD
+    public function forgotForm()
+    {
+        return view('forgot-password');
+    }
+
+    // RESET PASSWORD PAKAI NO HP
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'no_hp' => 'required',
+            'password' => 'required|min:5',
+        ]);
+
+        $user = User::where('no_hp', $request->no_hp)->first();
+
+        if (!$user) {
+            return back()->with('error', 'Nomor tidak ditemukan!');
+        }
+
+        $user->password = bcrypt($request->password);
+        $user->save();
+
+        return redirect('/login')->with('success', 'Password berhasil diubah!');
     }
 }

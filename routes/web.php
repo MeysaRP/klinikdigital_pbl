@@ -9,30 +9,48 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardDokterController;
 use App\Http\Controllers\RegistrasiController;
 
-// Homepage
+// ================= HOMEPAGE =================
 Route::get('/', [homepageController::class, 'index']);
 
-// Login
+
+// ================= LOGIN =================
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.process');
 
-// Logout
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// 👉 LOGIN SEMENTARA (DUMMY FRONTEND)
+Route::post('/login', function () {
+    return redirect('/dashboard_pasien')->with('success', 'Login berhasil (dummy)');
+})->name('login.process');
 
-// Registrasi
+
+// ================= LOGOUT =================
+Route::post('/logout', function () {
+    return redirect('/login');
+})->name('logout');
+
+
+// ================= LUPA PASSWORD =================
+Route::get('/forgot-password', [LoginController::class, 'forgotForm'])->name('forgot.password');
+
+// dummy reset
+Route::post('/forgot-password', function () {
+    return redirect('/login')->with('success', 'Password berhasil diubah (dummy)');
+})->name('forgot.process');
+
+
+// ================= REGISTRASI =================
 Route::get('/registrasi', [RegistrasiController::class, 'index'])->name('registrasi');
-Route::post('/registrasi', [RegistrasiController::class, 'store'])->name('registrasi.store');
 
-// Pasien
+// dummy register
+Route::post('/registrasi', function () {
+    return redirect('/login')->with('success', 'Registrasi berhasil (dummy)');
+})->name('registrasi.store');
+
+
+// ================= DASHBOARD (TANPA AUTH) =================
 Route::get('/pasien', [PasienController::class, 'index']);
 
-// Dashboard Pasien
 Route::get('/dashboard_pasien', [DashboardPasienController::class, 'index']);
 
-// Dashboard Admin
-Route::get('/dashboard/admin', [DashboardAdminController::class, 'index'])
-    ->name('dashboard.admin');
+Route::get('/dashboard/admin', [DashboardAdminController::class, 'index']);
 
-// Dashboard Dokter
-Route::get('/dashboard/dokter', [DashboardDokterController::class, 'index'])
-    ->name('dashboard.dokter');
+Route::get('/dashboard/dokter', [DashboardDokterController::class, 'index']);
