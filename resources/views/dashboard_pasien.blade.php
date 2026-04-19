@@ -4,40 +4,80 @@
 
 <div class="space-y-6">
 
-    <!-- HEADER -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-        <h2 class="text-2xl font-bold text-gray-800">Selamat datang kembali, Andi!</h2>
-        <p class="text-gray-500 mt-1">Kelola jadwal pemeriksaan kesehatan Anda di sini.</p>
+    {{-- SECTION 1: HERO CARD (ANTRIAN AKTIF) - Biar Putih Biar Kontras --}}
+    <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-6 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-[#09637E]/10 rounded-full -mr-10 -mt-10"></div>
+
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10">
+            <div>
+                <p class="text-sm font-medium text-gray-500 mb-1">Janji Temu Berikutnya</p>
+                <h2 class="text-xl font-bold text-gray-800">Dr. Sarah Wijaya (Dokter Umum)</h2>
+                <div class="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                    <span class="flex items-center gap-1 font-semibold text-[#09637E]">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                        Senin, 22 Mei 2025
+                    </span>
+                    <span class="flex items-center gap-1">
+                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+                        08:00 - 08:30 WIB
+                    </span>
+                </div>
+                <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Keluhan: Demam tinggi dan sesak napas</p>
+            </div>
+
+            <div class="mt-4 md:mt-0 text-center bg-[#09637E] rounded-xl p-4 text-white min-w-[140px]">
+                <p class="text-xs uppercase tracking-wider font-medium opacity-80">No. Antrian</p>
+                <p class="text-5xl font-bold mt-1">05</p>
+                <span class="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full mt-2 inline-block">Menunggu</span>
+            </div>
+        </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- LEFT: JADWAL -->
+        {{-- LEFT COLUMN (JADWAL & QUICK ACTION) --}}
         <div class="lg:col-span-2 space-y-6">
 
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            {{-- QUICK ACTIONS (TAMBAHAN BARU) --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <a href="#" class="flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-[#09637E] transition-all group">
+                    <div class="p-2 rounded-lg bg-blue-50 text-[#09637E] mr-3 group-hover:bg-[#09637E] group-hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-sm">Buat Janji</h3>
+                        <p class="text-xs text-gray-500">Pemesanan jadwal</p>
+                    </div>
+                </a>
 
-                <!-- Header Filter -->
+                <a href="#" class="flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-green-500 transition-all group">
+                    <div class="p-2 rounded-lg bg-green-50 text-green-600 mr-3 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-800 text-sm">Rekam Medis</h3>
+                        <p class="text-xs text-gray-500">Riwayat sakit</p>
+                    </div>
+                </a>
+            </div>
+
+            {{-- LIST JADWAL (STYLE LAMA TAPI SUDAH DIPERBAIKI) --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50/50">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <h3 class="font-bold text-lg text-gray-800">Jadwal Pemeriksaan Saya</h3>
                         <div class="flex gap-2 items-center">
-                            <select class="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg p-2.5">
+                            <select class="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg p-2.5 focus:ring-[#09637E]">
                                 <option>Semua Status</option>
                                 <option>Menunggu</option>
                                 <option>Selesai</option>
                             </select>
-                            <button class="p-2.5 bg-[#09637E] text-white rounded-lg">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- LIST JADWAL -->
                 <div class="divide-y divide-gray-100">
-
-                    <!-- ITEM 1 (Akan Datang) -->
+                    {{-- ITEM 1 (Akan Datang) --}}
                     <div class="p-5 hover:bg-gray-50 transition-colors">
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
                             <div class="flex-1">
@@ -50,7 +90,6 @@
                                 </p>
                                 <p class="text-xs text-gray-500 italic mt-1">Keluhan: Demam tinggi</p>
                             </div>
-
                             <div class="flex-shrink-0">
                                 <button class="w-full md:w-auto px-5 py-2 text-sm font-bold text-[#09637E] bg-white border-2 border-[#09637E] rounded-lg hover:bg-[#09637E] hover:text-white shadow-sm transition-all">
                                     Lihat Detail
@@ -59,40 +98,19 @@
                         </div>
                     </div>
 
-                    <!-- ITEM 2 (Menunggu) -->
-                    <div class="p-5 hover:bg-gray-50 transition-colors">
-                        <div class="flex flex-col md:flex-row md:items-center gap-4">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <span class="px-2 py-1 text-xs font-bold rounded bg-yellow-100 text-yellow-700">Menunggu Antrian</span>
-                                </div>
-                                <h4 class="font-bold text-gray-900 text-lg">Dr. Budi Hartono</h4>
-                                <p class="text-sm text-gray-600 mt-1">
-                                    <span class="font-bold text-[#09637E]">29 Oktober 2025</span> &bull; 10:00 - 10:30 WIB
-                                </p>
-                                <p class="text-xs text-gray-500 italic mt-1">Keluhan: Sakit kepala</p>
-                            </div>
-
-                            <div class="flex-shrink-0">
-                                <button class="w-full md:w-auto px-5 py-2 text-sm font-bold text-red-600 bg-white border-2 border-red-300 rounded-lg hover:bg-red-50 transition-colors">
-                                    Batalkan
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ITEM 3 (Selesai - WARNA DIUBAH JADI HIJAU) -->
+                    {{-- ITEM 2 (Selesai - Diagnosa Ditambahkan) --}}
                     <div class="p-5 bg-gray-50 opacity-80 hover:opacity-100 transition-opacity">
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
                             <div class="flex-1">
                                 <div class="flex items-center gap-2 mb-2">
-                                    <!-- Diubah jadi Hijau -->
                                     <span class="px-2 py-1 text-xs font-bold rounded bg-green-100 text-green-700">Selesai</span>
                                 </div>
-                                <h4 class="font-bold text-gray-900 text-lg">Dr. Andi Setiawan</h4>
+                                <h4 class="font-bold text-gray-900 text-lg">Dr. Budi Hartono</h4>
                                 <p class="text-sm text-gray-600 mt-1">
                                     <span class="font-semibold text-gray-700">15 Januari 2024</span> &bull; 14:00 - 14:30 WIB
                                 </p>
+                                {{-- Tambahan dari ERD --}}
+                                <p class="text-sm text-gray-600 mt-1">Diagnosa: <span class="font-medium">Gastritis Akut</span></p>
                             </div>
                             <div class="flex-shrink-0">
                                 <button class="text-sm text-[#09637E] font-semibold hover:underline">
@@ -101,12 +119,11 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
 
-        <!-- RIGHT: PROFIL -->
+        {{-- RIGHT COLUMN (PROFIL - DIKEMBALIKAN) --}}
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
 
@@ -145,8 +162,7 @@
                     </div>
                 </div>
 
-                <!-- TOMBOL DIUBAH JADI SOLID (TIDAK PUTIH LAGI) -->
-                <button class="mt-6 w-full bg-[#09637E] text-white hover:bg-[#074d61] font-semibold py-2.5 rounded-xl transition-colors shadow-sm">
+                <button class="mt-6 w-full bg-[#09637E] text-black hover:bg-[#074d61] font-semibold py-2.5 rounded-xl transition-colors shadow-sm">
                     Ubah Profil
                 </button>
 
