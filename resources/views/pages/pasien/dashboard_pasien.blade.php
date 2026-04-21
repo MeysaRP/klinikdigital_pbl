@@ -1,10 +1,18 @@
-@extends('layouts.dashboard_pasien')
+@extends('layouts.dashboard', [
+    'pageTitle' => 'Dashboard Pasien',
+    'userName' => 'Andi Pratama Rayhan',
+    'userRole' => 'Pasien',
+    'userInitial' => 'AR'
+])
+
+@section('sidebar')
+    <x-sidebar-pasien />
+@endsection
 
 @section('content')
-
 <div class="space-y-6">
 
-    {{-- SECTION 1: HERO CARD (ANTRIAN AKTIF) - Biar Putih Biar Kontras --}}
+    {{-- HERO CARD (ANTRIAN AKTIF) --}}
     <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-6 relative overflow-hidden">
         <div class="absolute top-0 right-0 w-32 h-32 bg-[#09637E]/10 rounded-full -mr-10 -mt-10"></div>
 
@@ -35,10 +43,10 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {{-- LEFT COLUMN (JADWAL & QUICK ACTION) --}}
+        {{-- LEFT COLUMN --}}
         <div class="lg:col-span-2 space-y-6">
 
-            {{-- QUICK ACTIONS (TAMBAHAN BARU) --}}
+            {{-- QUICK ACTIONS --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a href="#" class="flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-[#09637E] transition-all group">
                     <div class="p-2 rounded-lg bg-blue-50 text-[#09637E] mr-3 group-hover:bg-[#09637E] group-hover:text-white transition-colors">
@@ -49,7 +57,6 @@
                         <p class="text-xs text-gray-500">Pemesanan jadwal</p>
                     </div>
                 </a>
-
                 <a href="#" class="flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-green-500 transition-all group">
                     <div class="p-2 rounded-lg bg-green-50 text-green-600 mr-3 group-hover:bg-green-500 group-hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path></svg>
@@ -61,7 +68,7 @@
                 </a>
             </div>
 
-            {{-- LIST JADWAL (STYLE LAMA TAPI SUDAH DIPERBAIKI) --}}
+            {{-- LIST JADWAL --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50/50">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -77,7 +84,7 @@
                 </div>
 
                 <div class="divide-y divide-gray-100">
-                    {{-- ITEM 1 (Akan Datang) --}}
+                    {{-- ITEM 1 --}}
                     <div class="p-5 hover:bg-gray-50 transition-colors">
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
                             <div class="flex-1">
@@ -98,7 +105,7 @@
                         </div>
                     </div>
 
-                    {{-- ITEM 2 (Selesai - Diagnosa Ditambahkan) --}}
+                    {{-- ITEM 2 --}}
                     <div class="p-5 bg-gray-50 opacity-80 hover:opacity-100 transition-opacity">
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
                             <div class="flex-1">
@@ -109,7 +116,6 @@
                                 <p class="text-sm text-gray-600 mt-1">
                                     <span class="font-semibold text-gray-700">15 Januari 2024</span> &bull; 14:00 - 14:30 WIB
                                 </p>
-                                {{-- Tambahan dari ERD --}}
                                 <p class="text-sm text-gray-600 mt-1">Diagnosa: <span class="font-medium">Gastritis Akut</span></p>
                             </div>
                             <div class="flex-shrink-0">
@@ -123,7 +129,7 @@
             </div>
         </div>
 
-        {{-- RIGHT COLUMN (PROFIL - DIKEMBALIKAN) --}}
+        {{-- RIGHT COLUMN (PROFIL) --}}
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
 
@@ -162,7 +168,7 @@
                     </div>
                 </div>
 
-                <button class="mt-6 w-full bg-[#09637E] text-black hover:bg-[#074d61] font-semibold py-2.5 rounded-xl transition-colors shadow-sm">
+                <button class="mt-6 w-full bg-[#09637E] text-white hover:bg-[#074d61] font-semibold py-2.5 rounded-xl transition-colors shadow-sm">
                     Ubah Profil
                 </button>
 
@@ -171,5 +177,4 @@
 
     </div>
 </div>
-
 @endsection

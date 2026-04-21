@@ -10,7 +10,8 @@ class RegistrasiController extends Controller
 {
     public function index()
     {
-        return view('registrasi');
+        // UBAH PATH VIEW
+        return view('pages.registrasi');
     }
 
     public function store(Request $request)
@@ -33,6 +34,7 @@ class RegistrasiController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // redirect()->route('registrasi') tidak perlu diubah karena nama routenya tetap sama
         return redirect()->route('registrasi')->with('success', 'Registrasi berhasil!');
     }
 }

@@ -11,7 +11,8 @@ class LoginController extends Controller
     // HALAMAN LOGIN
     public function index()
     {
-        return view('login');
+        // UBAH PATH VIEW
+        return view('pages.login');
     }
 
     // PROSES LOGIN
@@ -31,12 +32,14 @@ class LoginController extends Controller
 
             $user = Auth::user();
 
+            // PERBAIKI REDIRECT: Sesuaikan dengan Route::prefix yang baru
             if ($user->role == 'admin') {
-                return redirect('/dashboard/admin')->with('success', 'Berhasil masuk sebagai Admin');
+                return redirect()->route('dashboard.admin')->with('success', 'Berhasil masuk sebagai Admin');
             } elseif ($user->role == 'dokter') {
-                return redirect('/dashboard/dokter')->with('success', 'Berhasil masuk sebagai Dokter');
+                return redirect()->route('dashboard.dokter')->with('success', 'Berhasil masuk sebagai Dokter');
             } else {
-                return redirect('/dashboard_pasien')->with('success', 'Berhasil masuk sebagai Pasien');
+                // YANG INI DULU /dashboard_pasien, SEKARANG JADI /dashboard/pasien
+                return redirect()->route('dashboard.pasien')->with('success', 'Berhasil masuk sebagai Pasien');
             }
         }
 
@@ -50,13 +53,15 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        // PERBAIKI REDIRECT: Dulu /login, sekarang /auth/login
+        return redirect()->route('login');
     }
 
     // FORM LUPA PASSWORD
     public function forgotForm()
     {
-        return view('forgot-password');
+        // UBAH PATH VIEW
+        return view('pages.forgot-password');
     }
 
     // RESET PASSWORD PAKAI NO HP
@@ -76,6 +81,7 @@ class LoginController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        return redirect('/login')->with('success', 'Password berhasil diubah!');
+        // PERBAIKI REDIRECT
+        return redirect()->route('login')->with('success', 'Password berhasil diubah!');
     }
 }
