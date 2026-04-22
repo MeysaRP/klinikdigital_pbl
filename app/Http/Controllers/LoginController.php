@@ -21,31 +21,46 @@ class LoginController extends Controller
         $request->validate([
             'username' => 'required',
             'password' => 'required',
+            'role' => 'required',
+        ], [
+            'username.required' => 'Username wajib diisi!',
+            'password.required' => 'Password wajib diisi!',
+            'role.required' => 'Role wajib dipilih!',
         ]);
 
-        $credentials = [
-            'username' => $request->username,
-            'password' => $request->password,
+        // DATA DUMMY
+        $users = [
+            ['username' => 'admin', 'password' => '123', 'role' => 'admin'],
+            ['username' => 'dokter', 'password' => '123', 'role' => 'dokter'],
+            ['username' => 'pasien', 'password' => '123', 'role' => 'pasien'],
         ];
 
-        if (Auth::attempt($credentials)) {
+        foreach ($users as $user) {
+            if (
+                $request->username === $user['username'] &&
+                $request->password === $user['password'] &&
+                $request->role === $user['role']
+            ) {
 
-            $user = Auth::user();
+                // simpan session
+                session([
+                    'login' => true,
+                    'role' => $user['role'],
+                ]);
 
-            // PERBAIKI REDIRECT: Sesuaikan dengan Route::prefix yang baru
-            if ($user->role == 'admin') {
-                return redirect()->route('dashboard.admin')->with('success', 'Berhasil masuk sebagai Admin');
-            } elseif ($user->role == 'dokter') {
-                return redirect()->route('dashboard.dokter')->with('success', 'Berhasil masuk sebagai Dokter');
-            } else {
-                // YANG INI DULU /dashboard_pasien, SEKARANG JADI /dashboard/pasien
-                return redirect()->route('dashboard.pasien')->with('success', 'Berhasil masuk sebagai Pasien');
+                // redirect sesuai role
+                if ($user['role'] === 'admin') {
+                    return redirect('/dashboard/admin');
+                } elseif ($user['role'] === 'dokter') {
+                    return redirect('/dashboard/dokter');
+                } else {
+                    return redirect('/dashboard/pasien');
+                }
             }
         }
 
-        return back()->with('error', 'Username atau password salah!');
+        return back()->with('error', 'Username / password / role salah!');
     }
-
     // LOGOUT
     public function logout(Request $request)
     {
