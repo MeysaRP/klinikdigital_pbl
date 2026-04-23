@@ -6,8 +6,37 @@ use Illuminate\Http\Request;
 
 class DashboardAdminController extends Controller
 {
+    // ================= DASHBOARD =================
     public function index()
     {
         return view('pages.admin.dashboard_admin');
+    }
+
+    // ================= DATA PASIEN =================
+    public function dataPasien()
+    {
+        $pasien = [
+            ['id' => 'P001', 'nama' => 'Andi', 'hp' => '081234567890', 'tgl' => '2000-04-10'],
+            ['id' => 'P002', 'nama' => 'Budi', 'hp' => '081234567893', 'tgl' => '1999-04-09'],
+            ['id' => 'P003', 'nama' => 'Citra', 'hp' => '081234567891', 'tgl' => '1985-04-08'],
+            ['id' => 'P004', 'nama' => 'Doni', 'hp' => '081234567892', 'tgl' => '1997-04-07'],
+            ['id' => 'P005', 'nama' => 'Eni', 'hp' => '081234567894', 'tgl' => '1975-04-06'],
+        ];
+
+        return view('pages.admin.data_pasien', compact('pasien'));
+    }
+
+    // ================= DATA JADWAL =================
+    public function dataJadwal()
+    {
+        $jadwal = [
+            ['dokter' => 'Dr. Aditya', 'hari' => 'Senin', 'waktu' => '08:00-12:00', 'kuota' => 9, 'status' => 'Aktif'],
+            ['dokter' => 'Dr. Budi', 'hari' => 'Selasa', 'waktu' => '09:00-11:00', 'kuota' => 5, 'status' => 'Aktif'],
+            ['dokter' => 'Dr. Citra', 'hari' => 'Rabu', 'waktu' => '08:00-10:00', 'kuota' => 5, 'status' => 'Cuti'],
+            ['dokter' => 'Dr. Doni', 'hari' => 'Rabu', 'waktu' => '11:00-12:00', 'kuota' => 3, 'status' => 'Aktif'],
+            ['dokter' => 'Dr. Erwin', 'hari' => 'Jumat', 'waktu' => '08:00-10:00', 'kuota' => 5, 'status' => 'Aktif'],
+        ];
+
+        return view('pages.admin.data_jadwal', compact('jadwal'));
     }
 }

@@ -35,6 +35,7 @@ class LoginController extends Controller
             ['username' => 'pasien', 'password' => '123', 'role' => 'pasien'],
         ];
 
+        //pengecekkan login
         foreach ($users as $user) {
             if (
                 $request->username === $user['username'] &&
