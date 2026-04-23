@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardDokterController;
 use App\Http\Controllers\DataDokterController;
 
+
 // ================= HALAMAN PUBLIK =================
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 
@@ -56,11 +57,26 @@ Route::prefix('dashboard')->group(function () {
     Route::get('/dokter', [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
     Route::get('/admin', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
 
+    // ================= JADWAL DOKTER =================
+    Route::get('/dokter/jadwal', function () {
+        return view('pages.dokter.jadwal_saya');
+    })->name('dokter.jadwal');
+
+    // ================= ANTRIAN PASIEN =================
+    Route::get('/dokter/antrian', function () {
+        return view('pages.dokter.antrian_pasien');
+    })->name('dokter.antrian');
+
+    // ================= ✅ PROFIL DOKTER (INI YANG AKU TAMBAHIN) =================
+    Route::get('/dokter/profil', function () {
+        return view('pages.dokter.profil');
+    })->name('dokter.profil');
+
     // ================= DATA MASTER =================
     Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
     Route::get('/data_pasien', [DashboardAdminController::class, 'dataPasien'])->name('data.pasien');
 
-    //  DATA JADWAL
+    // DATA JADWAL
     Route::get('/data_jadwal', [DashboardAdminController::class, 'dataJadwal'])->name('data.jadwal');
 
     // ================= PEMESANAN =================
@@ -81,23 +97,10 @@ Route::prefix('dashboard')->group(function () {
 
     // ================= RIWAYAT MEDIS =================
     Route::get('/pasien/riwayat-medis', function () {
-        $filterTahun = request()->get('tahun', 'all');
-        $filterStatus = request()->get('status', 'all');
-
-        $semuaRiwayat = [
-            ['id' => 1, 'tanggal' => '2025-05-22', 'dokter' => 'Dr. Budi Hartono', 'poli' => 'Penyakit Dalam', 'status' => 'Selesai', 'gejala' => 'Demam tinggi selama 3 hari', 'diagnosa' => 'ISPA', 'resep' => 'Paracetamol'],
-        ];
-
-        $dataTerfilter = $semuaRiwayat;
-
-        return view('pages.pasien.riwayat_medis', [
-            'riwayat' => $dataTerfilter,
-            'tahunAktif' => $filterTahun,
-            'statusAktif' => $filterStatus
-        ]);
+        return view('pages.pasien.riwayat_medis');
     })->name('riwayat.medis');
 
-    // ================= PROFIL =================
+    // ================= PROFIL PASIEN =================
     Route::get('/pasien/profil', function () {
         return view('pages.pasien.profil');
     })->name('pasien.profil');

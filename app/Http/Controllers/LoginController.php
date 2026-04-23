@@ -11,7 +11,6 @@ class LoginController extends Controller
     // HALAMAN LOGIN
     public function index()
     {
-        // UBAH PATH VIEW
         return view('pages.login');
     }
 
@@ -35,7 +34,6 @@ class LoginController extends Controller
             ['username' => 'pasien', 'password' => '123', 'role' => 'pasien'],
         ];
 
-        //pengecekkan login
         foreach ($users as $user) {
             if (
                 $request->username === $user['username'] &&
@@ -43,13 +41,13 @@ class LoginController extends Controller
                 $request->role === $user['role']
             ) {
 
-                // simpan session
+                // SIMPAN SESSION
                 session([
                     'login' => true,
                     'role' => $user['role'],
                 ]);
 
-                // redirect sesuai role
+                // REDIRECT SESUAI ROLE
                 if ($user['role'] === 'admin') {
                     return redirect('/dashboard/admin');
                 } elseif ($user['role'] === 'dokter') {
@@ -62,25 +60,27 @@ class LoginController extends Controller
 
         return back()->with('error', 'Username / password / role salah!');
     }
-    // LOGOUT
+
+    // ✅ LOGOUT (SUDAH DIPERBAIKI TOTAL)
     public function logout(Request $request)
     {
-        Auth::logout();
+        // HAPUS SEMUA SESSION (karena kamu pakai manual session)
+        $request->session()->flush();
+
+        // OPTIONAL (biar lebih aman)
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // PERBAIKI REDIRECT: Dulu /login, sekarang /auth/login
         return redirect()->route('login');
     }
 
     // FORM LUPA PASSWORD
     public function forgotForm()
     {
-        // UBAH PATH VIEW
         return view('pages.forgot-password');
     }
 
-    // RESET PASSWORD PAKAI NO HP
+    // RESET PASSWORD
     public function resetPassword(Request $request)
     {
         $request->validate([
@@ -97,7 +97,6 @@ class LoginController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
-        // PERBAIKI REDIRECT
         return redirect()->route('login')->with('success', 'Password berhasil diubah!');
     }
 }
