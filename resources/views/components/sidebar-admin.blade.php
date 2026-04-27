@@ -1,4 +1,4 @@
-<aside class="fixed top-0 left-0 w-64 h-full bg-white border-r p-5 flex flex-col">
+<aside class="fixed top-0 left-0 w-64 h-full bg-white p-5 flex flex-col">
 
     <!-- LOGO -->
     <h1 class="text-xl font-bold text-primary mb-8">MediTech</h1>
@@ -12,7 +12,6 @@
                 class="flex items-center gap-3 p-3 rounded-xl
                {{ request()->routeIs('dashboard.admin') ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-100' }}">
 
-                <!-- ICON -->
                 <svg class="w-5 h-5 {{ request()->routeIs('dashboard.admin') ? 'text-white' : 'text-gray-400' }}"
                     fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 2L2 8h2v8h4v-4h4v4h4V8h2L10 2z" />
@@ -51,21 +50,21 @@
         </li>
 
         <!-- DATA JADWAL -->
-<li>
-    <a href="{{ route('data.jadwal') }}"
-        class="flex items-center gap-3 p-3 rounded-xl
+        <li>
+            <a href="{{ route('data.jadwal') }}"
+                class="flex items-center gap-3 p-3 rounded-xl
         {{ request()->routeIs('data.jadwal') ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-100' }}">
 
-        <svg class="w-5 h-5 
+                <svg class="w-5 h-5 
         {{ request()->routeIs('data.jadwal') ? 'text-white' : 'text-gray-400' }}"
-            fill="currentColor" viewBox="0 0 20 20">
-            <path
-                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z" />
-        </svg>
+                    fill="currentColor" viewBox="0 0 20 20">
+                    <path
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z" />
+                </svg>
 
-        Data Jadwal
-    </a>
-</li>
+                Data Jadwal
+            </a>
+        </li>
     </ul>
 
 </aside>

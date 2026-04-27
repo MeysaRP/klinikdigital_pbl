@@ -77,10 +77,12 @@
 
     <!-- ANTRIAN SELANJUTNYA -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100/80 overflow-hidden">
+        <!-- HEADER - ICON DIHAPUS DISINI -->
         <div class="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
-            <svg class="w-4 h-4 text-[#09637E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             <h3 class="text-sm font-semibold text-gray-800">ANTRIAN SELANJUTNYA</h3>
         </div>
+        <!-- END HEADER -->
+        
         <div class="p-5">
             <div class="flex flex-col sm:flex-row gap-5">
                 <!-- Info Pasien -->

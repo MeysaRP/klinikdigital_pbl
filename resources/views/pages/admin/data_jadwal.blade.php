@@ -12,11 +12,9 @@
 @section('content')
 <div class="p-6 bg-white rounded shadow">
 
-    <h2 class="text-lg font-semibold mb-4">DATA JADWAL</h2>
-
     <div class="flex justify-between mb-4">
         <input type="text" id="searchJadwal" placeholder="Cari Nama Dokter..."
-            class="border px-3 py-1 w-1/3 rounded">
+            class="border border-gray-300 px-3 py-1 w-1/3 rounded bg-gray-50 focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
 
         <button onclick="openTambah()"
             class="bg-[#09637E] text-white px-4 py-1 rounded">
@@ -24,28 +22,28 @@
         </button>
     </div>
 
-    <div class="border rounded overflow-hidden">
+    <div class="rounded overflow-hidden">
 
         <table class="w-full text-sm">
             <thead class="bg-gray-100 text-center">
                 <tr>
-                    <th class="border px-2 py-2">Dokter</th>
-                    <th class="border px-2 py-2">Hari</th>
-                    <th class="border px-2 py-2">Waktu</th>
-                    <th class="border px-2 py-2">Kuota</th>
-                    <th class="border px-2 py-2">Status</th>
-                    <th class="border px-2 py-2">Aksi</th>
+                    <th class="px-4 py-2 border-b border-gray-300">Dokter</th>
+                    <th class="px-4 py-2 border-b border-gray-300">Hari</th>
+                    <th class="px-4 py-2 border-b border-gray-300">Waktu</th>
+                    <th class="px-4 py-2 border-b border-gray-300">Kuota</th>
+                    <th class="px-4 py-2 border-b border-gray-300">Status</th>
+                    <th class="px-4 py-2 border-b border-gray-300">Aksi</th>
                 </tr>
             </thead>
 
             <tbody id="tableJadwal">
                 @foreach($jadwal as $j)
-                <tr class="text-center">
-                    <td class="border px-2 py-1 nama">{{ $j['dokter'] }}</td>
-                    <td class="border px-2 py-1">{{ $j['hari'] }}</td>
-                    <td class="border px-2 py-1">{{ $j['waktu'] }}</td>
-                    <td class="border px-2 py-1">{{ $j['kuota'] }}</td>
-                    <td class="border px-2 py-1">
+                <tr class="text-center hover:bg-gray-50 border-b border-gray-100">
+                    <td class="px-4 py-2 nama">{{ $j['dokter'] }}</td>
+                    <td class="px-4 py-2">{{ $j['hari'] }}</td>
+                    <td class="px-4 py-2">{{ $j['waktu'] }}</td>
+                    <td class="px-4 py-2">{{ $j['kuota'] }}</td>
+                    <td class="px-4 py-2">
                         <span class="px-3 py-1 rounded-full text-xs font-medium
                         @if($j['status']=='Aktif') bg-green-100 text-green-600
                         @elseif($j['status']=='Nonaktif') bg-red-100 text-red-600
@@ -53,7 +51,7 @@
                             {{ $j['status'] }}
                         </span>
                     </td>
-                    <td class="border px-2 py-1">
+                    <td class="px-4 py-2">
                         <button onclick="openEdit(this)"
                             class="bg-[#09637E] text-white px-3 py-1 rounded text-xs">
                             Edit
@@ -64,8 +62,8 @@
             </tbody>
         </table>
 
-        <!-- PAGINATION (UPDATED) -->
-        <div class="flex justify-end p-3 gap-2 text-sm" id="paginationJadwal">
+        <!-- PAGINATION -->
+        <div class="flex justify-end p-2 gap-2 text-sm" id="paginationJadwal">
             <button class="page-btn active">1</button>
             <button class="page-btn">2</button>
             <button class="page-btn">3</button>
@@ -78,20 +76,29 @@
 <!-- STYLE PAGINATION -->
 <style>
 .page-btn{
-    width: 32px;
-    height: 32px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background-color: #f3f4f6;
+    color: #374151;
+    border-radius: 6px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-btn:hover{
+    background-color: #e5e7eb;
 }
 
 .page-btn.active{
     background-color: #09637E;
     color: white;
-    border-color: #09637E;
 }
 </style>
 
-<!-- MODAL TAMBAH -->
+<!-- MODAL TAMBAH (SESUAI WIREFRAME) -->
 <div id="modalTambah" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
 
     <div class="bg-white w-[400px] p-6 rounded-lg shadow-lg">
@@ -100,53 +107,76 @@
 
         <div class="space-y-3 text-sm">
 
+            <!-- Pilih Dokter -->
             <div>
-                <label class="block mb-1 font-medium">Nama Dokter</label>
-                <input id="tDokter" placeholder="Masukkan nama dokter"
-                    class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Pilih Dokter</label>
+                <select id="tDokter" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
+                    <option value="" disabled selected>-- Pilih Dokter --</option>
+                    <option value="Dr. Aditya">Dr. Aditya</option>
+                    <option value="Dr. Citra">Dr. Citra</option>
+                    <option value="Dr. Budi">Dr. Budi</option>
+                    <option value="Dr. Siti">Dr. Siti</option>
+                    <option value="Dr. Erwin">Dr. Erwin</option>
+                </select>
             </div>
 
+            <!-- Hari Praktik -->
             <div>
-                <label class="block mb-1 font-medium">Hari Praktik</label>
-                <select id="tHari" class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Hari Praktik</label>
+                <select id="tHari" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                     <option>Senin</option>
                     <option>Selasa</option>
                     <option>Rabu</option>
+                    <option>Kamis</option>
+                    <option>Jumat</option>
+                    <option>Sabtu</option>
+                    <option>Minggu</option>
                 </select>
             </div>
 
+            <!-- Jam Mulai & Selesai (Side by Side) -->
             <div class="flex gap-2">
                 <div class="w-1/2">
-                    <label class="block mb-1 font-medium">Jam Mulai</label>
-                    <select id="tMulai" class="w-full border px-2 py-1 rounded">
+                    <label class="block mb-1 font-medium text-gray-700">Jam Mulai</label>
+                    <select id="tMulai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                         <option>08:00</option>
                         <option>09:00</option>
                         <option>10:00</option>
+                        <option>11:00</option>
+                        <option>13:00</option>
+                        <option>14:00</option>
                     </select>
                 </div>
 
                 <div class="w-1/2">
-                    <label class="block mb-1 font-medium">Jam Selesai</label>
-                    <select id="tSelesai" class="w-full border px-2 py-1 rounded">
+                    <label class="block mb-1 font-medium text-gray-700">Jam Selesai</label>
+                    <select id="tSelesai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
+                        <option>09:00</option>
                         <option>10:00</option>
                         <option>11:00</option>
                         <option>12:00</option>
+                        <option>15:00</option>
+                        <option>16:00</option>
                     </select>
                 </div>
             </div>
 
+            <!-- Kuota Pasien -->
             <div>
-                <label class="block mb-1 font-medium">Kuota Pasien</label>
-                <select id="tKuota" class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Kuota Pasien</label>
+                <select id="tKuota" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                     <option>1</option>
                     <option>5</option>
                     <option>10</option>
+                    <option>15</option>
+                    <option>20</option>
                 </select>
             </div>
 
+            <!-- Status -->
             <div>
-                <label class="block mb-1 font-medium">Status</label>
-                <select id="tStatus" class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Status</label>
+                <select id="tStatus" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                     <option>Aktif</option>
                     <option>Nonaktif</option>
                     <option>Cuti</option>
@@ -155,11 +185,12 @@
 
         </div>
 
-        <div class="flex justify-center gap-3 mt-5">
-            <button onclick="closeTambah()" class="border px-4 py-1 rounded">
+        <!-- Tombol Batal & Simpan -->
+        <div class="flex justify-center gap-3 mt-6">
+            <button onclick="closeTambah()" class="border border-gray-300 px-6 py-2 rounded text-gray-700 hover:bg-gray-50 transition">
                 Batal
             </button>
-            <button onclick="simpanJadwal()" class="bg-[#09637E] text-white px-4 py-1 rounded">
+            <button onclick="simpanJadwal()" class="bg-[#09637E] text-white px-6 py-2 rounded hover:bg-[#075066] transition">
                 Simpan
             </button>
         </div>
@@ -167,7 +198,7 @@
     </div>
 </div>
 
-<!-- MODAL EDIT -->
+<!-- MODAL EDIT (DISAMAKAN DENGAN MODAL TAMBAH) -->
 <div id="modalEdit" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
 
     <div class="bg-white w-[400px] p-6 rounded-lg shadow-lg">
@@ -177,40 +208,46 @@
         <div class="space-y-3 text-sm">
 
             <div>
-                <label class="block mb-1 font-medium">Nama Dokter</label>
-                <input id="eDokter" class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Pilih Dokter</label>
+                <input id="eDokter" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
             </div>
 
             <div>
-                <label class="block mb-1 font-medium">Hari</label>
-                <select id="eHari" class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Hari Praktik</label>
+                <select id="eHari" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                     <option>Senin</option>
                     <option>Selasa</option>
                     <option>Rabu</option>
+                    <option>Kamis</option>
+                    <option>Jumat</option>
+                    <option>Sabtu</option>
+                    <option>Minggu</option>
                 </select>
             </div>
 
             <div class="flex gap-2">
                 <div class="w-1/2">
-                    <label class="block mb-1 font-medium">Jam Mulai</label>
-                    <select id="eMulai" class="w-full border px-2 py-1 rounded">
+                    <label class="block mb-1 font-medium text-gray-700">Jam Mulai</label>
+                    <select id="eMulai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                         <option>08:00</option>
                         <option>09:00</option>
+                        <option>10:00</option>
                     </select>
                 </div>
 
                 <div class="w-1/2">
-                    <label class="block mb-1 font-medium">Jam Selesai</label>
-                    <select id="eSelesai" class="w-full border px-2 py-1 rounded">
+                    <label class="block mb-1 font-medium text-gray-700">Jam Selesai</label>
+                    <select id="eSelesai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                         <option>10:00</option>
                         <option>11:00</option>
+                        <option>12:00</option>
                     </select>
                 </div>
             </div>
 
             <div>
-                <label class="block mb-1 font-medium">Kuota Pasien</label>
-                <select id="eKuota" class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Kuota Pasien</label>
+                <select id="eKuota" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                     <option>1</option>
                     <option>5</option>
                     <option>10</option>
@@ -218,8 +255,8 @@
             </div>
 
             <div>
-                <label class="block mb-1 font-medium">Status</label>
-                <select id="eStatus" class="w-full border px-2 py-1 rounded">
+                <label class="block mb-1 font-medium text-gray-700">Status</label>
+                <select id="eStatus" class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none focus:border-[#09637E] focus:ring-1 focus:ring-[#09637E]">
                     <option>Aktif</option>
                     <option>Nonaktif</option>
                     <option>Cuti</option>
@@ -228,11 +265,11 @@
 
         </div>
 
-        <div class="flex justify-center gap-3 mt-5">
-            <button onclick="closeEdit()" class="border px-4 py-1 rounded">
+        <div class="flex justify-center gap-3 mt-6">
+            <button onclick="closeEdit()" class="border border-gray-300 px-6 py-2 rounded text-gray-700 hover:bg-gray-50 transition">
                 Batal
             </button>
-            <button onclick="updateJadwal()" class="bg-[#09637E] text-white px-4 py-1 rounded">
+            <button onclick="updateJadwal()" class="bg-[#09637E] text-white px-6 py-2 rounded hover:bg-[#075066] transition">
                 Simpan
             </button>
         </div>
@@ -259,19 +296,30 @@ document.querySelectorAll('#paginationJadwal .page-btn').forEach(btn => {
     });
 });
 
-// fungsi lain tetap
+// FUNGSI UNTUK MEMBUAT BADGE STATUS (INI YANG DITAMBAHKAN)
+function getStatusBadge(status) {
+    if (status === 'Aktif') {
+        return '<span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-600">' + status + '</span>';
+    } else if (status === 'Nonaktif') {
+        return '<span class="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-600">' + status + '</span>';
+    } else {
+        return '<span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-600">' + status + '</span>';
+    }
+}
+
+// MODAL FUNCTIONS
 function openTambah(){ modalTambah.classList.replace('hidden','flex'); }
 function closeTambah(){ modalTambah.classList.replace('flex','hidden'); }
 
 function simpanJadwal(){
     let row = `
-    <tr class="text-center">
-        <td class="border px-2 py-1 nama">${tDokter.value}</td>
-        <td class="border px-2 py-1">${tHari.value}</td>
-        <td class="border px-2 py-1">${tMulai.value} - ${tSelesai.value}</td>
-        <td class="border px-2 py-1">${tKuota.value}</td>
-        <td class="border px-2 py-1">${getStatusBadge(tStatus.value)}</td>
-        <td class="border px-2 py-1">
+    <tr class="text-center hover:bg-gray-50 border-b border-gray-100">
+        <td class="px-4 py-2 nama">${tDokter.value}</td>
+        <td class="px-4 py-2">${tHari.value}</td>
+        <td class="px-4 py-2">${tMulai.value} - ${tSelesai.value}</td>
+        <td class="px-4 py-2">${tKuota.value}</td>
+        <td class="px-4 py-2">${getStatusBadge(tStatus.value)}</td>
+        <td class="px-4 py-2">
             <button onclick="openEdit(this)" class="bg-[#09637E] text-white px-3 py-1 rounded text-xs">Edit</button>
         </td>
     </tr>`;
