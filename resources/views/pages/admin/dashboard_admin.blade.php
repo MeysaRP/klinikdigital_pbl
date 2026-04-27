@@ -12,106 +12,90 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- HEADER DIHAPUS (biar gak dobel) -->
-
-    <!-- CARD -->
+    <!-- CARD (FONT SAMA DENGAN PASIEN: xs untuk label, 2xl untuk angka) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-        <!-- Dokter -->
-        <div class="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500">Total Dokter</p>
-                <h3 class="text-xl font-bold text-gray-800">45</h3>
+                <p class="text-xs text-gray-400 font-medium">Total Dokter</p>
+                <p class="text-2xl font-bold text-gray-900 mt-1">45</p>
             </div>
-            <div class="text-2xl text-primary">🩺</div>
+            <div class="w-12 h-12 bg-[#09637E]/10 rounded-2xl flex items-center justify-center text-xl">🩺</div>
         </div>
 
-        <!-- Pasien -->
-        <div class="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500">Total Pasien</p>
-                <h3 class="text-xl font-bold text-gray-800">1.205</h3>
+                <p class="text-xs text-gray-400 font-medium">Total Pasien</p>
+                <p class="text-2xl font-bold text-gray-900 mt-1">1.205</p>
             </div>
-            <div class="text-2xl text-primary">👥</div>
+            <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-xl">👥</div>
         </div>
 
-        <!-- Jadwal -->
-        <div class="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500">Total Jadwal Hari Ini</p>
-                <h3 class="text-xl font-bold text-gray-800">85</h3>
+                <p class="text-xs text-gray-400 font-medium">Total Jadwal Hari Ini</p>
+                <p class="text-2xl font-bold text-gray-900 mt-1">85</p>
             </div>
-            <div class="text-2xl text-primary">📅</div>
+            <div class="w-12 h-12 bg-amber-50 rounded-2xl flex items-center justify-center text-xl">📅</div>
         </div>
 
     </div>
 
-    <!-- TABEL ANTRIAN -->
-    <div class="bg-white rounded-lg p-5 shadow-sm">
+    <!-- TABEL (FONT SAMA: sm untuk body, xs uppercase untuk header) -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
-        <h3 class="font-semibold mb-4 text-gray-800">Antrian Pasien Hari ini</h3>
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h3 class="font-bold text-lg text-gray-800">Antrian Pasien Hari Ini</h3>
+        </div>
 
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-gray-50 text-gray-600">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-semibold">
                     <tr>
-                        <th class="p-3 text-left font-medium">No</th>
-                        <th class="p-3 text-left font-medium">Nama Pasien</th>
-                        <th class="p-3 text-left font-medium">Dokter</th>
-                        <th class="p-3 text-left font-medium">Jam</th>
-                        <th class="p-3 text-left font-medium">Status</th>
+                        <th class="px-5 py-3.5 text-left">No</th>
+                        <th class="px-5 py-3.5 text-left">Nama Pasien</th>
+                        <th class="px-5 py-3.5 text-left">Dokter</th>
+                        <th class="px-5 py-3.5 text-left">Jam</th>
+                        <th class="px-5 py-3.5 text-left">Status</th>
                     </tr>
                 </thead>
                 <tbody class="text-gray-700 divide-y divide-gray-100">
-
-                    <tr class="hover:bg-gray-50">
-                        <td class="p-3">01</td>
-                        <td class="p-3">Andi Pratama</td>
-                        <td class="p-3">Dr. Santi Wijaya</td>
-                        <td class="p-3">09:30</td>
-                        <td class="p-3">
-                            <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-xs font-medium">
-                                Menunggu
-                            </span>
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-5 py-3.5">01</td>
+                        <td class="px-5 py-3.5 font-medium">Andi Pratama</td>
+                        <td class="px-5 py-3.5">Dr. Santi Wijaya</td>
+                        <td class="px-5 py-3.5">09:30</td>
+                        <td class="px-5 py-3.5">
+                            <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-gray-50">
-                        <td class="p-3">02</td>
-                        <td class="p-3">Andi Pratama</td>
-                        <td class="p-3">Dr. Santi Wijaya</td>
-                        <td class="p-3">09:00</td>
-                        <td class="p-3">
-                            <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-xs font-medium">
-                                Menunggu
-                            </span>
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-5 py-3.5">02</td>
+                        <td class="px-5 py-3.5 font-medium">Andi Pratama</td>
+                        <td class="px-5 py-3.5">Dr. Santi Wijaya</td>
+                        <td class="px-5 py-3.5">09:00</td>
+                        <td class="px-5 py-3.5">
+                            <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-gray-50">
-                        <td class="p-3">03</td>
-                        <td class="p-3">Andi Pratama</td>
-                        <td class="p-3">Dr. Budi Hartono</td>
-                        <td class="p-3">08:00</td>
-                        <td class="p-3">
-                            <span class="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs font-medium">
-                                Dilayani
-                            </span>
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-5 py-3.5">03</td>
+                        <td class="px-5 py-3.5 font-medium">Andi Pratama</td>
+                        <td class="px-5 py-3.5">Dr. Budi Hartono</td>
+                        <td class="px-5 py-3.5">08:00</td>
+                        <td class="px-5 py-3.5">
+                            <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700 font-medium">Dilayani</span>
                         </td>
                     </tr>
-
-                    <tr class="hover:bg-gray-50">
-                        <td class="p-3">04</td>
-                        <td class="p-3">Andi Pratama</td>
-                        <td class="p-3">Dr. Santi Wijaya</td>
-                        <td class="p-3">08:30</td>
-                        <td class="p-3">
-                            <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-medium">
-                                Selesai
-                            </span>
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="px-5 py-3.5">04</td>
+                        <td class="px-5 py-3.5 font-medium">Andi Pratama</td>
+                        <td class="px-5 py-3.5">Dr. Santi Wijaya</td>
+                        <td class="px-5 py-3.5">08:30</td>
+                        <td class="px-5 py-3.5">
+                            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Selesai</span>
                         </td>
                     </tr>
-
                 </tbody>
             </table>
         </div>

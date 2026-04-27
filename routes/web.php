@@ -8,10 +8,24 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardDokterController;
 use App\Http\Controllers\DataDokterController;
 
-// ================= HALAMAN PUBLIK =================
+/*
+|--------------------------------------------------------------------------
+| HALAMAN PUBLIK
+|--------------------------------------------------------------------------
+*/
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 
-// ================= AUTH =================
+Route::prefix('pages')->group(function () {
+    Route::view('/layanan', 'pages.layanan')->name('layanan');
+    Route::view('/about', 'pages.about')->name('about');
+    Route::view('/contact', 'pages.contact')->name('contact');
+});
+
+/*
+|--------------------------------------------------------------------------
+| AUTH (Login, Registrasi, Logout, Forgot Password)
+|--------------------------------------------------------------------------
+*/
 Route::prefix('auth')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.process');
@@ -23,13 +37,16 @@ Route::prefix('auth')->group(function () {
     Route::post('/forgot-password', [LoginController::class, 'resetPassword'])->name('forgot.process');
 });
 
-// ================= LOGOUT =================
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// ================= DASHBOARD =================
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD
+|--------------------------------------------------------------------------
+*/
 Route::prefix('dashboard')->group(function () {
 
-    // ================= DASHBOARD PASIEN (DENGAN FILTER) =================
+    // ================= PASIEN =================
     Route::get('/pasien', function () {
         $filterStatus = request()->get('status', 'all');
         $semuaJadwal = [
@@ -49,21 +66,6 @@ Route::prefix('dashboard')->group(function () {
         ]);
     })->name('dashboard.pasien');
 
-    // ================= DASHBOARD LAIN =================
-    Route::get('/dokter', [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
-    Route::get('/admin', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
-
-    // ================= FITUR DOKTER (DARI TEMAN) =================
-    Route::get('/dokter/jadwal', function () { return view('pages.dokter.jadwal_saya'); })->name('dokter.jadwal');
-    Route::get('/dokter/antrian', function () { return view('pages.dokter.antrian_pasien'); })->name('dokter.antrian');
-    Route::get('/dokter/profil', function () { return view('pages.dokter.profil'); })->name('dokter.profil');
-
-    // ================= DATA MASTER (DARI TEMAN) =================
-    Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
-    Route::get('/data_pasien', [DashboardAdminController::class, 'dataPasien'])->name('data.pasien');
-    Route::get('/data_jadwal', [DashboardAdminController::class, 'dataJadwal'])->name('data.jadwal');
-
-    // ================= PEMESANAN JADWAL PASIEN =================
     Route::get('/pasien/pemesanan-jadwal', function () {
         return view('pages.pasien.pemesanan_jadwal');
     })->name('pemesanan.jadwal');
@@ -77,7 +79,6 @@ Route::prefix('dashboard')->group(function () {
         return view('pages.pasien.pemesanan_berhasil', compact('nomor_antrian'));
     })->name('pemesanan.berhasil');
 
-    // ================= RIWAYAT MEDIS PASIEN (SUDAH DIPERBAIKI) =================
     Route::get('/pasien/riwayat-medis', function () {
         $filterTahun = request()->get('tahun', 'all');
         $filterStatus = request()->get('status', 'all');
@@ -109,7 +110,6 @@ Route::prefix('dashboard')->group(function () {
         ]);
     })->name('riwayat.medis');
 
-    // Route PDF
     Route::get('/pasien/riwayat-medis/pdf/{id}', function ($id) {
         $semuaRiwayat = [
             ['id' => 1, 'tanggal' => '2025-05-22', 'dokter' => 'Dr. Budi Hartono', 'poli' => 'Penyakit Dalam', 'status' => 'Selesai', 'gejala' => 'Demam tinggi selama 3 hari, batuk berdahak, dan nyeri otot.', 'diagnosa' => 'Infeksi Saluran Pernapasan Akut (ISPA)', 'resep' => 'Paracetamol 500mg (3x1), Amoxillin 500mg (3x1), OBH Batuk (3x1)'],
@@ -123,7 +123,6 @@ Route::prefix('dashboard')->group(function () {
         return $pdf->download('Rekam_Medis_' . str_replace(' ', '_', $dataPdf['dokter']) . '.pdf');
     })->name('riwayat.download-pdf');
 
-    // ================= PROFIL PASIEN (SUDAH DIPERBAIKI) =================
     Route::get('/pasien/profil', function () {
         $profil = session()->get('profil', [
             'nama' => 'Andi Pratama Rayhan',
@@ -146,5 +145,17 @@ Route::prefix('dashboard')->group(function () {
         session()->put('profil', $data);
         return redirect()->route('pasien.profil')->with('success', 'Profil berhasil diperbarui!');
     })->name('pasien.profil.update');
+
+    // ================= DOKTER =================
+    Route::get('/dokter', [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
+    Route::get('/dokter/jadwal', function () { return view('pages.dokter.jadwal_saya'); })->name('dokter.jadwal');
+    Route::get('/dokter/antrian', function () { return view('pages.dokter.antrian_pasien'); })->name('dokter.antrian');
+    Route::get('/dokter/profil', function () { return view('pages.dokter.profil'); })->name('dokter.profil');
+
+    // ================= ADMIN =================
+    Route::get('/admin', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
+    Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
+    Route::get('/data_pasien', [DashboardAdminController::class, 'dataPasien'])->name('data.pasien');
+    Route::get('/data_jadwal', [DashboardAdminController::class, 'dataJadwal'])->name('data.jadwal');
 
 });

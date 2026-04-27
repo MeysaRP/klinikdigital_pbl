@@ -1,75 +1,75 @@
-<aside class="fixed top-0 left-0 w-64 h-full bg-white border-r border-gray-200 p-5 flex flex-col">
-    <h1 class="text-xl font-bold text-[#09637E] mb-8">MediTech</h1>
+<aside class="fixed top-0 left-0 z-40 w-64 h-screen pt-4 bg-white border-r border-gray-200">
+    <div class="overflow-y-auto py-5 px-3 h-full bg-white">
+        <!-- LOGO (SAMA PERSIS DENGAN SIDEBAR PASIEN) -->
+        <a href="/" class="flex items-center pl-2.5 mb-8">
+            <svg class="w-8 h-8 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M5 5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3h-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v3H5V5Z"/>
+                <path d="M6 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H6Zm6 2a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"/>
+                <path fill-rule="evenodd" d="M1 6a1 1 0 0 1 1-1h2v12H2a1 1 0 0 1-1-1V6Zm16-1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-2V5h2Z" clip-rule="evenodd"/>
+            </svg>
+            <span class="self-center text-xl font-bold whitespace-nowrap text-[#09637E] ml-2">MediTech</span>
+        </a>
 
-    <ul class="space-y-2 text-sm flex-1">
+        <!-- MENU -->
+        <ul class="space-y-2">
 
-        <!-- DASHBOARD -->
-        <li>
-            <a href="{{ route('dashboard.dokter') }}"
-               class="flex items-center gap-3 p-3 rounded-xl {{ request()->routeIs('dashboard.dokter') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
-                
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-                </svg>
+            <!-- DASHBOARD -->
+            <li>
+                <a href="{{ route('dashboard.dokter') }}"
+                   class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dashboard.dokter') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dashboard.dokter') ? 'text-white' : 'text-gray-400 group-hover:text-[#09637E]' }}" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                    </svg>
+                    Dashboard
+                </a>
+            </li>
 
-                Dashboard
-            </a>
-        </li>
+            <!-- JADWAL -->
+            <li>
+                <a href="{{ route('dokter.jadwal') }}"
+                   class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dokter.jadwal') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dokter.jadwal') ? 'text-white' : 'text-gray-400 group-hover:text-[#09637E]' }}" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/>
+                    </svg>
+                    Jadwal Saya
+                </a>
+            </li>
 
-        <!-- JADWAL -->
-        <li>
-            <a href="{{ route('dokter.jadwal') }}"
-               class="flex items-center gap-3 p-3 rounded-xl {{ request()->routeIs('dokter.jadwal') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
-                
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1z"/>
-                </svg>
+            <!-- ANTRIAN -->
+            <li>
+                <a href="{{ route('dokter.antrian') }}"
+                   class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dokter.antrian') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dokter.antrian') ? 'text-white' : 'text-gray-400 group-hover:text-[#09637E]' }}" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                    </svg>
+                    Antrian Pasien
+                </a>
+            </li>
 
-                Jadwal Saya
-            </a>
-        </li>
+            <!-- PROFIL -->
+            <li>
+                <a href="{{ route('dokter.profil') }}"
+                   class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dokter.profil') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
+                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dokter.profil') ? 'text-white' : 'text-gray-400 group-hover:text-[#09637E]' }}" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/>
+                    </svg>
+                    Profil
+                </a>
+            </li>
 
-        <!-- ANTRIAN -->
-        <li>
-            <a href="{{ route('dokter.antrian') }}"
-               class="flex items-center gap-3 p-3 rounded-xl {{ request()->routeIs('dokter.antrian') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
-                
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
-                </svg>
-
-                Antrian Pasien
-            </a>
-        </li>
-
-        <!-- PROFIL -->
-        <li>
-            <a href="{{ route('dokter.profil') }}"
-            class="flex items-center gap-3 p-3 rounded-xl 
-            {{ request()->routeIs('dokter.profil') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
-        
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
-                </svg>
-
-                Profil
-            </a>
-        </li>
-
-    </ul>
+        </ul>
+    </div>
 
     <!-- LOGOUT -->
-    <form action="{{ route('logout') }}" method="POST">
-    @csrf
-    <button type="submit" 
-        class="flex items-center gap-3 w-full p-3 text-red-600 rounded-xl hover:bg-red-50 text-sm">
-
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-        </svg>
-
-        Logout
-    </button>
-</form>
+    <div class="absolute bottom-0 left-0 justify-center p-4 w-full border-t border-gray-200 bg-white">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="flex items-center w-full p-3 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 group">
+                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
+            </button>
+        </form>
+    </div>
 </aside>

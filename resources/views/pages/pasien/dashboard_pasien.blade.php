@@ -31,7 +31,7 @@
                 </div>
                 <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Keluhan: Demam tinggi dan sesak napas</p>
             </div>
-            <div class="mt-4 md:mt-0 text-center bg-[#09637E] rounded-xl p-4 text-white min-w-[140px]">
+            <div class="mt-4 md:mt-0 text-center bg-[#09637E] rounded-2xl p-4 text-white min-w-[140px]">
                 <p class="text-xs uppercase tracking-wider font-medium opacity-80">No. Antrian</p>
                 <p class="text-5xl font-bold mt-1">05</p>
                 <span class="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full mt-2 inline-block">Menunggu</span>
@@ -43,10 +43,10 @@
         {{-- LEFT COLUMN (QUICK ACTION & JADWAL) --}}
         <div class="lg:col-span-2 space-y-6">
 
-            {{-- QUICK ACTIONS (SUDAH DISAMBUNGKAN) --}}
+            {{-- QUICK ACTIONS --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <a href="{{ route('pemesanan.jadwal') }}" class="flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-[#09637E] transition-all group">
-                    <div class="p-2 rounded-lg bg-blue-50 text-[#09637E] mr-3 group-hover:bg-[#09637E] group-hover:text-white transition-colors">
+                <a href="{{ route('pemesanan.jadwal') }}" class="flex items-center p-4 bg-white rounded-2xl shadow-sm border border-gray-200 hover:border-[#09637E] transition-all group">
+                    <div class="p-2.5 rounded-xl bg-blue-50 text-[#09637E] mr-3 group-hover:bg-[#09637E] group-hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                     </div>
                     <div>
@@ -55,8 +55,8 @@
                     </div>
                 </a>
 
-                <a href="{{ route('riwayat.medis') }}" class="flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-200 hover:border-green-500 transition-all group">
-                    <div class="p-2 rounded-lg bg-green-50 text-green-600 mr-3 group-hover:bg-green-500 group-hover:text-white transition-colors">
+                <a href="{{ route('riwayat.medis') }}" class="flex items-center p-4 bg-white rounded-2xl shadow-sm border border-gray-200 hover:border-green-500 transition-all group">
+                    <div class="p-2.5 rounded-xl bg-green-50 text-green-600 mr-3 group-hover:bg-green-500 group-hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"></path></svg>
                     </div>
                     <div>
@@ -72,9 +72,8 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <h3 class="font-bold text-lg text-gray-800">Jadwal Pemeriksaan Saya</h3>
 
-                        <!-- FILTER OTOMATIS (PAKAI ONCHANGE) -->
                         <form method="GET" action="{{ route('dashboard.pasien') }}">
-                            <select name="status" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-700 text-sm rounded-lg p-2.5 focus:ring-[#09637E] w-full sm:w-auto">
+                            <select name="status" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-700 text-sm rounded-xl p-2.5 focus:ring-[#09637E] w-full sm:w-auto">
                                 <option value="all" {{ $statusAktif == 'all' ? 'selected' : '' }}>Semua Status</option>
                                 <option value="Menunggu" {{ $statusAktif == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
                                 <option value="Selesai" {{ $statusAktif == 'Selesai' ? 'selected' : '' }}>Selesai</option>
@@ -90,14 +89,14 @@
                             <div class="flex-1">
                                 <div class="flex items-center gap-2 mb-2">
                                     @if($item['status'] == 'Menunggu')
-                                        <span class="px-2 py-1 text-xs font-bold rounded bg-blue-100 text-blue-700">Akan Datang</span>
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-100 text-blue-700">Akan Datang</span>
                                     @else
-                                        <span class="px-2 py-1 text-xs font-bold rounded bg-green-100 text-green-700">Selesai</span>
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-green-100 text-green-700">Selesai</span>
                                     @endif
                                 </div>
                                 <h4 class="font-bold text-gray-900 text-lg">{{ $item['dokter'] }}</h4>
                                 <p class="text-sm text-gray-600 mt-1">
-                                    <span class="font-bold text-[#09637E]">{{ date('d F Y', strtotime($item['tanggal'])) }}</span> &bull; {{ $item['jam'] }}
+                                    <span class="font-semibold text-[#09637E]">{{ date('d F Y', strtotime($item['tanggal'])) }}</span> &bull; {{ $item['jam'] }}
                                 </p>
                                 @if($item['status'] == 'Menunggu')
                                     <p class="text-xs text-gray-500 italic mt-1">Keluhan: {{ $item['keluhan'] }}</p>
@@ -107,15 +106,29 @@
                             </div>
                             <div class="flex-shrink-0">
                                 @if($item['status'] == 'Menunggu')
-                                    <!-- TOMBOL UNTUK STATUS MENUNGGU -->
-                                    <a href="{{ route('pemesanan.jadwal') }}" class="w-full md:w-auto px-5 py-2 text-sm font-bold text-[#09637E] bg-white border-2 border-[#09637E] rounded-lg hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center">
+                                    <button
+                                        onclick='openDetailModal({
+                                            dokter: "{{ $item['dokter'] }}",
+                                            tanggal: "{{ date('d F Y', strtotime($item['tanggal'])) }}",
+                                            jam: "{{ $item['jam'] }}",
+                                            keluhan: "{{ $item['keluhan'] }}",
+                                            status: "Menunggu"
+                                        })'
+                                        class="w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center">
                                         Lihat Detail
-                                    </a>
+                                    </button>
                                 @else
-                                    <!-- TOMBOL UNTUK STATUS SELESAI -->
-                                    <a href="{{ route('riwayat.medis') }}" class="text-sm text-[#09637E] font-semibold hover:underline block text-center md:text-right">
-                                        Lihat Rekam Medis →
-                                    </a>
+                                    <button
+                                        onclick='openDetailModal({
+                                            dokter: "{{ $item['dokter'] }}",
+                                            tanggal: "{{ date('d F Y', strtotime($item['tanggal'])) }}",
+                                            jam: "{{ $item['jam'] }}",
+                                            keluhan: "{{ $item['keluhan'] }}",
+                                            status: "Selesai"
+                                        })'
+                                        class="w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center">
+                                        Lihat Detail
+                                    </button>
                                 @endif
                             </div>
                         </div>
@@ -153,4 +166,136 @@
 
     </div>
 </div>
+
+<!-- ================= MODAL DETAIL JADWAL ================= -->
+<div id="detailModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDetailModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+        <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-md overflow-hidden">
+
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-base font-bold text-gray-900">Detail Jadwal</h3>
+                <button onclick="closeDetailModal()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="px-6 py-5 space-y-4">
+
+                <!-- Status Badge -->
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-400 uppercase tracking-wide font-medium">Status</span>
+                    <span id="modalStatus" class="px-3 py-1 text-xs rounded-full font-medium"></span>
+                </div>
+
+                <!-- Info Rows -->
+                <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <div class="w-9 h-9 bg-[#09637E]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-4.5 h-4.5 text-[#09637E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Dokter</p>
+                        <p id="modalDokter" class="text-sm font-semibold text-gray-900 -mt-0.5">-</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <div class="w-9 h-9 bg-[#09637E]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-4.5 h-4.5 text-[#09637E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Tanggal</p>
+                        <p id="modalTanggal" class="text-sm font-semibold text-gray-900 -mt-0.5">-</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <div class="w-9 h-9 bg-[#09637E]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-4.5 h-4.5 text-[#09637E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Jam</p>
+                        <p id="modalJam" class="text-sm font-semibold text-gray-900 -mt-0.5">-</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <div class="w-9 h-9 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-4.5 h-4.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">Keluhan</p>
+                        <p id="modalKeluhan" class="text-sm font-semibold text-gray-900 -mt-0.5">-</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
+                    <div class="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <svg class="w-4.5 h-4.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/></svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">No. Antrian</p>
+                        <p id="modalAntrian" class="text-sm font-semibold text-gray-900 -mt-0.5">05</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="px-6 py-4 border-t border-gray-200">
+                <div class="flex items-center gap-3" id="modalFooter">
+                    <button onclick="closeDetailModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition">
+                        Tutup
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Script -->
+<script>
+function openDetailModal(data) {
+    document.getElementById('modalDokter').textContent = data.dokter;
+    document.getElementById('modalTanggal').textContent = data.tanggal;
+    document.getElementById('modalJam').textContent = data.jam;
+    document.getElementById('modalKeluhan').textContent = data.keluhan;
+    document.getElementById('modalAntrian').textContent = '05';
+
+    const statusEl = document.getElementById('modalStatus');
+    const footerEl = document.getElementById('modalFooter');
+
+    if (data.status === 'Menunggu') {
+        statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-blue-100 text-blue-700';
+        statusEl.textContent = 'Akan Datang';
+        footerEl.innerHTML = `
+            <button onclick="closeDetailModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition">Tutup</button>
+            <a href="{{ route('pemesanan.jadwal') }}" class="flex-1 py-2.5 bg-[#09637E] hover:bg-[#074d61] text-white text-sm font-semibold rounded-xl transition block text-center">Ubah Jadwal</a>
+        `;
+    } else {
+        statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-green-100 text-green-700';
+        statusEl.textContent = 'Selesai';
+        footerEl.innerHTML = `
+            <button onclick="closeDetailModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition">Tutup</button>
+            <a href="{{ route('riwayat.medis') }}" class="flex-1 py-2.5 bg-[#09637E] hover:bg-[#074d61] text-white text-sm font-semibold rounded-xl transition block text-center">Lihat Rekam Medis</a>
+        `;
+    }
+
+    document.getElementById('detailModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDetailModal() {
+    document.getElementById('detailModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeDetailModal();
+});
+</script>
+
 @endsection

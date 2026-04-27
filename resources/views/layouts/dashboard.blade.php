@@ -18,9 +18,10 @@
     @yield('sidebar')
 
     <div class="flex flex-col flex-1 ml-64">
+        <!-- TOPBAR (STANDAR SESUAI PASIEN) -->
         <header class="sticky top-0 z-30 bg-white border-b border-gray-200">
             <div class="px-6 py-3 flex items-center justify-between">
-                <h2 class="text-xl font-bold text-gray-800">{{ $pageTitle ?? 'Dashboard' }}</h2>
+                <h2 class="text-lg font-bold text-gray-800">{{ $pageTitle ?? 'Dashboard' }}</h2>
                 <div class="flex items-center gap-3">
                     <div class="text-right hidden sm:block">
                         <p class="text-sm font-semibold text-gray-900">{{ $userName ?? 'User' }}</p>
@@ -38,7 +39,7 @@
         </main>
 
         <footer class="bg-[#09637E] p-4 text-center">
-            <span class="text-sm text-white/70">© 2026 Politeknik Negeri Batam - Projek PBL IFpagi2A-02</span>
+            <span class="text-xs text-white/70">© 2026 Politeknik Negeri Batam - Projek PBL IFpagi2A-02</span>
         </footer>
     </div>
 </div>
