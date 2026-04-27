@@ -80,8 +80,15 @@
                             @endif
                         </td>
                         <td class="px-6 py-4 text-center">
-                            <button onclick="openModal('{{ $item['id'] }}', '{{ $item['dokter'] }}', '{{ date('d M Y', strtotime($item['tanggal'])) }}', '{{ $item['gejala'] }}', '{{ $item['diagnosa'] }}', '{{ $item['resep'] }}')"
-                                    class="text-[#09637E] hover:text-white hover:bg-[#09637E] border border-[#09637E] px-4 py-1.5 rounded-lg text-sm font-semibold transition">
+                            <!-- TOMBOL DETAIL (MENGGUNAKAN DATA ATTRIBUTE) -->
+                            <button onclick="openRiwayatModal(this)"
+                                    class="text-[#09637E] hover:text-white hover:bg-[#09637E] border border-[#09637E] px-4 py-1.5 rounded-lg text-sm font-semibold transition"
+                                    data-id="{{ $item['id'] }}"
+                                    data-dokter="{{ $item['dokter'] }}"
+                                    data-tanggal="{{ date('d M Y', strtotime($item['tanggal'])) }}"
+                                    data-gejala="{{ $item['gejala'] }}"
+                                    data-diagnosa="{{ $item['diagnosa'] }}"
+                                    data-resep="{{ $item['resep'] }}">
                                 Detail
                             </button>
                         </td>
@@ -97,7 +104,7 @@
     </div>
 </div>
 
-<!-- ================= POP UP MODAL (FLOWBITE) ================= -->
+<!-- ================= POP UP MODAL ================= -->
 <div id="detailModal" tabindex="-1" aria-hidden="true" class="hidden fixed top-0 right-0 left-0 z-50 justify-center items-center flex">
     <div class="relative w-full max-w-2xl max-h-full">
         <!-- Modal content -->
@@ -108,7 +115,7 @@
                     <h3 class="text-xl font-bold text-gray-900" id="modalDokter">Nama Dokter</h3>
                     <p class="text-sm text-gray-500" id="modalTanggal">Tanggal</p>
                 </div>
-                <button onclick="closeModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 ms-auto inline-flex justify-center items-center">
+                <button onclick="closeRiwayatModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 ms-auto inline-flex justify-center items-center">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
@@ -129,7 +136,7 @@
             </div>
             <!-- Modal Footer -->
             <div class="flex items-center justify-end p-5 border-t border-gray-200 rounded-b-2xl gap-3">
-                <button onclick="closeModal()" type="button" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-100">
+                <button onclick="closeRiwayatModal()" type="button" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-100">
                     Tutup
                 </button>
                 <a id="btnUnduhPdf" href="#" target="_blank" class="px-5 py-2.5 text-sm font-medium text-white bg-[#09637E] rounded-xl hover:bg-[#074d61] flex items-center gap-2">
@@ -141,23 +148,34 @@
     </div>
 </div>
 
-<!-- Script JS Untuk Ngatur Modal -->
+<!-- Script JS -->
 <script>
-    function openModal(id, dokter, tanggal, gejala, diagnosa, resep) {
+    function openRiwayatModal(btn) {
+        // Ambil data dari tombol menggunakan data-attribute (Anti Error Tanda Kutip)
+        const id = btn.getAttribute('data-id');
+        const dokter = btn.getAttribute('data-dokter');
+        const tanggal = btn.getAttribute('data-tanggal');
+        const gejala = btn.getAttribute('data-gejala');
+        const diagnosa = btn.getAttribute('data-diagnosa');
+        const resep = btn.getAttribute('data-resep');
+
+        // Masukkan data ke modal
         document.getElementById('modalDokter').innerText = dokter;
         document.getElementById('modalTanggal').innerText = tanggal;
         document.getElementById('modalGejala').innerText = gejala;
         document.getElementById('modalDiagnosa').innerText = diagnosa;
         document.getElementById('modalResep').innerText = resep;
 
-        // Logika Ajaib Untuk Mengubah Link PDF Sesuai Data yang diklik
-        document.getElementById('btnUnduhPdf').href = "{{ route('riwayat.download-pdf', ['id' => 1]) }}".replace("1", id);
+        // PERBAIKAN LOGIKA PDF:
+        // Kita pakai 'REPLACE_ME' agar tidak merusak port IP (misal 127.0.0.1)
+        document.getElementById('btnUnduhPdf').href = "{{ route('riwayat.download-pdf', ['id' => 'REPLACE_ME']) }}".replace("REPLACE_ME", id);
 
+        // Buka Modal
         document.getElementById('detailModal').classList.remove('hidden');
         document.body.classList.add('overflow-hidden');
     }
 
-    function closeModal() {
+    function closeRiwayatModal() {
         document.getElementById('detailModal').classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
     }

@@ -119,7 +119,7 @@ Route::prefix('dashboard')->group(function () {
             ['id' => 5, 'tanggal' => '2023-06-12', 'dokter' => 'Dr. Sarah Wijaya', 'poli' => 'Umum', 'status' => 'Menunggu', 'gejala' => 'Nyeri sendi lutut kiri saat berjalan jarak jauh.', 'diagnosa' => 'N/A', 'resep' => 'N/A'],
         ];
         $dataPdf = collect($semuaRiwayat)->firstWhere('id', $id);
-        $pdf = \PDF::loadView('pages.pasien.pdf_riwayat', ['data' => $dataPdf]);
+        $pdf = app('dompdf.wrapper')->loadView('pages.pasien.pdf_riwayat', ['data' => $dataPdf]);
         return $pdf->download('Rekam_Medis_' . str_replace(' ', '_', $dataPdf['dokter']) . '.pdf');
     })->name('riwayat.download-pdf');
 

@@ -66,7 +66,7 @@
                 </a>
             </div>
 
-            {{-- LIST JADWAL (FILTER AKTIF) --}}
+            {{-- LIST JADWAL --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50/50">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -107,26 +107,24 @@
                             <div class="flex-shrink-0">
                                 @if($item['status'] == 'Menunggu')
                                     <button
-                                        onclick='openDetailModal({
-                                            dokter: "{{ $item['dokter'] }}",
-                                            tanggal: "{{ date('d F Y', strtotime($item['tanggal'])) }}",
-                                            jam: "{{ $item['jam'] }}",
-                                            keluhan: "{{ $item['keluhan'] }}",
-                                            status: "Menunggu"
-                                        })'
-                                        class="w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center">
+                                        class="btn-detail w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center"
+                                        onclick="openDetailModal(this)"
+                                        data-dokter="{{ $item['dokter'] }}"
+                                        data-tanggal="{{ date('d F Y', strtotime($item['tanggal'])) }}"
+                                        data-jam="{{ $item['jam'] }}"
+                                        data-keluhan="{{ $item['keluhan'] }}"
+                                        data-status="Menunggu">
                                         Lihat Detail
                                     </button>
                                 @else
                                     <button
-                                        onclick='openDetailModal({
-                                            dokter: "{{ $item['dokter'] }}",
-                                            tanggal: "{{ date('d F Y', strtotime($item['tanggal'])) }}",
-                                            jam: "{{ $item['jam'] }}",
-                                            keluhan: "{{ $item['keluhan'] }}",
-                                            status: "Selesai"
-                                        })'
-                                        class="w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center">
+                                        class="btn-detail w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center"
+                                        onclick="openDetailModal(this)"
+                                        data-dokter="{{ $item['dokter'] }}"
+                                        data-tanggal="{{ date('d F Y', strtotime($item['tanggal'])) }}"
+                                        data-jam="{{ $item['jam'] }}"
+                                        data-keluhan="{{ $item['keluhan'] }}"
+                                        data-status="Selesai">
                                         Lihat Detail
                                     </button>
                                 @endif
@@ -258,17 +256,25 @@
 
 <!-- Script -->
 <script>
-function openDetailModal(data) {
-    document.getElementById('modalDokter').textContent = data.dokter;
-    document.getElementById('modalTanggal').textContent = data.tanggal;
-    document.getElementById('modalJam').textContent = data.jam;
-    document.getElementById('modalKeluhan').textContent = data.keluhan;
+function openDetailModal(btn) {
+    // Ambil data dari atribut tombol (data-dokter, data-tanggal, dll)
+    const dokter = btn.getAttribute('data-dokter');
+    const tanggal = btn.getAttribute('data-tanggal');
+    const jam = btn.getAttribute('data-jam');
+    const keluhan = btn.getAttribute('data-keluhan');
+    const status = btn.getAttribute('data-status');
+
+    // Masukkan ke modal
+    document.getElementById('modalDokter').textContent = dokter;
+    document.getElementById('modalTanggal').textContent = tanggal;
+    document.getElementById('modalJam').textContent = jam;
+    document.getElementById('modalKeluhan').textContent = keluhan;
     document.getElementById('modalAntrian').textContent = '05';
 
     const statusEl = document.getElementById('modalStatus');
     const footerEl = document.getElementById('modalFooter');
 
-    if (data.status === 'Menunggu') {
+    if (status === 'Menunggu') {
         statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-blue-100 text-blue-700';
         statusEl.textContent = 'Akan Datang';
         footerEl.innerHTML = `

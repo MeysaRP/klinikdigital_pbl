@@ -11,9 +11,24 @@
             <!-- KIRI -->
             <div class="relative min-h-[400px] bg-cover bg-center"
                 style="background-image: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef');">
+                
                 <div class="absolute inset-0 bg-primary opacity-20"></div>
+
+                <!-- LOGO -->
+                <div class="absolute top-4 left-4 flex items-center gap-2 bg-white/80 px-3 py-1 rounded-lg shadow">
+                    <svg class="w-6 h-6 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M5 5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3h-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v3H5V5Z" />
+                        <path d="M6 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H6Zm6 2a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" />
+                        <path fill-rule="evenodd"
+                            d="M1 6a1 1 0 0 1 1-1h2v12H2a1 1 0 0 1-1-1V6Zm16-1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-2V5h2Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-sm font-semibold text-[#09637E]">MediTech</span>
+                </div>
+
             </div>
 
+            <!-- FORM -->
             <div class="p-8 flex flex-col">
 
                 <h2 id="title" class="text-center text-primary font-bold text-xl mb-6">
@@ -75,15 +90,10 @@
                         class="w-full bg-primary hover:bg-secondary text-white py-2.5 rounded-lg font-semibold shadow-md">
                         MASUK
                     </button>
-
                 </form>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 
 <script>
@@ -101,3 +111,4 @@
     }
 </script>
 
+@endsection

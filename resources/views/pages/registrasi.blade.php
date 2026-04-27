@@ -6,12 +6,23 @@
 
     <div class="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 rounded-2xl shadow-[0_20px_50px_rgba(9,99,126,0.12)] overflow-hidden">
 
-        <!-- LEFT IMAGE -->
         <div class="relative hidden md:block">
             <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=700&q=85"
                  class="w-full h-full object-cover brightness-90">
 
             <div class="absolute inset-0 bg-gradient-to-b from-[#09637E]/50 via-[#09637E]/20 to-black/10"></div>
+
+            <!-- LOGO -->
+            <div class="absolute top-4 left-4 flex items-center gap-2 bg-white/80 px-3 py-1 rounded-lg shadow">
+                <svg class="w-6 h-6 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M5 5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3h-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v3H5V5Z" />
+                    <path d="M6 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H6Zm6 2a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z" />
+                    <path fill-rule="evenodd"
+                        d="M1 6a1 1 0 0 1 1-1h2v12H2a1 1 0 0 1-1-1V6Zm16-1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-2V5h2Z"
+                        clip-rule="evenodd" />
+                </svg>
+                <span class="text-sm font-semibold text-[#09637E]">MediTech</span>
+            </div>
         </div>
 
         <!-- FORM -->
@@ -48,18 +59,19 @@
 
                 <div class="grid grid-cols-2 gap-2">
 
-              <div>
-                 <label class="text-xs text-gray-500 ml-1">Tanggal lahir</label>
-                    <input type="date" id="tanggal"
-                        class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/30">
-                    <p id="error-tanggal" class="text-red-500 text-xs hidden">Tanggal lahir wajib diisi</p>
-                </div>
+                    <div>
+                        <label class="text-xs text-gray-500 ml-1">Tanggal lahir</label>
+                        <input type="date" id="tanggal"
+                            class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/30">
+                        <p id="error-tanggal" class="text-red-500 text-xs hidden">Tanggal lahir wajib diisi</p>
+                    </div>
 
-            <div>
-                 <label class="text-xs text-gray-500 ml-1">No HP</label>
-                    <input type="tel" id="nohp" placeholder="08xxxxxxxxxx"
-                        class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/30">
-                    <p id="error-nohp" class="text-red-500 text-xs hidden">No HP wajib diisi</p>
+                    <div>
+                        <label class="text-xs text-gray-500 ml-1">No HP</label>
+                        <input type="tel" id="nohp" placeholder="08xxxxxxxxxx"
+                            class="w-full px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/30">
+                        <p id="error-nohp" class="text-red-500 text-xs hidden">No HP wajib diisi</p>
+                    </div>
                 </div>
 
                 <div>
@@ -83,13 +95,9 @@
                     Sudah punya akun?
                     <a href="{{ route('login') }}" class="text-[#09637E] font-semibold hover:underline">Masuk</a>
                 </p>
-
             </form>
-
         </div>
-
     </div>
-
 </div>
 
 <script>

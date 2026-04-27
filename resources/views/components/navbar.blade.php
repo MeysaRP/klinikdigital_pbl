@@ -45,11 +45,11 @@
         <div class="flex md:order-2 space-x-3">
             <a href="{{ route('login') }}"
                 class="hidden md:flex items-center px-5 py-2.5 text-sm font-semibold text-[#09637E] border border-[#09637E] rounded-full hover:bg-[#09637E] hover:text-white transition-all duration-300">
-                Login
+                Masuk
             </a>
             <a href="{{ route('registrasi') }}"
                 class="flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-[#09637E] rounded-full hover:bg-[#074d61] shadow-md transition-all duration-300">
-                Registrasi
+                Daftar
             </a>
         </div>
     </div>

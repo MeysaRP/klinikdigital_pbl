@@ -9,7 +9,9 @@
 </head>
 
 <body class="bg-gray-50 antialiased">
+
     @yield('content')
+
 </body>
 
 </html>
