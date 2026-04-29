@@ -21,8 +21,8 @@
         <input type="text" id="searchPasien" oninput="filterPasien()" placeholder="Cari pasien..." class="w-full border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table class="w-full text-sm table-fixed">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+        <table class="w-full text-sm min-w-[580px]">
             <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-semibold">
                 <tr>
                     <th class="w-16 px-5 py-3.5 text-left">No</th>
@@ -88,22 +88,22 @@
 
 <!-- MODAL REKAM MEDIS -->
 <div id="modalRM" class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center hidden z-50" onclick="closeModal()">
-    <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl p-6 mx-4" onclick="event.stopPropagation()">
+    <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl p-5 sm:p-6 mx-4" onclick="event.stopPropagation()">
         <h3 class="text-base font-bold text-gray-900 mb-5">Rekam Medis Pasien</h3>
-        <div class="grid grid-cols-2 gap-4 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
             <input type="text" id="rmNama" placeholder="Nama Pasien" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
             <input type="text" id="rmNo" placeholder="No. Antrian" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
             <input type="text" id="rmKeluhan" placeholder="Keluhan" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
             <div></div>
-            <input type="text" id="rmDiagnosa" placeholder="Diagnosa" class="col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
-            <textarea id="rmCatatan" placeholder="Catatan Dokter" class="col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40" rows="3"></textarea>
-            <div class="col-span-2">
+            <input type="text" id="rmDiagnosa" placeholder="Diagnosa" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
+            <textarea id="rmCatatan" placeholder="Catatan Dokter" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40" rows="3"></textarea>
+            <div class="col-span-1 sm:col-span-2">
                 <div class="flex items-center justify-between mb-2">
                     <span class="text-sm font-medium text-gray-700">Resep Obat</span>
                     <button type="button" onclick="tambahObat()" class="text-xs text-[#09637E] hover:underline font-medium">+ Tambah Obat</button>
                 </div>
                 <div id="obatContainer" class="space-y-2">
-                    <div class="flex gap-2 items-center obat-row">
+                    <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center obat-row">
                         <input type="text" placeholder="Nama Obat" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
                         <input type="text" placeholder="Dosis" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
                         <input type="text" placeholder="Keterangan" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
@@ -161,7 +161,7 @@ function closeModal() {
 }
 
 function buatBarisObat() {
-    return '<div class="flex gap-2 items-center obat-row">' +
+    return '<div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center obat-row">' +
         '<input type="text" placeholder="Nama Obat" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
         '<input type="text" placeholder="Dosis" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
         '<input type="text" placeholder="Keterangan" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +

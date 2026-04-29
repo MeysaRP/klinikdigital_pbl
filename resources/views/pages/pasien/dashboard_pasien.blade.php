@@ -69,11 +69,10 @@
             {{-- LIST JADWAL --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-6 border-b border-gray-100 bg-gray-50/50">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <h3 class="font-bold text-lg text-gray-800">Jadwal Pemeriksaan Saya</h3>
-
-                        <form method="GET" action="{{ route('dashboard.pasien') }}">
-                            <select name="status" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-700 text-sm rounded-xl p-2.5 focus:ring-[#09637E] w-full sm:w-auto">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <h3 class="font-bold text-base sm:text-lg text-gray-800">Jadwal Pemeriksaan Saya</h3>
+                        <form method="GET" action="{{ route('dashboard.pasien') }}" class="w-full sm:w-auto">
+                            <select name="status" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-700 text-sm rounded-xl p-2.5 focus:ring-[#09637E] w-full">
                                 <option value="all" {{ $statusAktif == 'all' ? 'selected' : '' }}>Semua Status</option>
                                 <option value="Menunggu" {{ $statusAktif == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
                                 <option value="Selesai" {{ $statusAktif == 'Selesai' ? 'selected' : '' }}>Selesai</option>
@@ -142,7 +141,7 @@
 
         {{-- RIGHT COLUMN (PROFIL) --}}
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:sticky lg:top-24">
                 <div class="flex flex-col items-center text-center mb-6">
                     <div class="w-24 h-24 rounded-full bg-[#09637E] flex items-center justify-center text-white text-3xl font-bold shadow-lg border-4 border-white mb-4">AR</div>
                     <h3 class="text-xl font-bold text-gray-900">Andi Pratama Rayhan</h3>

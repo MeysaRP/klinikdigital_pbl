@@ -2,7 +2,6 @@
 
 @section('content')
 
-<!-- HERO -->
 <section class="bg-white relative overflow-hidden">
     <div class="absolute top-0 right-0 w-96 h-96 bg-[#09637E]/5 rounded-full filter blur-3xl -z-0 transform translate-x-1/2 -translate-y-1/2"></div>
 
@@ -18,13 +17,11 @@
     </div>
 </section>
 
-<!-- CONTACT SECTION -->
 <section class="bg-gray-50 py-20 border-t border-gray-100">
     <div class="max-w-screen-xl mx-auto px-4">
         <div class="grid lg:grid-cols-3 gap-8">
 
-            <!-- INFO KONTAK -->
-            <div class="space-y-6">
+            <div class="space-y-4">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                     <div class="w-12 h-12 bg-[#09637E]/10 rounded-xl flex items-center justify-center mb-4">
                         <svg class="w-6 h-6 text-[#09637E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -66,9 +63,8 @@
                 </div>
             </div>
 
-            <!-- FORM KONTAK -->
             <div class="lg:col-span-2">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
                     <h2 class="text-xl font-bold text-gray-900 mb-6">Kirim Pesan</h2>
 
                     <form class="space-y-5">

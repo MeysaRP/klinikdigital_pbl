@@ -1,19 +1,26 @@
-<aside class="fixed top-0 left-0 z-40 w-64 h-screen pt-4 bg-white border-r border-gray-200">
+<aside id="mainSidebar"
+       class="sidebar-transition fixed top-0 left-0 z-50 w-64 h-screen pt-4 bg-white border-r border-gray-200 -translate-x-full md:translate-x-0 md:z-40">
+
     <div class="overflow-y-auto py-5 px-3 h-full bg-white">
-        <!-- LOGO (SAMA PERSIS DENGAN SIDEBAR PASIEN) -->
-        <a href="/" class="flex items-center pl-2.5 mb-8">
-            <svg class="w-8 h-8 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M5 5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3h-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v3H5V5Z"/>
-                <path d="M6 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H6Zm6 2a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"/>
-                <path fill-rule="evenodd" d="M1 6a1 1 0 0 1 1-1h2v12H2a1 1 0 0 1-1-1V6Zm16-1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-2V5h2Z" clip-rule="evenodd"/>
-            </svg>
-            <span class="self-center text-xl font-bold whitespace-nowrap text-[#09637E] ml-2">MediTech</span>
-        </a>
+        <!-- HEADER SIDEBAR -->
+        <div class="flex items-center justify-between pl-2.5 mb-8">
+            <a href="/" class="flex items-center">
+                <svg class="w-8 h-8 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M5 5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v3h-2V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v3H5V5Z"/>
+                    <path d="M6 10a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H6Zm6 2a1 1 0 1 1 2 0 1 1 0 0 1-2 0Z"/>
+                    <path fill-rule="evenodd" d="M1 6a1 1 0 0 1 1-1h2v12H2a1 1 0 0 1-1-1V6Zm16-1a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-2V5h2Z" clip-rule="evenodd"/>
+                </svg>
+                <span class="self-center text-xl font-bold whitespace-nowrap text-[#09637E] ml-2">MediTech</span>
+            </a>
+            <button onclick="toggleSidebar()" class="md:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
 
         <!-- MENU -->
         <ul class="space-y-2">
-
-            <!-- DASHBOARD -->
             <li>
                 <a href="{{ route('dashboard.dokter') }}"
                    class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dashboard.dokter') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
@@ -23,8 +30,6 @@
                     Dashboard
                 </a>
             </li>
-
-            <!-- JADWAL -->
             <li>
                 <a href="{{ route('dokter.jadwal') }}"
                    class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dokter.jadwal') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
@@ -34,8 +39,6 @@
                     Jadwal Saya
                 </a>
             </li>
-
-            <!-- ANTRIAN -->
             <li>
                 <a href="{{ route('dokter.antrian') }}"
                    class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dokter.antrian') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
@@ -45,8 +48,6 @@
                     Antrian Pasien
                 </a>
             </li>
-
-            <!-- PROFIL -->
             <li>
                 <a href="{{ route('dokter.profil') }}"
                    class="flex items-center p-3 text-sm font-medium rounded-xl group {{ request()->routeIs('dokter.profil') ? 'bg-[#09637E] text-white font-semibold' : 'text-gray-700 hover:bg-gray-100' }}">
@@ -56,7 +57,6 @@
                     Profil
                 </a>
             </li>
-
         </ul>
     </div>
 

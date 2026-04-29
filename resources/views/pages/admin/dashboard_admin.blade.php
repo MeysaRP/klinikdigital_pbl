@@ -12,8 +12,7 @@
 @section('content')
 <div class="space-y-6">
 
-    <!-- CARD (FONT SAMA DENGAN PASIEN: xs untuk label, 2xl untuk angka) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
 
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex items-center justify-between">
             <div>
@@ -41,15 +40,14 @@
 
     </div>
 
-    <!-- TABEL (FONT SAMA: sm untuk body, xs uppercase untuk header) -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
-        <div class="px-6 py-4 border-b border-gray-100">
-            <h3 class="font-bold text-lg text-gray-800">Antrian Pasien Hari Ini</h3>
+        <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
+            <h3 class="font-bold text-base sm:text-lg text-gray-800">Antrian Pasien Hari Ini</h3>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="w-full text-sm min-w-[540px]">
                 <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-semibold">
                     <tr>
                         <th class="px-5 py-3.5 text-left">No</th>

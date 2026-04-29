@@ -77,7 +77,8 @@
 
     <!-- TABLE -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <table class="w-full text-sm">
+    <div class="overflow-x-auto">
+    <table class="w-full text-sm min-w-[640px]">
             <thead>
                 <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-semibold">
                     <th class="px-5 py-3.5 text-left rounded-tl-2xl">Hari</th>
@@ -167,10 +168,9 @@
                 </tr>
             </tbody>
         </table>
-        <div id="jadwalEmpty" class="hidden py-12 text-center text-sm text-gray-400">Jadwal tidak ditemukan.</div>
-    </div>
-
-</div>
+         </div><!-- tutup overflow-x-auto -->
+            <div id="jadwalEmpty" class="hidden py-12 text-center text-sm text-gray-400">Jadwal tidak ditemukan.</div>
+        </div>
 
 <!-- MODAL DAFTAR PASIEN -->
 <div id="pasienModal" class="fixed inset-0 z-50 hidden">

@@ -14,10 +14,10 @@
 <div class="space-y-6">
 
     <!-- FILTER -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col md:flex-row justify-between gap-3">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-5 flex flex-col sm:flex-row justify-between gap-3">
 
         <!-- SEARCH DENGAN TOMBOL X -->
-        <div class="relative w-full md:w-1/3">
+        <div class="relative w-full sm:w-1/3">
             <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <input type="text" id="searchDokter" placeholder="Cari username, nama, STR, atau HP..."
                 class="w-full bg-gray-50 rounded-xl pl-10 pr-9 py-2.5 text-sm focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40 outline-none border border-gray-200">
@@ -39,7 +39,7 @@
     </div>
 
     <!-- HEADER & BUTTON -->
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <h2 class="font-bold text-lg text-gray-800">Kelola Data Dokter</h2>
         <button onclick="openTambah()" class="bg-[#09637E] text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-[#074d61] transition">
             + Tambah Dokter
@@ -50,7 +50,7 @@
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
         <div class="overflow-x-auto">
-            <table class="w-full text-sm text-left">
+            <table class="w-full text-sm text-left min-w-[700px]">
 
                 <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-semibold">
                     <tr>
@@ -110,7 +110,7 @@
         </div>
 
         <!-- FOOTER -->
-        <div class="flex justify-between items-center px-5 py-3 text-sm text-gray-500 border-t border-gray-100">
+        <div class="flex flex-col sm:flex-row justify-between items-center px-5 py-3 text-sm text-gray-500 border-t border-gray-100 gap-2">
             <span id="infoJumlah">Menampilkan 3 data dokter</span>
             <div class="flex gap-2" id="pagination">
                 <button class="page-btn active">1</button>
@@ -259,7 +259,6 @@ function tampilkanSemua() {
         total++;
     });
     document.getElementById('infoJumlah').textContent = 'Menampilkan ' + total + ' data dokter';
-    // Sembunyikan tombol X
     document.getElementById('btnClearSearch').classList.add('hidden');
 }
 
@@ -275,13 +274,11 @@ function cariDokter() {
     let inputEl = document.getElementById('searchDokter');
     let value = inputEl.value.toLowerCase().trim();
 
-    // Kalau input kosong → langsung tampilkan semua, JANGAN delay
     if (value === '') {
         tampilkanSemua();
         return;
     }
 
-    // Kalau ada isi → delay 400ms biar gak kebanyakan filter
     let tampil = 0;
     document.querySelectorAll('#tableDokter tr').forEach(function(row) {
         let username = row.querySelector('.username') ? row.querySelector('.username').innerText.toLowerCase() : '';
@@ -295,22 +292,18 @@ function cariDokter() {
     });
 
     document.getElementById('infoJumlah').textContent = 'Menampilkan ' + tampil + ' data dokter';
-    // Tampilkan tombol X
     document.getElementById('btnClearSearch').classList.remove('hidden');
 }
 
 // ========== EVENT: INPUT PENCARIAN ==========
 document.getElementById('searchDokter').addEventListener('input', function() {
-    // Batalkan timeout sebelumnya kalau ada
     if (searchTimeout) clearTimeout(searchTimeout);
 
     let value = this.value.toLowerCase().trim();
 
     if (value === '') {
-        // Kalau kosong → langsung tampilkan semua tanpa delay
         tampilkanSemua();
     } else {
-        // Kalau ada isi → delay 400ms baru filter
         searchTimeout = setTimeout(cariDokter, 400);
     }
 });
