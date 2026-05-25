@@ -19,9 +19,11 @@ class RegistrasiController extends Controller
         $request->validate([
             'username' => 'required|unique:users,username',
             'name' => 'required|string|max:255',
-            'alamat' => 'required',
+            'alamat' => 'required|string|max:500',
             'tgl_lahir' => 'required|date',
-            'no_hp' => 'required',
+            'no_hp' => 'required|string|max:25',
+            'kategori' => 'required|in:Mahasiswa,Dosen,Staff TU',
+            'no_identitas' => 'required|string|max:100',
             'password' => 'required|min:6|confirmed',
         ]);
 
@@ -31,10 +33,13 @@ class RegistrasiController extends Controller
             'alamat' => $request->alamat,
             'tgl_lahir' => $request->tgl_lahir,
             'no_hp' => $request->no_hp,
+            'kategori' => $request->kategori,
+            'no_identitas' => $request->no_identitas,
+            'role' => 'pasien',
+            'email' => $request->username . '@meditech.local',
             'password' => Hash::make($request->password),
         ]);
 
-        // redirect()->route('registrasi') tidak perlu diubah karena nama routenya tetap sama
-        return redirect()->route('registrasi')->with('success', 'Registrasi berhasil!');
+        return redirect()->route('login')->with('success', 'Registrasi berhasil! Silakan login.');
     }
 }

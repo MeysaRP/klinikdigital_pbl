@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class LoginController extends Controller
@@ -27,11 +27,28 @@ class LoginController extends Controller
             'role.required' => 'Role wajib dipilih!',
         ]);
 
-        // DATA DUMMY
+        if ($request->role === 'pasien') {
+            $user = User::where('username', $request->username)
+                ->where('role', 'pasien')
+                ->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                session([
+                    'login' => true,
+                    'role' => 'pasien',
+                    'username' => $user->username,
+                ]);
+
+                return redirect('/dashboard/pasien');
+            }
+
+            return back()->with('error', 'Username / password / role salah!');
+        }
+
+        // fallback untuk admin/dokter yang belum terdaftar di database
         $users = [
             ['username' => 'admin', 'password' => '123', 'role' => 'admin'],
             ['username' => 'dokter', 'password' => '123', 'role' => 'dokter'],
-            ['username' => 'pasien', 'password' => '123', 'role' => 'pasien'],
         ];
 
         foreach ($users as $user) {
@@ -40,21 +57,16 @@ class LoginController extends Controller
                 $request->password === $user['password'] &&
                 $request->role === $user['role']
             ) {
-
-                // SIMPAN SESSION
                 session([
                     'login' => true,
                     'role' => $user['role'],
                 ]);
 
-                // REDIRECT SESUAI ROLE
                 if ($user['role'] === 'admin') {
                     return redirect('/dashboard/admin');
-                } elseif ($user['role'] === 'dokter') {
-                    return redirect('/dashboard/dokter');
-                } else {
-                    return redirect('/dashboard/pasien');
                 }
+
+                return redirect('/dashboard/dokter');
             }
         }
 

@@ -45,6 +45,12 @@
                     MASUK PASIEN
                 </h2>
 
+                @if(session('success'))
+                    <div class="mb-3 text-sm text-green-700 bg-green-50 border border-green-200 p-3 rounded-xl">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 @if(session('error'))
                     <div class="mb-3 text-sm text-red-600 bg-red-50 border border-red-200 p-3 rounded-xl">
                         {{ session('error') }}
@@ -56,9 +62,9 @@
 
                     <select name="role" id="role" onchange="handleRoleChange()"
                         class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
-                        <option value="pasien">Pasien</option>
-                        <option value="dokter">Dokter</option>
-                        <option value="admin">Admin</option>
+                        <option value="pasien" {{ old('role') === 'pasien' ? 'selected' : '' }}>Pasien</option>
+                        <option value="dokter" {{ old('role') === 'dokter' ? 'selected' : '' }}>Dokter</option>
+                        <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
 
                     <div>

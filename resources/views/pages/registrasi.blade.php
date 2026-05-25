@@ -47,49 +47,91 @@
                 Daftar Akun
             </h1>
 
-            <form onsubmit="return validateForm()" class="flex flex-col gap-2.5">
+            @if(session('success'))
+                <div class="mb-4 text-sm text-green-700 bg-green-50 border border-green-200 p-3 rounded-xl">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="mb-4 text-sm text-red-700 bg-red-50 border border-red-200 p-3 rounded-xl">
+                    <ul class="list-disc list-inside">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('registrasi.store') }}" onsubmit="return validateForm()" class="flex flex-col gap-2.5">
+                @csrf
 
                 <div>
-                    <input type="text" id="username" placeholder="Username"
+                    <input name="username" type="text" id="username" placeholder="Username"
+                        value="{{ old('username') }}"
                         class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
                     <p id="error-username" class="text-red-500 text-xs hidden">Username wajib diisi</p>
                 </div>
 
                 <div>
-                    <input type="text" id="nama" placeholder="Nama lengkap"
+                    <input name="name" type="text" id="nama" placeholder="Nama lengkap"
+                        value="{{ old('name') }}"
                         class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
                     <p id="error-nama" class="text-red-500 text-xs hidden">Nama wajib diisi</p>
                 </div>
 
                 <div>
-                    <input type="text" id="alamat" placeholder="Alamat"
+                    <input name="alamat" type="text" id="alamat" placeholder="Alamat"
+                        value="{{ old('alamat') }}"
                         class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
                     <p id="error-alamat" class="text-red-500 text-xs hidden">Alamat wajib diisi</p>
+                </div>
+
+                <div>
+                    <label class="text-xs text-gray-500 ml-1">Kategori</label>
+                    <select name="kategori" id="kategori"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                        <option value="">Pilih kategori</option>
+                        <option value="Mahasiswa" {{ old('kategori') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                        <option value="Dosen" {{ old('kategori') == 'Dosen' ? 'selected' : '' }}>Dosen</option>
+                        <option value="Staff TU" {{ old('kategori') == 'Staff TU' ? 'selected' : '' }}>Staff TU</option>
+                    </select>
+                    <p id="error-kategori" class="text-red-500 text-xs hidden">Kategori wajib dipilih</p>
+                </div>
+
+                <div>
+                    <label id="label-identitas" class="text-xs text-gray-500 ml-1">NIM / NIK</label>
+                    <input name="no_identitas" type="text" id="no_identitas" placeholder="NIM / NIK"
+                        value="{{ old('no_identitas') }}"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                    <p id="error-no-identitas" class="text-red-500 text-xs hidden">Identitas wajib diisi</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <div>
                         <label class="text-xs text-gray-500 ml-1">Tanggal lahir</label>
-                        <input type="date" id="tanggal"
+                        <input name="tgl_lahir" type="date" id="tanggal"
+                            value="{{ old('tgl_lahir') }}"
                             class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
                         <p id="error-tanggal" class="text-red-500 text-xs hidden">Tanggal lahir wajib diisi</p>
                     </div>
                     <div>
                         <label class="text-xs text-gray-500 ml-1">No HP</label>
-                        <input type="tel" id="nohp" placeholder="08xxxxxxxxxx"
+                        <input name="no_hp" type="tel" id="nohp" placeholder="08xxxxxxxxxx"
+                            value="{{ old('no_hp') }}"
                             class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
                         <p id="error-nohp" class="text-red-500 text-xs hidden">No HP wajib diisi</p>
                     </div>
                 </div>
 
                 <div>
-                    <input type="password" id="password" placeholder="Password"
+                    <input name="password" type="password" id="password" placeholder="Password"
                         class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
                     <p id="error-password" class="text-red-500 text-xs hidden">Password wajib diisi</p>
                 </div>
 
                 <div>
-                    <input type="password" id="confirm" placeholder="Konfirmasi Password"
+                    <input name="password_confirmation" type="password" id="confirm" placeholder="Konfirmasi Password"
                         class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
                     <p id="error-confirm" class="text-red-500 text-xs hidden">Password tidak sama</p>
                 </div>
@@ -109,6 +151,26 @@
 </div>
 
 <script>
+function updateIdentitasLabel() {
+    const kategori = document.getElementById('kategori').value;
+    const label = document.getElementById('label-identitas');
+    const input = document.getElementById('no_identitas');
+
+    if (kategori === 'Mahasiswa') {
+        label.textContent = 'NIM';
+        input.placeholder = 'NIM Mahasiswa';
+    } else if (kategori === 'Dosen' || kategori === 'Staff TU') {
+        label.textContent = 'NIK';
+        input.placeholder = 'NIK';
+    } else {
+        label.textContent = 'NIM / NIK';
+        input.placeholder = 'NIM / NIK';
+    }
+}
+
+document.getElementById('kategori').addEventListener('change', updateIdentitasLabel);
+updateIdentitasLabel();
+
 function validateForm() {
     let valid = true;
     function cek(id, errorId, message) {
@@ -127,6 +189,8 @@ function validateForm() {
     cek("username", "error-username", "Username wajib diisi");
     cek("nama", "error-nama", "Nama wajib diisi");
     cek("alamat", "error-alamat", "Alamat wajib diisi");
+    cek("kategori", "error-kategori", "Kategori wajib dipilih");
+    cek("no_identitas", "error-no-identitas", "Identitas wajib diisi");
     cek("tanggal", "error-tanggal", "Tanggal wajib diisi");
     cek("nohp", "error-nohp", "No HP wajib diisi");
     cek("password", "error-password", "Password wajib diisi");
