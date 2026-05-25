@@ -155,6 +155,8 @@ Route::prefix('dashboard')->group(function () {
     // ================= ADMIN =================
     Route::get('/admin', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
     Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
+    Route::post('/data_dokter', [DataDokterController::class, 'store'])->name('data.dokter.store');
+    Route::put('/data_dokter/{dokter}', [DataDokterController::class, 'update'])->name('data.dokter.update');
     Route::get('/data_pasien', [DashboardAdminController::class, 'dataPasien'])->name('data.pasien');
     Route::get('/data_jadwal', [DashboardAdminController::class, 'dataJadwal'])->name('data.jadwal');
 

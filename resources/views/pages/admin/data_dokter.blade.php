@@ -64,46 +64,24 @@
                 </thead>
 
                 <tbody id="tableDokter" class="text-gray-700 divide-y divide-gray-100">
-
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-5 py-3.5 font-mono text-xs text-gray-400 username">dr.sarah</td>
-                        <td class="px-5 py-3.5 font-medium nama">Dr. Sarah</td>
-                        <td class="px-5 py-3.5 str">1234567</td>
-                        <td class="px-5 py-3.5 hp">081234567</td>
-                        <td class="px-5 py-3.5">
-                            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Aktif</span>
-                        </td>
-                        <td class="px-5 py-3.5 text-right">
-                            <button onclick="openEdit(this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#09637E]/10 text-[#09637E] hover:bg-[#09637E] hover:text-white transition">Edit</button>
-                        </td>
-                    </tr>
-
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-5 py-3.5 font-mono text-xs text-gray-400 username">dr.budi</td>
-                        <td class="px-5 py-3.5 font-medium nama">Dr. Budi</td>
-                        <td class="px-5 py-3.5 str">1234567</td>
-                        <td class="px-5 py-3.5 hp">081234567</td>
-                        <td class="px-5 py-3.5">
-                            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Aktif</span>
-                        </td>
-                        <td class="px-5 py-3.5 text-right">
-                            <button onclick="openEdit(this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#09637E]/10 text-[#09637E] hover:bg-[#09637E] hover:text-white transition">Edit</button>
-                        </td>
-                    </tr>
-
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-5 py-3.5 font-mono text-xs text-gray-400 username">dr.rina</td>
-                        <td class="px-5 py-3.5 font-medium nama">Dr. Rina</td>
-                        <td class="px-5 py-3.5 str">1234567</td>
-                        <td class="px-5 py-3.5 hp">081234567</td>
-                        <td class="px-5 py-3.5">
-                            <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-600 font-medium">Nonaktif</span>
-                        </td>
-                        <td class="px-5 py-3.5 text-right">
-                            <button onclick="openEdit(this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#09637E]/10 text-[#09637E] hover:bg-[#09637E] hover:text-white transition">Edit</button>
-                        </td>
-                    </tr>
-
+                    @foreach ($dokters as $dokter)
+                        <tr data-dokter-id="{{ $dokter->id }}" class="hover:bg-gray-50 transition">
+                            <td class="px-5 py-3.5 font-mono text-xs text-gray-400 username">{{ $dokter->username }}</td>
+                            <td class="px-5 py-3.5 font-medium nama">{{ $dokter->nama }}</td>
+                            <td class="px-5 py-3.5 str">{{ $dokter->str }}</td>
+                            <td class="px-5 py-3.5 hp">{{ $dokter->no_hp }}</td>
+                            <td class="px-5 py-3.5">
+                                @if ($dokter->status === 'Aktif')
+                                    <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Aktif</span>
+                                @else
+                                    <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-600 font-medium">{{ $dokter->status }}</span>
+                                @endif
+                            </td>
+                            <td class="px-5 py-3.5 text-right">
+                                <button onclick="openEdit(this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#09637E]/10 text-[#09637E] hover:bg-[#09637E] hover:text-white transition">Edit</button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
 
             </table>
@@ -250,6 +228,11 @@
 <script>
 
 let searchTimeout = null;
+const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+const storeDokterUrl = '{{ route('data.dokter.store') }}';
+const updateDokterUrlBase = '{{ route('data.dokter.update', ['dokter' => 0]) }}';
+let selectedRow = null;
+let selectedRowId = null;
 
 // ========== FUNGSI: TAMPILKAN SEMUA BARIS ==========
 function tampilkanSemua() {
@@ -336,23 +319,51 @@ function closeTambah() {
     document.body.style.overflow = '';
 }
 
-function simpanDokter() {
+async function simpanDokter() {
     let username = document.getElementById('tUsername').value;
     let nama = document.getElementById('tNama').value;
     let str = document.getElementById('tSTR').value;
     let hp = document.getElementById('tHP').value;
     let status = document.getElementById('tStatus').value;
+    let password = document.getElementById('tPass').value;
 
-    if (!username || !nama || !str || !hp) { alert("Username, Nama, STR, dan HP harus diisi!"); return; }
+    if (!username || !nama || !str || !hp || !password) {
+        alert("Username, Nama, STR, HP, dan Password harus diisi!");
+        return;
+    }
 
-    let badgeClass = status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600';
+    const response = await fetch(storeDokterUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            username,
+            nama,
+            str,
+            no_hp: hp,
+            status,
+            password
+        })
+    });
 
-    let row = '<tr class="hover:bg-gray-50 transition">' +
-        '<td class="px-5 py-3.5 font-mono text-xs text-gray-400 username">' + username + '</td>' +
-        '<td class="px-5 py-3.5 font-medium nama">' + nama + '</td>' +
-        '<td class="px-5 py-3.5 str">' + str + '</td>' +
-        '<td class="px-5 py-3.5 hp">' + hp + '</td>' +
-        '<td class="px-5 py-3.5"><span class="px-3 py-1 text-xs rounded-full ' + badgeClass + ' font-medium">' + status + '</span></td>' +
+    if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        alert(result.message || 'Gagal menyimpan data dokter.');
+        return;
+    }
+
+    const data = await response.json();
+    const badgeClass = data.status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600';
+
+    const row = '<tr data-dokter-id="' + data.id + '" class="hover:bg-gray-50 transition">' +
+        '<td class="px-5 py-3.5 font-mono text-xs text-gray-400 username">' + data.username + '</td>' +
+        '<td class="px-5 py-3.5 font-medium nama">' + data.nama + '</td>' +
+        '<td class="px-5 py-3.5 str">' + data.str + '</td>' +
+        '<td class="px-5 py-3.5 hp">' + data.no_hp + '</td>' +
+        '<td class="px-5 py-3.5"><span class="px-3 py-1 text-xs rounded-full ' + badgeClass + ' font-medium">' + data.status + '</span></td>' +
         '<td class="px-5 py-3.5 text-right"><button onclick="openEdit(this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#09637E]/10 text-[#09637E] hover:bg-[#09637E] hover:text-white transition">Edit</button></td>' +
     '</tr>';
 
@@ -361,10 +372,10 @@ function simpanDokter() {
 }
 
 // ========== MODAL EDIT ==========
-let selectedRow = null;
 
 function openEdit(btn) {
     selectedRow = btn.closest('tr');
+    selectedRowId = selectedRow.dataset.dokterId;
 
     document.getElementById('eUsername').value = selectedRow.querySelector('.username').innerText;
     document.getElementById('eNama').value = selectedRow.querySelector('.nama').innerText;
@@ -386,23 +397,58 @@ function closeEdit() {
     document.body.style.overflow = '';
 }
 
-function updateDokter() {
+async function updateDokter() {
     let username = document.getElementById('eUsername').value;
     let nama = document.getElementById('eNama').value;
     let str = document.getElementById('eSTR').value;
     let hp = document.getElementById('eHP').value;
     let status = document.getElementById('eStatus').value;
+    let password = document.getElementById('ePass').value;
 
-    if (!username || !nama || !str || !hp) { alert("Username, Nama, STR, dan HP harus diisi!"); return; }
+    if (!username || !nama || !str || !hp) {
+        alert("Username, Nama, STR, dan HP harus diisi!");
+        return;
+    }
 
-    selectedRow.querySelector('.username').innerText = username;
-    selectedRow.querySelector('.nama').innerText = nama;
-    selectedRow.querySelector('.str').innerText = str;
-    selectedRow.querySelector('.hp').innerText = hp;
+    if (!selectedRowId) {
+        alert('Dokter tidak ditemukan untuk diperbarui.');
+        return;
+    }
 
-    let badgeClass = status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600';
-    selectedRow.querySelector('span').className = 'px-3 py-1 text-xs rounded-full ' + badgeClass + ' font-medium';
-    selectedRow.querySelector('span').innerText = status;
+    const url = updateDokterUrlBase.replace('/0', '/' + selectedRowId);
+    const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+            username,
+            nama,
+            str,
+            no_hp: hp,
+            status,
+            password
+        })
+    });
+
+    if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        alert(result.message || 'Gagal memperbarui data dokter.');
+        return;
+    }
+
+    const data = await response.json();
+    selectedRow.querySelector('.username').innerText = data.username;
+    selectedRow.querySelector('.nama').innerText = data.nama;
+    selectedRow.querySelector('.str').innerText = data.str;
+    selectedRow.querySelector('.hp').innerText = data.no_hp;
+
+    let badgeClass = data.status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600';
+    const statusSpan = selectedRow.querySelector('span');
+    statusSpan.className = 'px-3 py-1 text-xs rounded-full ' + badgeClass + ' font-medium';
+    statusSpan.innerText = data.status;
 
     closeEdit();
 }
