@@ -27,59 +27,41 @@ class LoginController extends Controller
             'role.required' => 'Role wajib dipilih!',
         ]);
 
-        if ($request->role === 'pasien') {
-            $user = User::where('username', $request->username)
-                ->where('role', 'pasien')
-                ->first();
+        // CEK USER BERDASARKAN USERNAME & ROLE
+        $user = User::where('username', $request->username)
+            ->where('role', $request->role)
+            ->first();
 
-            if ($user && Hash::check($request->password, $user->password)) {
-                session([
-                    'login' => true,
-                    'role' => 'pasien',
-                    'username' => $user->username,
-                ]);
+        // CEK PASSWORD HASH
+        if ($user && Hash::check($request->password, $user->password)) {
 
-                return redirect('/dashboard/pasien');
+            // SIMPAN SESSION
+            session([
+                'login' => true,
+                'role' => $user->role,
+                'username' => $user->username,
+            ]);
+
+            // REDIRECT BERDASARKAN ROLE
+            if ($user->role === 'admin') {
+                return redirect('/dashboard/admin');
             }
 
-            return back()->with('error', 'Username / password / role salah!');
-        }
-
-        // fallback untuk admin/dokter yang belum terdaftar di database
-        $users = [
-            ['username' => 'admin', 'password' => '123', 'role' => 'admin'],
-            ['username' => 'dokter', 'password' => '123', 'role' => 'dokter'],
-        ];
-
-        foreach ($users as $user) {
-            if (
-                $request->username === $user['username'] &&
-                $request->password === $user['password'] &&
-                $request->role === $user['role']
-            ) {
-                session([
-                    'login' => true,
-                    'role' => $user['role'],
-                ]);
-
-                if ($user['role'] === 'admin') {
-                    return redirect('/dashboard/admin');
-                }
-
+            elseif ($user->role === 'dokter') {
                 return redirect('/dashboard/dokter');
             }
+
+            return redirect('/dashboard/pasien');
         }
 
         return back()->with('error', 'Username / password / role salah!');
     }
 
-    // ✅ LOGOUT (SUDAH DIPERBAIKI TOTAL)
+    // LOGOUT
     public function logout(Request $request)
     {
-        // HAPUS SEMUA SESSION (karena kamu pakai manual session)
         $request->session()->flush();
 
-        // OPTIONAL (biar lebih aman)
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
