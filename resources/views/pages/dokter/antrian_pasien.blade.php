@@ -132,8 +132,14 @@
                 <input type="text" id="rmKeluhan" placeholder="Keluhan" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
             </div>
             
-            <!-- KOSONG (Spacer) -->
-            <div></div>
+            <!-- STATUS (DROPDOWN) -->
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
+                <select id="rmStatus" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
+                    <option value="Menunggu">Menunggu</option>
+                    <option value="Selesai">Selesai</option>
+                </select>
+            </div>
             
             <!-- DIAGNOSA (TANPA LABEL) -->
             <input type="text" id="rmDiagnosa" placeholder="Diagnosa" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
@@ -192,6 +198,9 @@ function openModal(btn) {
     document.getElementById('rmNama').value = btn.dataset.nama;
     document.getElementById('rmNo').value = btn.dataset.no;
     document.getElementById('rmKeluhan').value = btn.dataset.keluhan;
+    // Reset status ke default Menunggu saat buka modal
+    document.getElementById('rmStatus').value = 'Menunggu';
+    
     document.getElementById('rmDiagnosa').value = '';
     document.getElementById('rmCatatan').value = '';
     document.getElementById('obatContainer').innerHTML = buatBarisObat();
