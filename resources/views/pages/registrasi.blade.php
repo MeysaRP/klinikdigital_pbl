@@ -67,6 +67,13 @@
                 @csrf
 
                 <div>
+                    <input name="no_identitas" type="text" id="no_identitas" placeholder="NIM / NIK"
+                        value="{{ old('no_identitas') }}"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                    <p id="error-no-identitas" class="text-red-500 text-xs hidden">Identitas wajib diisi</p>
+                </div>
+
+                <div>
                     <input name="username" type="text" id="username" placeholder="Username"
                         value="{{ old('username') }}"
                         class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
@@ -97,14 +104,6 @@
                         <option value="Staff TU" {{ old('kategori') == 'Staff TU' ? 'selected' : '' }}>Staff TU</option>
                     </select>
                     <p id="error-kategori" class="text-red-500 text-xs hidden">Kategori wajib dipilih</p>
-                </div>
-
-                <div>
-                    <label id="label-identitas" class="text-xs text-gray-500 ml-1">NIM / NIK</label>
-                    <input name="no_identitas" type="text" id="no_identitas" placeholder="NIM / NIK"
-                        value="{{ old('no_identitas') }}"
-                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
-                    <p id="error-no-identitas" class="text-red-500 text-xs hidden">Identitas wajib diisi</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -153,17 +152,13 @@
 <script>
 function updateIdentitasLabel() {
     const kategori = document.getElementById('kategori').value;
-    const label = document.getElementById('label-identitas');
     const input = document.getElementById('no_identitas');
 
     if (kategori === 'Mahasiswa') {
-        label.textContent = 'NIM';
         input.placeholder = 'NIM Mahasiswa';
     } else if (kategori === 'Dosen' || kategori === 'Staff TU') {
-        label.textContent = 'NIK';
         input.placeholder = 'NIK';
     } else {
-        label.textContent = 'NIM / NIK';
         input.placeholder = 'NIM / NIK';
     }
 }

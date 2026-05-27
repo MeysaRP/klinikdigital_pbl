@@ -183,9 +183,7 @@
                         <h3 class="text-base font-bold text-gray-900" id="modalTitle">Daftar Pasien</h3>
                         <p class="text-xs text-gray-400 mt-1">Poliklinik Umum • Dr. Sarah Wijaya</p>
                     </div>
-                    <button onclick="closePasienModal()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                    </button>
+                    <!-- Tombol Tanda Silang Dihapus Disini -->
                 </div>
                 <div class="mt-3">
                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#09637E]/10 text-[#09637E] text-xs font-semibold rounded-lg">

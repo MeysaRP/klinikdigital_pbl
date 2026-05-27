@@ -41,8 +41,12 @@
                         <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Selesai</span>
                     </td>
                     <td class="px-5 py-3.5 text-right">
-                        <button onclick="openModal(this)" data-nama="Andi Pratama" data-no="05" data-keluhan="Demam" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
-                            Isi Rekam Medis
+                        <button onclick="openModal(this)" data-nama="Andi Pratama" data-no="05" data-keluhan="Demam" 
+                            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[#09637E] text-white hover:bg-[#074d61] transition shadow-sm"
+                            title="Isi Rekam Medis">
+                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
                         </button>
                     </td>
                 </tr>
@@ -54,7 +58,13 @@
                         <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
                     </td>
                     <td class="px-5 py-3.5 text-right">
-                        <button class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Periksa</button>
+                        <button disabled
+                            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
+                            title="Menunggu Periksa">
+                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </button>
                     </td>
                 </tr>
                 <tr class="hover:bg-gray-50 transition">
@@ -65,7 +75,13 @@
                         <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
                     </td>
                     <td class="px-5 py-3.5 text-right">
-                        <button class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Periksa</button>
+                        <button disabled
+                            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
+                            title="Menunggu Periksa">
+                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </button>
                     </td>
                 </tr>
                 <tr class="hover:bg-gray-50 transition">
@@ -76,7 +92,13 @@
                         <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
                     </td>
                     <td class="px-5 py-3.5 text-right">
-                        <button class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200 transition">Periksa</button>
+                        <button disabled
+                            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
+                            title="Menunggu Periksa">
+                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -90,16 +112,39 @@
 <div id="modalRM" class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center hidden z-50" onclick="closeModal()">
     <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl p-5 sm:p-6 mx-4" onclick="event.stopPropagation()">
         <h3 class="text-base font-bold text-gray-900 mb-5">Rekam Medis Pasien</h3>
+        
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <input type="text" id="rmNama" placeholder="Nama Pasien" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
-            <input type="text" id="rmNo" placeholder="No. Antrian" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
-            <input type="text" id="rmKeluhan" placeholder="Keluhan" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
+            <!-- NAMA PASIEN + LABEL -->
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Nama Pasien</label>
+                <input type="text" id="rmNama" placeholder="Nama Pasien" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
+            </div>
+            
+            <!-- NO ANTRIAN + LABEL -->
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">No. Antrian</label>
+                <input type="text" id="rmNo" placeholder="No. Antrian" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
+            </div>
+            
+            <!-- KELUHAN + LABEL -->
+            <div>
+                <label class="block text-xs font-medium text-gray-500 mb-1">Keluhan</label>
+                <input type="text" id="rmKeluhan" placeholder="Keluhan" class="border border-gray-200 rounded-xl px-3 py-2.5 bg-gray-50 text-gray-500 text-sm">
+            </div>
+            
+            <!-- KOSONG (Spacer) -->
             <div></div>
+            
+            <!-- DIAGNOSA (TANPA LABEL) -->
             <input type="text" id="rmDiagnosa" placeholder="Diagnosa" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
+            
+            <!-- CATATAN DOKTER (TANPA LABEL) -->
             <textarea id="rmCatatan" placeholder="Catatan Dokter" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40" rows="3"></textarea>
+            
+            <!-- RESEP OBAT -->
             <div class="col-span-1 sm:col-span-2">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-700">Resep Obat</span>
+                    <span class="text-sm font-semibold text-gray-700">Resep Obat</span>
                     <button type="button" onclick="tambahObat()" class="text-xs text-[#09637E] hover:underline font-medium">+ Tambah Obat</button>
                 </div>
                 <div id="obatContainer" class="space-y-2">
@@ -107,13 +152,12 @@
                         <input type="text" placeholder="Nama Obat" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
                         <input type="text" placeholder="Dosis" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
                         <input type="text" placeholder="Keterangan" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
-                        <button type="button" onclick="hapusObat(this)" class="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                        </button>
+                        <!-- Tombol Hapus Dihapus -->
                     </div>
                 </div>
             </div>
         </div>
+        
         <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
             <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 transition">Tutup</button>
             <button onclick="simpanRM()" class="px-5 py-2 rounded-xl text-sm font-semibold text-white bg-[#09637E] hover:bg-[#074d61] transition">Simpan</button>
@@ -165,20 +209,11 @@ function buatBarisObat() {
         '<input type="text" placeholder="Nama Obat" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
         '<input type="text" placeholder="Dosis" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
         '<input type="text" placeholder="Keterangan" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
-        '<button type="button" onclick="hapusObat(this)" class="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-xl border border-gray-200 text-gray-400 hover:text-red-500 hover:border-red-200 transition">' +
-            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>' +
-        '</button>' +
-    '</div>';
+        '</div>';
 }
 
 function tambahObat() {
     document.getElementById('obatContainer').insertAdjacentHTML('beforeend', buatBarisObat());
-}
-
-function hapusObat(btn) {
-    if (document.querySelectorAll('.obat-row').length > 1) {
-        btn.closest('.obat-row').remove();
-    }
 }
 
 function simpanRM() {
