@@ -120,6 +120,11 @@ Route::prefix('dashboard')->group(function () {
 
     })->name('pasien.profil.update');
 
+    // ================= RIWAYAT MEDIS =================
+    Route::get('/riwayat-medis', function () {
+        return 'Halaman Riwayat Medis';
+    })->name('riwayat.medis');
+
 
     // ================= DOKTER =================
     Route::get('/dokter', [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
@@ -151,6 +156,6 @@ Route::prefix('dashboard')->group(function () {
     // DATA JADWAL
     Route::get('/data_jadwal', [JadwalController::class, 'index'])->name('data.jadwal');
     Route::post('/data_jadwal', [JadwalController::class, 'store'])->name('data.jadwal.store');
-    Route::put('/data_jadwal/{id}', [JadwalController::class, 'update'])->name('data.jadwal.update'); // ← DITAMBAHKAN
+    Route::put('/data_jadwal/{id}', [JadwalController::class, 'update'])->name('data.jadwal.update');
 
 });
