@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Barryvdh\DomPDF\Facade\Pdf; // <--- DITAMBAHKAN UNTUK PDF
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\HomepageController;
 use App\Http\Controllers\RegistrasiController;
@@ -122,8 +123,105 @@ Route::prefix('dashboard')->group(function () {
 
     // ================= RIWAYAT MEDIS =================
     Route::get('/riwayat-medis', function () {
-        return 'Halaman Riwayat Medis';
+        // 1. Ambil nilai filter dari URL
+        $tahunAktif = request()->get('tahun', 'all');
+        $statusAktif = request()->get('status', 'all');
+
+        // 2. Data Dummy Lengkap (Sesuai kebutuhan View)
+        $semuaRiwayat = [
+            [
+                'id' => 1,
+                'tanggal' => '2024-05-20',
+                'dokter' => 'Dr. Ani Lestari',
+                'poli' => 'Paru',
+                'status' => 'Selesai',
+                'gejala' => 'Batuk kering yang tidak kunjung sembuh disertai sesak ringan.',
+                'diagnosa' => 'ISPA (Infeksi Saluran Pernapasan Akut)',
+                'resep' => 'Ambroxol 3x1, Paracetamol 3x1, Vitamin C 1x1'
+            ],
+            [
+                'id' => 2,
+                'tanggal' => '2024-01-15',
+                'dokter' => 'Dr. Budi Hartono',
+                'poli' => 'Penyakit Dalam',
+                'status' => 'Selesai',
+                'gejala' => 'Sakit ulu hati dan mual setelah makan pedas.',
+                'diagnosa' => 'Gastritis Akut',
+                'resep' => 'Omeprazole 1x1, Antasida 3x1'
+            ],
+            [
+                'id' => 3,
+                'tanggal' => '2023-11-10',
+                'dokter' => 'Dr. Sarah Wijaya',
+                'poli' => 'Umum',
+                'status' => 'Dibatalkan',
+                'gejala' => 'Pusing kepala dan demam ringan.',
+                'diagnosa' => '-',
+                'resep' => '-'
+            ],
+            [
+                'id' => 4,
+                'tanggal' => '2023-08-05',
+                'dokter' => 'Dr. Andi Saputra',
+                'poli' => 'Gigi',
+                'status' => 'Selesai',
+                'gejala' => 'Sakit gigi geraham bawah kanan.',
+                'diagnosa' => 'Karies Gigi',
+                'resep' => 'Amoxicillin 3x1, Ibuprofen 3x1 (bila sakit)'
+            ],
+        ];
+
+        // 3. Logika Filter
+        $riwayatTerfilter = $semuaRiwayat;
+
+        if ($tahunAktif !== 'all') {
+            $riwayatTerfilter = array_filter($riwayatTerfilter, function ($item) use ($tahunAktif) {
+                return date('Y', strtotime($item['tanggal'])) == $tahunAktif;
+            });
+        }
+
+        if ($statusAktif !== 'all') {
+            $riwayatTerfilter = array_filter($riwayatTerfilter, function ($item) use ($statusAktif) {
+                return $item['status'] == $statusAktif;
+            });
+        }
+
+        // Reset index array setelah filter
+        $riwayatTerfilter = array_values($riwayatTerfilter);
+
+        // 4. Return View
+        return view('pages.pasien.riwayat_medis', [
+            'riwayat' => $riwayatTerfilter,
+            'tahunAktif' => $tahunAktif,
+            'statusAktif' => $statusAktif
+        ]);
     })->name('riwayat.medis');
+
+    // ================= ROUTE EXPORT PDF (ASLI) =================
+    Route::get('/riwayat-medis/download-pdf/{id}', function ($id) {
+        // 1. Ambil Data (Sama dengan data di atas)
+        $semuaRiwayat = [
+            ['id' => 1, 'tanggal' => '2024-05-20', 'dokter' => 'Dr. Ani Lestari', 'poli' => 'Paru', 'status' => 'Selesai', 'gejala' => 'Batuk kering yang tidak kunjung sembuh disertai sesak ringan.', 'diagnosa' => 'ISPA (Infeksi Saluran Pernapasan Akut)', 'resep' => 'Ambroxol 3x1, Paracetamol 3x1, Vitamin C 1x1'],
+            ['id' => 2, 'tanggal' => '2024-01-15', 'dokter' => 'Dr. Budi Hartono', 'poli' => 'Penyakit Dalam', 'status' => 'Selesai', 'gejala' => 'Sakit ulu hati dan mual setelah makan pedas.', 'diagnosa' => 'Gastritis Akut', 'resep' => 'Omeprazole 1x1, Antasida 3x1'],
+            ['id' => 3, 'tanggal' => '2023-11-10', 'dokter' => 'Dr. Sarah Wijaya', 'poli' => 'Umum', 'status' => 'Dibatalkan', 'gejala' => 'Pusing kepala dan demam ringan.', 'diagnosa' => '-', 'resep' => '-'],
+            ['id' => 4, 'tanggal' => '2023-08-05', 'dokter' => 'Dr. Andi Saputra', 'poli' => 'Gigi', 'status' => 'Selesai', 'gejala' => 'Sakit gigi geraham bawah kanan.', 'diagnosa' => 'Karies Gigi', 'resep' => 'Amoxicillin 3x1, Ibuprofen 3x1 (bila sakit)'],
+        ];
+
+        // 2. Cari item berdasarkan ID
+        $item = collect($semuaRiwayat)->firstWhere('id', $id);
+
+        if (!$item) {
+            return abort(404, 'Data tidak ditemukan');
+        }
+
+        // 3. Load View PDF
+        // Pastikan file ada di: resources/views/pdf/riwayat_medis.blade.php
+        // KODE BARU
+        $pdf = Pdf::loadView('pages.pasien.pdf_riwayat', ['data' => $item]);
+
+        // 4. Download PDF
+        return $pdf->download('rekam-medis-' . $item['id'] . '.pdf');
+    })->name('riwayat.download-pdf');
 
 
     // ================= DOKTER =================
