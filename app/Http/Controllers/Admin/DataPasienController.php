@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class PasienController extends Controller
+class DataPasienController extends Controller
 {
-    // ================= DATA PASIEN =================
     public function index()
     {
         $pasien = [

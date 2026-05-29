@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Jadwal;
 use App\Models\Dokter;
 use Illuminate\Http\Request;
 
-class JadwalController extends Controller
+class DataJadwalController extends Controller
 {
     public function index()
     {
