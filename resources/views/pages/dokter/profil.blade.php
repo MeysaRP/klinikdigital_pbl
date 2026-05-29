@@ -112,6 +112,14 @@
             </div>
 
             <div class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50/50 transition">
+                <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">📧</div>
+                <div class="flex-1 min-w-0">
+                     <p class="text-xs text-gray-400">Email</p>
+                     <p class="text-sm font-semibold text-gray-900">dr.sarah@meditech.local</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50/50 transition">
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">🏥</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-gray-400">Status</p>

@@ -10,7 +10,7 @@ class Dokter extends Model
     use HasFactory;
 
     protected $fillable = [
-        'username',
+        'email',
         'nama',
         'str',
         'no_hp',

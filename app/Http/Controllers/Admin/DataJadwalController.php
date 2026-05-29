@@ -11,31 +11,26 @@ class DataJadwalController extends Controller
 {
     public function index()
     {
-        $jadwal = Jadwal::with('dokter')->get();
-        $dokters = Dokter::orderBy('nama')->get();
-
-        return view('pages.admin.data_jadwal', compact('jadwal', 'dokters'));
+        return view('pages.admin.data_jadwal', [
+            'jadwal' => Jadwal::with('dokter')->get(),
+            'dokters' => Dokter::orderBy('nama')->get(),
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'dokter_id'    => 'required|exists:dokters,id',
-            'hari'         => 'required',
-            'jam_mulai'    => 'required',
-            'jam_selesai'  => 'required',
+            'dokter_id' => 'required|exists:dokters,id',
+            'hari' => 'required',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
             'kuota_pasien' => 'required|integer',
-            'status'       => 'required',
+            'status' => 'required',
         ]);
 
-        Jadwal::create([
-            'dokter_id'    => $request->dokter_id,
-            'hari'         => $request->hari,
-            'jam_mulai'    => $request->jam_mulai,
-            'jam_selesai'  => $request->jam_selesai,
-            'kuota_pasien' => $request->kuota_pasien,
-            'status'       => $request->status,
-        ]);
+        Jadwal::create($request->only(
+            'dokter_id', 'hari', 'jam_mulai', 'jam_selesai', 'kuota_pasien', 'status'
+        ));
 
         return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan');
     }
@@ -43,23 +38,17 @@ class DataJadwalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'dokter_id'    => 'required|exists:dokters,id',
-            'hari'         => 'required',
-            'jam_mulai'    => 'required',
-            'jam_selesai'  => 'required',
+            'dokter_id' => 'required|exists:dokters,id',
+            'hari' => 'required',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
             'kuota_pasien' => 'required|integer',
-            'status'       => 'required',
+            'status' => 'required',
         ]);
 
-        $jadwal = Jadwal::findOrFail($id);
-        $jadwal->update([
-            'dokter_id'    => $request->dokter_id,
-            'hari'         => $request->hari,
-            'jam_mulai'    => $request->jam_mulai,
-            'jam_selesai'  => $request->jam_selesai,
-            'kuota_pasien' => $request->kuota_pasien,
-            'status'       => $request->status,
-        ]);
+        Jadwal::findOrFail($id)->update($request->only(
+            'dokter_id', 'hari', 'jam_mulai', 'jam_selesai', 'kuota_pasien', 'status'
+        ));
 
         return redirect()->back()->with('success', 'Jadwal berhasil diupdate');
     }

@@ -68,6 +68,11 @@
                         <p class="text-gray-800 font-medium">{{ $profil['nama'] }}</p>
                     </div>
 
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Email</p>
+                        <p class="text-gray-800 font-medium">{{ $profil['email'] ?? '-' }}</p>
+                    </div>
+
                     <!-- Tanggal Lahir -->
                     <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Tanggal Lahir</p>

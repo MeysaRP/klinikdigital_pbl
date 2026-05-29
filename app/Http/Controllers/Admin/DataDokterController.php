@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
-
 use App\Http\Controllers\Controller;
 use App\Models\Dokter;
 use Illuminate\Http\Request;
@@ -9,59 +7,20 @@ use Illuminate\Support\Facades\Hash;
 
 class DataDokterController extends Controller
 {
-    public function index()
-    {
-        $dokters = Dokter::orderBy('id')->get();
-
-        return view('pages.admin.data_dokter', compact('dokters'));
-    }
+    public function index() { return view('pages.admin.data_dokter', ['dokters' => Dokter::orderBy('id')->get()]); }
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'username' => 'required|string|max:255|unique:dokters,username',
-            'nama' => 'required|string|max:255',
-            'str' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:255',
-            'status' => 'required|string|max:50',
-            'password' => 'required|string|min:6',
-        ]);
-
-        $dokter = Dokter::create([
-            'username' => $validated['username'],
-            'nama' => $validated['nama'],
-            'str' => $validated['str'],
-            'no_hp' => $validated['no_hp'],
-            'status' => $validated['status'],
-            'password' => Hash::make($validated['password']),
-        ]);
-
-        return response()->json($dokter);
+        $v = $request->validate(['email'=>'required|email|unique:dokters,email','nama'=>'required','str'=>'required','no_hp'=>'required','status'=>'required','password'=>'required|min:6']);
+        return response()->json(Dokter::create(['email'=>$v['email'],'nama'=>$v['nama'],'str'=>$v['str'],'no_hp'=>$v['no_hp'],'status'=>$v['status'],'password'=>Hash::make($v['password'])]));
     }
 
     public function update(Request $request, Dokter $dokter)
     {
-        $validated = $request->validate([
-            'username' => 'required|string|max:255|unique:dokters,username,' . $dokter->id,
-            'nama' => 'required|string|max:255',
-            'str' => 'required|string|max:255',
-            'no_hp' => 'required|string|max:255',
-            'status' => 'required|string|max:50',
-            'password' => 'nullable|string|min:6',
-        ]);
-
-        $dokter->username = $validated['username'];
-        $dokter->nama = $validated['nama'];
-        $dokter->str = $validated['str'];
-        $dokter->no_hp = $validated['no_hp'];
-        $dokter->status = $validated['status'];
-
-        if (! empty($validated['password'])) {
-            $dokter->password = Hash::make($validated['password']);
-        }
-
+        $v = $request->validate(['email'=>'required|email|unique:dokters,email,'.$dokter->id,'nama'=>'required','str'=>'required','no_hp'=>'required','status'=>'required','password'=>'nullable|min:6']);
+        $dokter->email = $v['email']; $dokter->nama = $v['nama']; $dokter->str = $v['str']; $dokter->no_hp = $v['no_hp']; $dokter->status = $v['status'];
+        if (!empty($v['password'])) $dokter->password = Hash::make($v['password']);
         $dokter->save();
-
         return response()->json($dokter);
     }
 }

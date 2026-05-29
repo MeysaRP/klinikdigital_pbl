@@ -17,11 +17,6 @@ use App\Http\Controllers\Admin\DataDokterController;
 use App\Http\Controllers\Admin\DataPasienController;
 use App\Http\Controllers\Admin\DataJadwalController;
 
-/*
-|--------------------------------------------------------------------------
-| HALAMAN PUBLIK
-|--------------------------------------------------------------------------
-*/
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 
 Route::prefix('pages')->group(function () {
@@ -30,29 +25,19 @@ Route::prefix('pages')->group(function () {
     Route::view('/contact', 'pages.contact')->name('contact');
 });
 
-/*
-|--------------------------------------------------------------------------
-| AUTH
-|--------------------------------------------------------------------------
-*/
 Route::prefix('auth')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/login', [LoginController::class, 'login'])->name('login.process');
-
     Route::get('/registrasi', [RegistrasiController::class, 'index'])->name('registrasi');
     Route::post('/registrasi', [RegistrasiController::class, 'store'])->name('registrasi.store');
-
     Route::get('/forgot-password', [LoginController::class, 'forgotForm'])->name('forgot.password');
-    Route::post('/forgot-password', [LoginController::class, 'resetPassword'])->name('forgot.process');
+    Route::post('/forgot-password', [LoginController::class, 'sendResetLink'])->name('forgot.process');
+    Route::get('/reset-password/{token}', [LoginController::class, 'showResetForm'])->name('reset.form');
+    Route::post('/reset-password', [LoginController::class, 'resetPassword'])->name('reset.password');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD (DILINDUNGI MIDDLEWARE)
-|--------------------------------------------------------------------------
-*/
 Route::prefix('dashboard')->middleware('auth.session')->group(function () {
 
     Route::prefix('pasien')->middleware('role:pasien')->group(function () {

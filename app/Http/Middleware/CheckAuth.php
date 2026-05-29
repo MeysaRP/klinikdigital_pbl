@@ -12,7 +12,6 @@ class CheckAuth
         if (!session('login')) {
             return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu!');
         }
-
         return $next($request);
     }
 }

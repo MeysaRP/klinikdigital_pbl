@@ -68,12 +68,12 @@
                     </select>
 
                     <div>
-                        <input type="text" name="username" value="{{ old('username') }}" placeholder="Masukkan username"
-                            class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40
-                            @error('username') border-red-500 @enderror">
-                        @error('username')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
+                        <input type="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email"
+                         class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40
+                        @error('email') border-red-500 @enderror">
+                     @error('email')
+                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    @enderror
                     </div>
 
                     <div>

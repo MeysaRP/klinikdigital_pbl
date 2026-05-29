@@ -74,12 +74,11 @@
                 </div>
 
                 <div>
-                    <input name="username" type="text" id="username" placeholder="Username"
-                        value="{{ old('username') }}"
-                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
-                    <p id="error-username" class="text-red-500 text-xs hidden">Username wajib diisi</p>
+                    <input name="email" type="email" id="email" placeholder="Email (contoh: andi@gmail.com)"
+                         value="{{ old('email') }}"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637ab]/40">
+                    <p id="error-email" class="text-red-500 text-xs hidden">Email wajib diisi</p>
                 </div>
-
                 <div>
                     <input name="name" type="text" id="nama" placeholder="Nama lengkap"
                         value="{{ old('name') }}"
@@ -181,7 +180,7 @@ function validateForm() {
             input.classList.remove("border-red-500");
         }
     }
-    cek("username", "error-username", "Username wajib diisi");
+    cek("email", "error-email", "Email wajib diisi");
     cek("nama", "error-nama", "Nama wajib diisi");
     cek("alamat", "error-alamat", "Alamat wajib diisi");
     cek("kategori", "error-kategori", "Kategori wajib dipilih");
