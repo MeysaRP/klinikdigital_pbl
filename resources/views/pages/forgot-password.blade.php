@@ -21,9 +21,9 @@
             </div>
         @endif
 
-        @if(session('success'))
+        @if(session('status'))
             <div class="bg-green-50 border border-green-200 text-green-600 p-3 rounded-xl mb-4 text-sm">
-                {{ session('success') }}
+                {{ session('status') }}
             </div>
         @endif
 

@@ -23,13 +23,13 @@ return new class extends Migration
             });
         }
 
-        DB::table('dokters')->whereNull('email')->orWhere('email', '')->update([
-            'email' => DB::raw("CONCAT('temp-', id, '@meditech.local')")
-        ]);
+       // DB::table('dokters')->whereNull('email')->orWhere('email', '')->update([
+       //    'email' => DB::raw("CONCAT('temp-', id, '@meditech.local')")
+       //]);
 
-        Schema::table('dokters', function (Blueprint $table) {
-            $table->string('email')->nullable(false)->unique()->change();
-        });
+        //Schema::table('dokters', function (Blueprint $table) {
+        //    $table->string('email')->nullable(false)->unique()->change();
+        //});
     }
 
     public function down(): void

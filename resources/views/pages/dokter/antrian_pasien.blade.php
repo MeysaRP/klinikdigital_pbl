@@ -33,75 +33,68 @@
                 </tr>
             </thead>
             <tbody id="tbodyPasien" class="text-gray-700 divide-y divide-gray-100">
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-5 py-3.5">05</td>
-                    <td class="px-5 py-3.5 font-medium">Andi Pratama</td>
-                    <td class="px-5 py-3.5">Demam</td>
-                    <td class="px-5 py-3.5">
-                        <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Selesai</span>
-                    </td>
-                    <td class="px-5 py-3.5 text-right">
-                        <button onclick="openModal(this)" data-nama="Andi Pratama" data-no="05" data-keluhan="Demam" 
+                @forelse($antrians as $antrian)
+                    <tr class="hover:bg-gray-50 transition">
+                <td class="px-5 py-3.5">
+                    {{ $antrian->nomor_antrian }}
+                </td>
+
+                <td class="px-5 py-3.5 font-medium">
+                    {{ $antrian->pemesanan->nama_pasien ?? '-' }}
+                </td>
+
+                <td class="px-5 py-3.5">
+                    {{ $antrian->pemesanan->keluhan ?? '-' }}
+                </td>   
+
+                <td class="px-5 py-3.5">
+                    @if($antrian->status == 'menunggu')
+                <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">
+                    Menunggu
+                </span>
+                    @elseif($antrian->status == 'dipanggil')
+                <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700 font-medium">
+                    Dipanggil
+                </span>
+                    @else
+                <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
+                    Selesai
+                </span>
+                    @endif
+            </td>
+
+                <td class="px-5 py-3.5 text-right">
+                    @if($antrian->status != 'selesai')
+                        <button
+                            onclick="openModal(this)"
+                            data-nama="{{ $antrian->pemesanan->nama_pasien ?? '-' }}"
+                            data-no="{{ $antrian->nomor_antrian }}"
+                            data-keluhan="{{ $antrian->pemesanan->keluhan ?? '-' }}"
                             class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-[#09637E] text-white hover:bg-[#074d61] transition shadow-sm"
                             title="Isi Rekam Medis">
-                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-5 py-3.5">06</td>
-                    <td class="px-5 py-3.5 font-medium">Siti Aminah</td>
-                    <td class="px-5 py-3.5">Batuk</td>
-                    <td class="px-5 py-3.5">
-                        <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
-                    </td>
-                    <td class="px-5 py-3.5 text-right">
-                        <button disabled
-                            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
-                            title="Menunggu Periksa">
-                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-5 py-3.5">07</td>
-                    <td class="px-5 py-3.5 font-medium">Budi Santoso</td>
-                    <td class="px-5 py-3.5">Flu ringan</td>
-                    <td class="px-5 py-3.5">
-                        <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
-                    </td>
-                    <td class="px-5 py-3.5 text-right">
-                        <button disabled
-                            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
-                            title="Menunggu Periksa">
-                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-                <tr class="hover:bg-gray-50 transition">
-                    <td class="px-5 py-3.5">08</td>
-                    <td class="px-5 py-3.5 font-medium">Rini Wulandari</td>
-                    <td class="px-5 py-3.5">Pusing</td>
-                    <td class="px-5 py-3.5">
-                        <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">Menunggu</span>
-                    </td>
-                    <td class="px-5 py-3.5 text-right">
-                        <button disabled
-                            class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-gray-100 text-gray-400 cursor-not-allowed"
-                            title="Menunggu Periksa">
-                            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
+
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+            </button>
+        @else
+            <span class="text-green-600 text-sm font-medium">
+                Sudah Diisi
+            </span>
+        @endif
+    </td>
+        </tr>
+            @empty
+                <tr>
+                <td colspan="5" class="text-center py-5 text-gray-400">
+                    Belum ada antrian
+                </td>
+            </tr>
+                @endforelse
+        </tbody>
         </table>
         <div id="emptyState" class="hidden py-12 text-center text-sm text-gray-400">Pasien tidak ditemukan.</div>
     </div>

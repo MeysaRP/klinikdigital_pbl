@@ -100,7 +100,7 @@
                         <option value="">Pilih kategori</option>
                         <option value="Mahasiswa" {{ old('kategori') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
                         <option value="Dosen" {{ old('kategori') == 'Dosen' ? 'selected' : '' }}>Dosen</option>
-                        <option value="Staff TU" {{ old('kategori') == 'Staff TU' ? 'selected' : '' }}>Staff TU</option>
+                        <option value="Staff TU" {{ old('kategori') == 'Staff TU' ? 'selected' : '' }}>Tenaga Kependidikan</option>
                     </select>
                     <p id="error-kategori" class="text-red-500 text-xs hidden">Kategori wajib dipilih</p>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pasien;
 use App\Http\Controllers\Controller;
 use App\Models\Jadwal;
 use App\Models\PemesananJadwal;
+use App\Models\Antrian;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,7 @@ class PemesananJadwalController extends Controller
         $user = User::where('email', $email)->first();
 
         $jadwal = Jadwal::with('dokter')->findOrFail($request->jadwal_id);
+
         if ($jadwal->status !== 'Aktif') {
             return back()->with('error', 'Jadwal dokter tidak aktif. Silakan pilih jadwal lain.');
         }
@@ -74,12 +76,22 @@ class PemesananJadwalController extends Controller
             'status' => 'Menunggu',
         ]);
 
-        return redirect()->route('pemesanan.berhasil', ['booking' => $booking->id]);
+        // Simpan ke tabel antrians
+        Antrian::create([
+            'pemesanan_id' => $booking->id,
+            'nomor_antrian' => 'A' . str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT),
+            'status' => 'menunggu',
+        ]);
+
+        return redirect()->route('pemesanan.berhasil', [
+            'booking' => $booking->id
+        ]);
     }
 
     public function berhasil($bookingId)
     {
         $email = session('email');
+
         $booking = PemesananJadwal::with(['dokter', 'jadwal'])
             ->where('id', $bookingId)
             ->where('email', $email)
@@ -91,6 +103,7 @@ class PemesananJadwalController extends Controller
     public function batal($bookingId)
     {
         $email = session('email');
+
         $booking = PemesananJadwal::where('id', $bookingId)
             ->where('email', $email)
             ->where('status', 'Menunggu')
