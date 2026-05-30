@@ -44,7 +44,8 @@ Route::prefix('dashboard')->middleware('auth.session')->group(function () {
         Route::get('/', [DashboardPasienController::class, 'index'])->name('dashboard.pasien');
         Route::get('/pemesanan-jadwal', [PemesananJadwalController::class, 'index'])->name('pemesanan.jadwal');
         Route::post('/pemesanan-jadwal', [PemesananJadwalController::class, 'proses'])->name('pemesanan.proses');
-        Route::get('/pemesanan-berhasil/{nomor_antrian}', [PemesananJadwalController::class, 'berhasil'])->name('pemesanan.berhasil');
+        Route::get('/pemesanan-berhasil/{booking}', [PemesananJadwalController::class, 'berhasil'])->name('pemesanan.berhasil');
+        Route::post('/pemesanan-batal/{booking}', [PemesananJadwalController::class, 'batal'])->name('pemesanan.batal');
         Route::get('/profil', [ProfilPasienController::class, 'index'])->name('pasien.profil');
         Route::post('/profil', [ProfilPasienController::class, 'update'])->name('pasien.profil.update');
         Route::get('/riwayat-medis', [RiwayatMedisController::class, 'index'])->name('riwayat.medis');

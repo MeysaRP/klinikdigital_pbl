@@ -9,7 +9,9 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Dokter;
 use App\Mail\ResetPasswordMail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class LoginController extends Controller
 {
@@ -82,7 +84,18 @@ class LoginController extends Controller
                 'created_at' => now(),
             ]);
             $resetUrl = url('/auth/reset-password/' . $token . '?email=' . urlencode($email));
-            Mail::to($email)->send(new ResetPasswordMail($resetUrl));
+
+            try {
+                Mail::to($email)->send(new ResetPasswordMail($resetUrl));
+            } catch (TransportExceptionInterface $exception) {
+                DB::table('password_reset_tokens')->where('email', $email)->delete();
+                Log::error('Reset password email failed', ['email' => $email, 'error' => $exception->getMessage()]);
+                return back()->with('error', 'Gagal mengirim email reset password. Cek konfigurasi mail (.env) atau gunakan Mailtrap untuk development.');
+            } catch (\Exception $exception) {
+                DB::table('password_reset_tokens')->where('email', $email)->delete();
+                Log::error('Reset password email failed', ['email' => $email, 'error' => $exception->getMessage()]);
+                return back()->with('error', 'Terjadi kesalahan saat mengirim email. Silakan coba lagi nanti.');
+            }
         }
 
         return back()->with('success', 'Jika email terdaftar, link reset password telah dikirim.');
