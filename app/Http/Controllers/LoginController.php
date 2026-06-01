@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\User;
-use App\Models\Dokter;
+// use App\Models\Dokter; // Tidak perlu lagi karena data ada di User
 use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -32,6 +32,7 @@ class LoginController extends Controller
             'role.required' => 'Role wajib dipilih!',
         ]);
 
+        // Login mencari di tabel users
         $user = User::where('email', $request->email)->where('role', $request->role)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
@@ -72,10 +73,11 @@ class LoginController extends Controller
         ]);
 
         $email = $request->email;
+        
+        // HANYA cek di tabel users (karena semua data disana)
         $user = User::where('email', $email)->first();
-        $dokter = Dokter::where('email', $email)->first();
 
-        if ($user || $dokter) {
+        if ($user) {
             DB::table('password_reset_tokens')->where('email', $email)->delete();
             $token = Str::random(60);
             DB::table('password_reset_tokens')->insert([
@@ -98,7 +100,8 @@ class LoginController extends Controller
             }
         }
 
-        return back()->with('success', 'Jika email terdaftar, link reset password telah dikirim.');
+        // Ubah 'success' menjadi 'status' supaya muncul di View
+        return back()->with('status', 'Jika email terdaftar, link reset password telah dikirim.');
     }
 
     public function showResetForm(Request $request, $token)
@@ -139,14 +142,17 @@ class LoginController extends Controller
 
         $newPassword = Hash::make($request->password);
 
+        // Update password di tabel users
         $user = User::where('email', $email)->first();
-        if ($user) { $user->password = $newPassword; $user->save(); }
+        if ($user) { 
+            $user->password = $newPassword; 
+            $user->save(); 
+        }
 
-        $dokter = Dokter::where('email', $email)->first();
-        if ($dokter) { $dokter->password = $newPassword; $dokter->save(); }
-
+        // Hapus token
         DB::table('password_reset_tokens')->where('email', $email)->delete();
 
-        return redirect()->route('login')->with('success', 'Password berhasil diubah!');
+        // Ubah 'success' menjadi 'status'
+        return redirect()->route('login')->with('status', 'Password berhasil diubah!');
     }
 }
