@@ -52,10 +52,14 @@ Route::prefix('dashboard')->middleware('auth.session')->group(function () {
         Route::get('/riwayat-medis/download-pdf/{id}', [RiwayatMedisController::class, 'downloadPdf'])->name('riwayat.download-pdf');
     });
 
-    Route::prefix('dokter')->middleware('role:dokter')->group(function () {
+        Route::prefix('dokter')->middleware('role:dokter')->group(function () {
         Route::get('/', [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
         Route::get('/jadwal', [JadwalDokterController::class, 'index'])->name('dokter.jadwal');
         Route::get('/antrian', [AntrianDokterController::class, 'index'])->name('dokter.antrian');
+
+        Route::post('/antrian/simpan-rekam-medis', [AntrianDokterController::class, 'simpanRekamMedis'])
+            ->name('dokter.rekammedis.simpan');
+
         Route::get('/profil', [ProfilDokterController::class, 'index'])->name('dokter.profil');
     });
 

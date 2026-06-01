@@ -67,6 +67,7 @@
                     @if($antrian->status != 'selesai')
                         <button
                             onclick="openModal(this)"
+                            data-id="{{ $antrian->id }}"
                             data-nama="{{ $antrian->pemesanan->nama_pasien ?? '-' }}"
                             data-no="{{ $antrian->nomor_antrian }}"
                             data-keluhan="{{ $antrian->pemesanan->keluhan ?? '-' }}"
@@ -106,7 +107,12 @@
     <div class="bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-2xl p-5 sm:p-6 mx-4" onclick="event.stopPropagation()">
         <h3 class="text-base font-bold text-gray-900 mb-5">Rekam Medis Pasien</h3>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        <form action="{{ route('dokter.rekammedis.simpan') }}" method="POST">
+            @csrf
+
+            <input type="hidden" name="antrian_id" id="rmAntrianId">
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
             <!-- NAMA PASIEN + LABEL -->
             <div>
                 <label class="block text-xs font-medium text-gray-500 mb-1">Nama Pasien</label>
@@ -128,17 +134,17 @@
             <!-- STATUS (DROPDOWN) -->
             <div>
                 <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
-                <select id="rmStatus" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
-                    <option value="Menunggu">Menunggu</option>
-                    <option value="Selesai">Selesai</option>
+                <select id="rmStatus" name="status" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
+                    <option value="menunggu">Menunggu</option>
+                    <option value="selesai">Selesai</option>
                 </select>
             </div>
             
             <!-- DIAGNOSA (TANPA LABEL) -->
-            <input type="text" id="rmDiagnosa" placeholder="Diagnosa" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
+            <input type="text" id="rmDiagnosa" name="diagnosa" placeholder="Diagnosa" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
             
             <!-- CATATAN DOKTER (TANPA LABEL) -->
-            <textarea id="rmCatatan" placeholder="Catatan Dokter" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40" rows="3"></textarea>
+            <textarea id="rmCatatan" name="catatan_dokter" placeholder="Catatan Dokter" class="col-span-1 sm:col-span-2 border border-gray-200 rounded-xl px-3 py-2.5 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40" rows="3"></textarea>
             
             <!-- RESEP OBAT -->
             <div class="col-span-1 sm:col-span-2">
@@ -157,10 +163,21 @@
             </div>
         </div>
         
-        <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
-            <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 transition">Tutup</button>
-            <button onclick="simpanRM()" class="px-5 py-2 rounded-xl text-sm font-semibold text-white bg-[#09637E] hover:bg-[#074d61] transition">Simpan</button>
-        </div>
+            <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+                <button type="button"
+                    onclick="closeModal()"
+                    class="px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-100 transition">
+                    Tutup
+                </button>
+
+                <button type="submit"
+                    class="px-5 py-2 rounded-xl text-sm font-semibold text-white bg-[#09637E] hover:bg-[#074d61] transition">
+                    Simpan
+                </button>
+            </div>
+
+        </form>
+
     </div>
 </div>
 
@@ -188,12 +205,12 @@ function filterPasien() {
 }
 
 function openModal(btn) {
+
+    document.getElementById('rmAntrianId').value = btn.dataset.id;
     document.getElementById('rmNama').value = btn.dataset.nama;
     document.getElementById('rmNo').value = btn.dataset.no;
     document.getElementById('rmKeluhan').value = btn.dataset.keluhan;
-    // Reset status ke default Menunggu saat buka modal
-    document.getElementById('rmStatus').value = 'Menunggu';
-    
+    document.getElementById('rmStatus').value = 'menunggu';
     document.getElementById('rmDiagnosa').value = '';
     document.getElementById('rmCatatan').value = '';
     document.getElementById('obatContainer').innerHTML = buatBarisObat();
@@ -216,19 +233,6 @@ function buatBarisObat() {
 
 function tambahObat() {
     document.getElementById('obatContainer').insertAdjacentHTML('beforeend', buatBarisObat());
-}
-
-function simpanRM() {
-    const diagnosa = document.getElementById('rmDiagnosa').value.trim();
-    if (!diagnosa) {
-        document.getElementById('rmDiagnosa').style.borderColor = '#ef4444';
-        document.getElementById('rmDiagnosa').focus();
-        return;
-    }
-    closeModal();
-    const toast = document.getElementById('toast');
-    toast.classList.remove('hidden');
-    setTimeout(() => toast.classList.add('hidden'), 3000);
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
