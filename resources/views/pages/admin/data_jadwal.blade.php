@@ -53,16 +53,15 @@
                         </td>
                         <td class="px-4 py-2">
                             <button type="button"
-                                onclick="openEdit({
-                                    id: {{ $j->id }},
-                                    dokter_id: {{ $j->dokter_id }},
-                                    hari: '{{ $j->hari }}',
-                                    jam_mulai: '{{ $j->jam_mulai }}',
-                                    jam_selesai: '{{ $j->jam_selesai }}',
-                                    kuota_pasien: {{ $j->kuota_pasien }},
-                                    status: '{{ $j->status }}'
-                                })"
-                                class="bg-yellow-500 text-white px-3 py-1 rounded text-xs">
+                                class="bg-yellow-500 text-white px-3 py-1 rounded text-xs"
+                                onclick="openEdit(this)"
+                                data-id="{{ $j->id }}"
+                                data-dokter="{{ $j->dokter_id }}"
+                                data-hari="{{ $j->hari }}"
+                                data-mulai="{{ $j->jam_mulai }}"
+                                data-selesai="{{ $j->jam_selesai }}"
+                                data-kuota="{{ $j->kuota_pasien }}"
+                                data-status="{{ $j->status }}">
                                 Edit
                             </button>
                         </td>
@@ -74,7 +73,6 @@
         </div>
     </div>
 </div>
-
 
 {{-- ================= MODAL TAMBAH ================= --}}
 <div id="modalTambah" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 pointer-events-none">
@@ -89,8 +87,7 @@
 
                 <div>
                     <label class="block mb-1 font-medium text-gray-700">Pilih Dokter</label>
-                    <select id="tDokter" name="dokter_id"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none">
+                    <select name="dokter_id" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
                         <option value="" disabled selected>-- Pilih Dokter --</option>
                         @foreach($dokters as $d)
                             <option value="{{ $d->id }}">{{ $d->nama }}</option>
@@ -100,8 +97,7 @@
 
                 <div>
                     <label class="block mb-1 font-medium text-gray-700">Hari Praktik</label>
-                    <select id="tHari" name="hari"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none">
+                    <select name="hari" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
                         <option>Senin</option>
                         <option>Selasa</option>
                         <option>Rabu</option>
@@ -112,38 +108,33 @@
                     </select>
                 </div>
 
-                <div class="flex gap-2">
-                    <div class="w-1/2">
-                        <label class="block mb-1 font-medium text-gray-700">Jam Mulai</label>
-                        <select id="tMulai" name="jam_mulai"
-                            class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
-                            <option>08:00</option><option>09:00</option><option>10:00</option>
-                            <option>11:00</option><option>13:00</option><option>14:00</option>
-                        </select>
-                    </div>
-                    <div class="w-1/2">
-                        <label class="block mb-1 font-medium text-gray-700">Jam Selesai</label>
-                        <select id="tSelesai" name="jam_selesai"
-                            class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
-                            <option>09:00</option><option>10:00</option><option>11:00</option>
-                            <option>12:00</option><option>15:00</option><option>16:00</option>
-                        </select>
-                    </div>
-                </div>
-
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Kuota Pasien</label>
-                    <select id="tKuota" name="kuota_pasien"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
-                        <option>1</option><option>5</option><option>10</option>
-                        <option>15</option><option>20</option>
+                    <label>Jam Mulai</label>
+                    <select name="jam_mulai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                        @for($i=0;$i<24;$i++)
+                            <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                        @endfor
                     </select>
                 </div>
 
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Status</label>
-                    <select id="tStatus" name="status"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                    <label>Jam Selesai</label>
+                    <select name="jam_selesai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                        @for($i=0;$i<24;$i++)
+                            <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div>
+                    <label>Kuota</label>
+                    <input type="number" name="kuota_pasien"
+                        class="border border-gray-300 w-full px-2 py-2 rounded" min="1">
+                </div>
+
+                <div>
+                    <label>Status</label>
+                    <select name="status" class="border border-gray-300 w-full px-2 py-2 rounded">
                         <option>Aktif</option>
                         <option>Nonaktif</option>
                         <option>Cuti</option>
@@ -153,12 +144,10 @@
             </div>
 
             <div class="flex justify-center gap-3 mt-6">
-                <button type="button" onclick="closeTambah()"
-                    class="border border-gray-300 px-6 py-2 rounded text-gray-700">
+                <button type="button" onclick="closeTambah()" class="border px-6 py-2 rounded">
                     Batal
                 </button>
-                <button type="submit"
-                    class="bg-[#09637E] text-white px-6 py-2 rounded">
+                <button type="submit" class="bg-[#09637E] text-white px-6 py-2 rounded">
                     Simpan
                 </button>
             </div>
@@ -166,7 +155,6 @@
         </form>
     </div>
 </div>
-
 
 {{-- ================= MODAL EDIT ================= --}}
 <div id="modalEdit" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 pointer-events-none">
@@ -181,9 +169,8 @@
             <div class="space-y-3 text-sm">
 
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Pilih Dokter</label>
-                    <select id="eDokter" name="dokter_id"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none">
+                    <label>Dokter</label>
+                    <select id="eDokter" name="dokter_id" class="border w-full px-2 py-2 rounded">
                         @foreach($dokters as $d)
                             <option value="{{ $d->id }}">{{ $d->nama }}</option>
                         @endforeach
@@ -191,9 +178,8 @@
                 </div>
 
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Hari Praktik</label>
-                    <select id="eHari" name="hari"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white focus:outline-none">
+                    <label>Hari</label>
+                    <select id="eHari" name="hari" class="border w-full px-2 py-2 rounded">
                         <option>Senin</option>
                         <option>Selasa</option>
                         <option>Rabu</option>
@@ -204,38 +190,33 @@
                     </select>
                 </div>
 
-                <div class="flex gap-2">
-                    <div class="w-1/2">
-                        <label class="block mb-1 font-medium text-gray-700">Jam Mulai</label>
-                        <select id="eMulai" name="jam_mulai"
-                            class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
-                            <option>08:00</option><option>09:00</option><option>10:00</option>
-                            <option>11:00</option><option>13:00</option><option>14:00</option>
-                        </select>
-                    </div>
-                    <div class="w-1/2">
-                        <label class="block mb-1 font-medium text-gray-700">Jam Selesai</label>
-                        <select id="eSelesai" name="jam_selesai"
-                            class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
-                            <option>09:00</option><option>10:00</option><option>11:00</option>
-                            <option>12:00</option><option>15:00</option><option>16:00</option>
-                        </select>
-                    </div>
-                </div>
-
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Kuota Pasien</label>
-                    <select id="eKuota" name="kuota_pasien"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
-                        <option>1</option><option>5</option><option>10</option>
-                        <option>15</option><option>20</option>
+                    <label>Jam Mulai</label>
+                    <select id="eMulai" name="jam_mulai" class="border w-full px-2 py-2 rounded">
+                        @for($i=0;$i<24;$i++)
+                            <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                        @endfor
                     </select>
                 </div>
 
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Status</label>
-                    <select id="eStatus" name="status"
-                        class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                    <label>Jam Selesai</label>
+                    <select id="eSelesai" name="jam_selesai" class="border w-full px-2 py-2 rounded">
+                        @for($i=0;$i<24;$i++)
+                            <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                        @endfor
+                    </select>
+                </div>
+
+                <div>
+                    <label>Kuota</label>
+                    <input type="number" id="eKuota" name="kuota_pasien"
+                        class="border w-full px-2 py-2 rounded" min="1">
+                </div>
+
+                <div>
+                    <label>Status</label>
+                    <select id="eStatus" name="status" class="border w-full px-2 py-2 rounded">
                         <option>Aktif</option>
                         <option>Nonaktif</option>
                         <option>Cuti</option>
@@ -245,12 +226,10 @@
             </div>
 
             <div class="flex justify-center gap-3 mt-6">
-                <button type="button" onclick="closeEdit()"
-                    class="border border-gray-300 px-6 py-2 rounded text-gray-700">
+                <button type="button" onclick="closeEdit()" class="border px-6 py-2 rounded">
                     Batal
                 </button>
-                <button type="submit"
-                    class="bg-[#09637E] text-white px-6 py-2 rounded">
+                <button type="submit" class="bg-[#09637E] text-white px-6 py-2 rounded">
                     Simpan
                 </button>
             </div>
@@ -259,75 +238,84 @@
     </div>
 </div>
 
+{{-- ================= SCRIPT ================= --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-{{-- ================= JAVASCRIPT ================= --}}
 <script>
 
-/* ===== MODAL TAMBAH ===== */
 function openTambah() {
     const modal = document.getElementById('modalTambah');
-    modal.classList.remove('hidden', 'pointer-events-none');
+    modal.classList.remove('hidden','pointer-events-none');
     modal.classList.add('flex');
 }
 
 function closeTambah() {
     const modal = document.getElementById('modalTambah');
-    modal.classList.add('hidden', 'pointer-events-none');
+    modal.classList.add('hidden','pointer-events-none');
     modal.classList.remove('flex');
 }
 
-/* ===== MODAL EDIT ===== */
-function openEdit(data) {
-    // Gunakan route() dari Blade, tinggal ganti nama route-nya
+function openEdit(el) {
     const baseUrl = "{{ route('data.jadwal.update', ['id' => '__ID__']) }}";
-    document.getElementById('formEdit').action = baseUrl.replace('__ID__', data.id);
 
-    setSelect('eDokter',  String(data.dokter_id));
-    setSelect('eHari',    data.hari);
-    setSelect('eMulai',   data.jam_mulai);
-    setSelect('eSelesai', data.jam_selesai);
-    setSelect('eKuota',   String(data.kuota_pasien));
-    setSelect('eStatus',  data.status);
+    document.getElementById('formEdit').action =
+        baseUrl.replace('__ID__', el.dataset.id);
+
+    document.getElementById('eDokter').value = el.dataset.dokter;
+    document.getElementById('eHari').value = el.dataset.hari;
+    document.getElementById('eMulai').value = el.dataset.mulai.substring(0,5);
+    document.getElementById('eSelesai').value = el.dataset.selesai.substring(0,5);
+    document.getElementById('eKuota').value = el.dataset.kuota;
+    document.getElementById('eStatus').value = el.dataset.status;
 
     const modal = document.getElementById('modalEdit');
-    modal.classList.remove('hidden', 'pointer-events-none');
+    modal.classList.remove('hidden','pointer-events-none');
     modal.classList.add('flex');
 }
+
 function closeEdit() {
     const modal = document.getElementById('modalEdit');
-    modal.classList.add('hidden', 'pointer-events-none');
+    modal.classList.add('hidden','pointer-events-none');
     modal.classList.remove('flex');
 }
 
-// Helper: cocokkan option berdasarkan value atau text
-function setSelect(id, val) {
-    const sel = document.getElementById(id);
-    for (let opt of sel.options) {
-        if (opt.value === val || opt.text === val) {
-            opt.selected = true;
-            break;
-        }
-    }
-}
-
-/* ===== SEARCH ===== */
+/* ================= SEARCH ================= */
 document.addEventListener('DOMContentLoaded', function () {
     const search = document.getElementById('searchJadwal');
 
-    if (search) {
-        search.addEventListener('keyup', function () {
+    if(search){
+        search.addEventListener('keyup', function(){
             let val = this.value.toLowerCase();
-
-            document.querySelectorAll('#tableJadwal tr').forEach(row => {
+            document.querySelectorAll('#tableJadwal tr').forEach(row=>{
                 let namaEl = row.querySelector('.nama');
-                if (!namaEl) return;
-                let nama = namaEl.innerText.toLowerCase();
-                row.style.display = nama.includes(val) ? '' : 'none';
+                if(!namaEl) return;
+                row.style.display = namaEl.innerText.toLowerCase().includes(val) ? '' : 'none';
             });
         });
     }
 });
 
+</script>
+
+{{-- ================= SWEETALERT ================= --}}
+<script>
+@if(session('success'))
+Swal.fire({
+    icon: 'success',
+    title: 'Berhasil',
+    text: '{{ session('success') }}',
+    timer: 2000,
+    showConfirmButton: false
+});
+@endif
+
+@if(session('error'))
+Swal.fire({
+    icon: 'error',
+    title: 'Gagal',
+    text: '{{ session('error') }}'
+});
+@endif
 </script>
 
 @endsection

@@ -64,13 +64,23 @@ Route::prefix('dashboard')->middleware('auth.session')->group(function () {
     });
 
     Route::prefix('admin')->middleware('role:admin')->group(function () {
-        Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
-        Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
-        Route::post('/data_dokter', [DataDokterController::class, 'store'])->name('data.dokter.store');
-        Route::put('/data_dokter/{dokter}', [DataDokterController::class, 'update'])->name('data.dokter.update');
-        Route::get('/data_pasien', [DataPasienController::class, 'index'])->name('data.pasien');
-        Route::get('/data_jadwal', [DataJadwalController::class, 'index'])->name('data.jadwal');
-        Route::post('/data_jadwal', [DataJadwalController::class, 'store'])->name('data.jadwal.store');
-        Route::put('/data_jadwal/{id}', [DataJadwalController::class, 'update'])->name('data.jadwal.update');
-    });
+
+    Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
+
+    // DATA DOKTER
+    Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
+    Route::post('/data_dokter', [DataDokterController::class, 'store'])->name('data.dokter.store');
+    Route::put('/data_dokter/{dokter}', [DataDokterController::class, 'update'])->name('data.dokter.update');
+
+    // DATA PASIEN
+    Route::get('/data_pasien', [DataPasienController::class, 'index'])->name('data.pasien');
+    Route::post('/data_pasien', [DataPasienController::class, 'store'])->name('data.pasien.store'); // optional
+    Route::put('/data_pasien/{id}', [DataPasienController::class, 'update'])->name('data.pasien.update');
+
+    // DATA JADWAL
+    Route::get('/data_jadwal', [DataJadwalController::class, 'index'])->name('data.jadwal');
+    Route::post('/data_jadwal', [DataJadwalController::class, 'store'])->name('data.jadwal.store');
+    Route::put('/data_jadwal/{id}', [DataJadwalController::class, 'update'])->name('data.jadwal.update');
+
+});
 });
