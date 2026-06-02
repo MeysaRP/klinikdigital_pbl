@@ -1,27 +1,40 @@
 <?php
 namespace App\Http\Controllers\Pasien;
+
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProfilPasienController extends Controller
 {
     public function index()
     {
-        $profil = session()->get('profil', [
-            'nama' => 'Andi Pratama Rayhan', 'email' => session('email'),
-            'tgl_lahir' => '2000-11-16', 'jk' => 'Laki-laki',
-            'no_hp' => '082124456789', 'alamat' => 'Jl. Kestung No.15, Pretanteru',
-        ]);
+        $email = session('email');
+        $user = User::where('email', $email)->firstOrFail();
+
+        $profil = [
+            'nama' => $user->name,
+            'email' => $user->email,
+            'tgl_lahir' => $user->tgl_lahir ?? now()->subYears(20)->format('Y-m-d'),
+            'jk' => $user->jk ?? 'Laki-laki',
+            'no_hp' => $user->no_hp ?? '-',
+            'alamat' => $user->alamat ?? '-',
+        ];
+
         return view('pages.pasien.profil', compact('profil'));
     }
 
     public function update(Request $request)
     {
-        session()->put('profil', [
-            'nama' => $request->nama ?: 'Andi Pratama Rayhan', 'email' => session('email'),
-            'tgl_lahir' => $request->tgl_lahir ?: '2000-11-16', 'jk' => $request->jk ?: 'Laki-laki',
-            'no_hp' => $request->no_hp ?: '082124456789', 'alamat' => $request->alamat ?: 'Jl. Kestung No.15, Pretanteru',
-        ]);
+        $user = User::where('email', session('email'))->firstOrFail();
+
+        $user->name = $request->nama ?: $user->name;
+        $user->tgl_lahir = $request->tgl_lahir ?: $user->tgl_lahir;
+        $user->jk = $request->jk ?: $user->jk;
+        $user->no_hp = $request->no_hp ?: $user->no_hp;
+        $user->alamat = $request->alamat ?: $user->alamat;
+        $user->save();
+
         return redirect()->route('pasien.profil')->with('success', 'Profil berhasil diperbarui!');
     }
 }

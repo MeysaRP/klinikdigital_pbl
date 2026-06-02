@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'alamat',
         'tgl_lahir',
+        'jk',
         'no_hp',
         'kategori',
         'no_identitas',

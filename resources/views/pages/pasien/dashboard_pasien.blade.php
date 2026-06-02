@@ -1,8 +1,8 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Dashboard Pasien',
-    'userName' => 'Andi Pratama Rayhan',
-    'userRole' => 'Pasien',
-    'userInitial' => 'AR'
+    'userName' => $userName,
+    'userRole' => $userRole,
+    'userInitial' => $userInitial
 ])
 
 @section('sidebar')
@@ -18,23 +18,34 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center relative z-10">
             <div>
                 <p class="text-sm font-medium text-gray-500 mb-1">Janji Temu Berikutnya</p>
-                <h2 class="text-xl font-bold text-gray-800">Dr. Sarah Wijaya (Dokter Umum)</h2>
-                <div class="flex items-center gap-4 mt-2 text-sm text-gray-600">
-                    <span class="flex items-center gap-1 font-semibold text-[#09637E]">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                        Senin, 22 Mei 2025
-                    </span>
-                    <span class="flex items-center gap-1">
-                        <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                        08:00 - 08:30 WIB
-                    </span>
-                </div>
-                <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Keluhan: Demam tinggi dan sesak napas</p>
+                @if($nextBooking)
+                    <h2 class="text-xl font-bold text-gray-800">{{ $nextBooking->dokter?->nama ?? 'Dokter' }} (Dokter Umum)</h2>
+                    <div class="flex items-center gap-4 mt-2 text-sm text-gray-600">
+                        <span class="flex items-center gap-1 font-semibold text-[#09637E]">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                            {{ date('l, d F Y', strtotime($nextBooking->tanggal)) }}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
+                            {{ date('H:i', strtotime($nextBooking->jam_mulai)) }} - {{ date('H:i', strtotime($nextBooking->jam_selesai)) }} WIB
+                        </span>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Keluhan: {{ $nextBooking->keluhan }}</p>
+                @else
+                    <h2 class="text-xl font-bold text-gray-800">Belum ada jadwal berikutnya</h2>
+                    <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Silakan buat janji jika Anda membutuhkan konsultasi.</p>
+                @endif
             </div>
             <div class="mt-4 md:mt-0 text-center bg-[#09637E] rounded-2xl p-4 text-white min-w-[140px]">
                 <p class="text-xs uppercase tracking-wider font-medium opacity-80">No. Antrian</p>
-                <p class="text-5xl font-bold mt-1">05</p>
-                <span class="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full mt-2 inline-block">Menunggu</span>
+                <p class="text-5xl font-bold mt-1">{{ $nextBooking?->nomor_antrian ?? '-' }}</p>
+                @if($nextBooking && $nextBooking->status === 'Menunggu')
+                    <span class="px-2 py-0.5 bg-yellow-400 text-yellow-900 text-xs font-bold rounded-full mt-2 inline-block">Menunggu</span>
+                @elseif($nextBooking)
+                    <span class="px-2 py-0.5 bg-green-500 text-white text-xs font-bold rounded-full mt-2 inline-block">Selesai</span>
+                @else
+                    <span class="px-2 py-0.5 bg-gray-500 text-white text-xs font-bold rounded-full mt-2 inline-block">Belum ada</span>
+                @endif
             </div>
         </div>
     </div>
@@ -87,46 +98,31 @@
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
                             <div class="flex-1">
                                 <div class="flex items-center gap-2 mb-2">
-                                    @if($item['status'] == 'Menunggu')
-                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-blue-100 text-blue-700">Akan Datang</span>
+                                    {{-- FIXED: "Akan Datang" diganti "Menunggu" --}}
+                                    @if($item->status === 'Menunggu')
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-yellow-100 text-yellow-700">Menunggu</span>
                                     @else
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-green-100 text-green-700">Selesai</span>
                                     @endif
                                 </div>
-                                <h4 class="font-bold text-gray-900 text-lg">{{ $item['dokter'] }}</h4>
+                                <h4 class="font-bold text-gray-900 text-lg">{{ $item->dokter?->nama ?? '-' }}</h4>
                                 <p class="text-sm text-gray-600 mt-1">
-                                    <span class="font-semibold text-[#09637E]">{{ date('d F Y', strtotime($item['tanggal'])) }}</span> &bull; {{ $item['jam'] }}
+                                    <span class="font-semibold text-[#09637E]">{{ date('d F Y', strtotime($item->tanggal)) }}</span> &bull; {{ date('H:i', strtotime($item->jam_mulai)) }} - {{ date('H:i', strtotime($item->jam_selesai)) }} WIB
                                 </p>
-                                @if($item['status'] == 'Menunggu')
-                                    <p class="text-xs text-gray-500 italic mt-1">Keluhan: {{ $item['keluhan'] }}</p>
-                                @else
-                                    <p class="text-sm text-gray-600 mt-1">Diagnosa: <span class="font-medium">{{ $item['keluhan'] }}</span></p>
-                                @endif
+                                <p class="text-xs text-gray-500 italic mt-1">Keluhan: {{ $item->keluhan ?? '-' }}</p>
                             </div>
                             <div class="flex-shrink-0">
-                                @if($item['status'] == 'Menunggu')
-                                    <button
-                                        class="btn-detail w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center"
-                                        onclick="openDetailModal(this)"
-                                        data-dokter="{{ $item['dokter'] }}"
-                                        data-tanggal="{{ date('d F Y', strtotime($item['tanggal'])) }}"
-                                        data-jam="{{ $item['jam'] }}"
-                                        data-keluhan="{{ $item['keluhan'] }}"
-                                        data-status="Menunggu">
-                                        Lihat Detail
-                                    </button>
-                                @else
-                                    <button
-                                        class="btn-detail w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center"
-                                        onclick="openDetailModal(this)"
-                                        data-dokter="{{ $item['dokter'] }}"
-                                        data-tanggal="{{ date('d F Y', strtotime($item['tanggal'])) }}"
-                                        data-jam="{{ $item['jam'] }}"
-                                        data-keluhan="{{ $item['keluhan'] }}"
-                                        data-status="Selesai">
-                                        Lihat Detail
-                                    </button>
-                                @endif
+                                <button
+                                    class="btn-detail w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center"
+                                    onclick="openDetailModal(this)"
+                                    data-dokter="{{ $item->dokter?->nama ?? '-' }}"
+                                    data-tanggal="{{ date('d F Y', strtotime($item->tanggal)) }}"
+                                    data-jam="{{ date('H:i', strtotime($item->jam_mulai)) }} - {{ date('H:i', strtotime($item->jam_selesai)) }} WIB"
+                                    data-keluhan="{{ $item->keluhan ?? '-' }}"
+                                    data-status="{{ $item->status }}"
+                                    data-antrian="{{ $item->nomor_antrian ?? '-' }}">
+                                    Lihat Detail
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -143,17 +139,19 @@
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:sticky lg:top-24">
                 <div class="flex flex-col items-center text-center mb-6">
-                    <div class="w-24 h-24 rounded-full bg-[#09637E] flex items-center justify-center text-white text-3xl font-bold shadow-lg border-4 border-white mb-4">AR</div>
-                    <h3 class="text-xl font-bold text-gray-900">Andi Pratama Rayhan</h3>
+                    {{-- FIXED: pakai $userInitial dari controller, bukan substr array --}}
+                    <div class="w-24 h-24 rounded-full bg-[#09637E] flex items-center justify-center text-white text-3xl font-bold shadow-lg border-4 border-white mb-4">{{ $userInitial }}</div>
+                    {{-- FIXED: $profil['nama'] diganti $profil->name --}}
+                    <h3 class="text-xl font-bold text-gray-900">{{ $profil?->name ?? 'Pasien' }}</h3>
                     <p class="text-sm text-gray-500">Pasien Aktif</p>
                 </div>
                 <div class="text-sm space-y-3 text-gray-600 border-t border-gray-100 pt-6">
-                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Nama</span><span class="text-gray-900 font-semibold">Andi Pratama Rayhan</span></div>
-                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Tanggal Lahir</span><span class="text-gray-900 font-semibold">15 Maret 2001</span></div>
-                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Umur</span><span class="text-gray-900 font-semibold">23 Tahun</span></div>
-                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Jenis Kelamin</span><span class="text-gray-900 font-semibold">Laki-laki</span></div>
-                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">No. HP</span><span class="text-gray-900 font-semibold">0812-3456-7890</span></div>
-                    <div class="flex justify-between items-start"><span class="font-medium text-gray-500">Alamat</span><span class="text-gray-900 font-semibold text-right ml-2">Pekanbaru, Riau</span></div>
+                    {{-- FIXED: semua $profil['...'] diganti $profil->... --}}
+                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Nama</span><span class="text-gray-900 font-semibold">{{ $profil?->name ?? '-' }}</span></div>
+                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Tanggal Lahir</span><span class="text-gray-900 font-semibold">{{ $profil?->tgl_lahir ? date('d F Y', strtotime($profil->tgl_lahir)) : '-' }}</span></div>
+                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Jenis Kelamin</span><span class="text-gray-900 font-semibold">{{ $profil?->jk == 'L' ? 'Laki-laki' : ($profil?->jk == 'P' ? 'Perempuan' : '-') }}</span></div>
+                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">No. HP</span><span class="text-gray-900 font-semibold">{{ $profil?->no_hp ?? '-' }}</span></div>
+                    <div class="flex justify-between items-start"><span class="font-medium text-gray-500">Alamat</span><span class="text-gray-900 font-semibold text-right ml-2">{{ $profil?->alamat ?? '-' }}</span></div>
                 </div>
                 <a href="{{ route('pasien.profil') }}" class="mt-6 w-full bg-[#09637E] text-white hover:bg-[#074d61] font-semibold py-2.5 rounded-xl transition-colors shadow-sm block text-center">
                     Ubah Profil
@@ -170,7 +168,6 @@
     <div class="absolute inset-0 flex items-center justify-center p-4">
         <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-200 w-full max-w-md overflow-hidden">
 
-            <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                 <h3 class="text-base font-bold text-gray-900">Detail Jadwal</h3>
                 <button onclick="closeDetailModal()" class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition">
@@ -178,16 +175,12 @@
                 </button>
             </div>
 
-            <!-- Body -->
             <div class="px-6 py-5 space-y-4">
-
-                <!-- Status Badge -->
                 <div class="flex items-center justify-between">
                     <span class="text-xs text-gray-400 uppercase tracking-wide font-medium">Status</span>
                     <span id="modalStatus" class="px-3 py-1 text-xs rounded-full font-medium"></span>
                 </div>
 
-                <!-- Info Rows -->
                 <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-xl">
                     <div class="w-9 h-9 bg-[#09637E]/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
                         <svg class="w-4.5 h-4.5 text-[#09637E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
@@ -234,13 +227,11 @@
                     </div>
                     <div>
                         <p class="text-xs text-gray-400 uppercase tracking-wide font-medium">No. Antrian</p>
-                        <p id="modalAntrian" class="text-sm font-semibold text-gray-900 -mt-0.5">05</p>
+                        <p id="modalAntrian" class="text-sm font-semibold text-gray-900 -mt-0.5">-</p>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Footer -->
             <div class="px-6 py-4 border-t border-gray-200">
                 <div class="flex items-center gap-3" id="modalFooter">
                     <button onclick="closeDetailModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition">
@@ -256,26 +247,26 @@
 <!-- Script -->
 <script>
 function openDetailModal(btn) {
-    // Ambil data dari atribut tombol (data-dokter, data-tanggal, dll)
     const dokter = btn.getAttribute('data-dokter');
     const tanggal = btn.getAttribute('data-tanggal');
     const jam = btn.getAttribute('data-jam');
     const keluhan = btn.getAttribute('data-keluhan');
     const status = btn.getAttribute('data-status');
+    const antrian = btn.getAttribute('data-antrian');
 
-    // Masukkan ke modal
     document.getElementById('modalDokter').textContent = dokter;
     document.getElementById('modalTanggal').textContent = tanggal;
     document.getElementById('modalJam').textContent = jam;
     document.getElementById('modalKeluhan').textContent = keluhan;
-    document.getElementById('modalAntrian').textContent = '05';
+    document.getElementById('modalAntrian').textContent = antrian;
 
     const statusEl = document.getElementById('modalStatus');
     const footerEl = document.getElementById('modalFooter');
 
     if (status === 'Menunggu') {
-        statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-blue-100 text-blue-700';
-        statusEl.textContent = 'Akan Datang';
+        // FIXED: "Akan Datang" diganti "Menunggu"
+        statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-yellow-100 text-yellow-700';
+        statusEl.textContent = 'Menunggu';
         footerEl.innerHTML = `
             <button onclick="closeDetailModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition">Tutup</button>
             <a href="{{ route('pemesanan.jadwal') }}" class="flex-1 py-2.5 bg-[#09637E] hover:bg-[#074d61] text-white text-sm font-semibold rounded-xl transition block text-center">Ubah Jadwal</a>

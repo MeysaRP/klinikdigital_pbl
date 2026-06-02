@@ -17,4 +17,9 @@ class Antrian extends Model
     {
         return $this->belongsTo(PemesananJadwal::class, 'pemesanan_id');
     }
+
+    public function rekamMedis()
+    {
+        return $this->hasOne(RekamMedis::class);
+    }
 }

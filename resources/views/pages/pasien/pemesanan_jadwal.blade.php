@@ -1,8 +1,8 @@
 ﻿@extends('layouts.dashboard', [
     'pageTitle' => 'Pemesanan Jadwal',
-    'userName' => 'Andi Pratama Rayhan',
-    'userRole' => 'Pasien',
-    'userInitial' => 'AR'
+    'userName' => $userName,
+    'userRole' => $userRole,
+    'userInitial' => $userInitial
 ])
 
 @section('sidebar')

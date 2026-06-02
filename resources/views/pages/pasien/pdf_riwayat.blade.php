@@ -25,7 +25,7 @@
         <p><strong>Dokter:</strong> {{ $data['dokter'] }}</p>
         <p><strong>Tanggal Periksa:</strong> {{ date('d F Y', strtotime($data['tanggal'])) }}</p>
         <p><strong>Poli:</strong> {{ $data['poli'] }}</p>
-        <p><strong>Pasien:</strong> Andi Pratama Rayhan</p>
+        <p><strong>Pasien:</strong> {{ $data['pasien'] }}</p>
     </div>
 
     <div class="section-title">A. Gejala / Keluhan</div>

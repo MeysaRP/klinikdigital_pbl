@@ -11,8 +11,8 @@ class DataDokterController extends Controller
 
     public function store(Request $request)
     {
-        $v = $request->validate(['email'=>'required|email|unique:dokters,email','nama'=>'required','str'=>'required','no_hp'=>'required','status'=>'required','password'=>'required|min:6']);
-        return response()->json(Dokter::create(['email'=>$v['email'],'nama'=>$v['nama'],'str'=>$v['str'],'no_hp'=>$v['no_hp'],'status'=>$v['status'],'password'=>Hash::make($v['password'])]));
+        $v = $request->validate(['email'=>'required|email|unique:dokters,email','nama'=>'required','str'=>'required','no_hp'=>'required','password'=>'required|min:6']);
+        return response()->json(Dokter::create(['email'=>$v['email'],'nama'=>$v['nama'],'str'=>$v['str'],'no_hp'=>$v['no_hp'],'status'=>'Aktif','password'=>Hash::make($v['password'])]));
     }
 
     public function update(Request $request, Dokter $dokter)

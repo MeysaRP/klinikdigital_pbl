@@ -39,4 +39,9 @@ class PemesananJadwal extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function antrian()
+    {
+        return $this->hasOne(Antrian::class, 'pemesanan_id');
+    }
 }

@@ -1,40 +1,85 @@
 <?php
 namespace App\Http\Controllers\Pasien;
+
 use App\Http\Controllers\Controller;
+use App\Models\PemesananJadwal;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class RiwayatMedisController extends Controller
 {
     public function index()
     {
+        $email = session('email');
+        $user = User::where('email', $email)->first();
         $tahunAktif = request()->get('tahun', 'all');
         $statusAktif = request()->get('status', 'all');
-        $semuaRiwayat = [
-            ['id' => 1, 'tanggal' => '2024-05-20', 'dokter' => 'Dr. Ani Lestari', 'poli' => 'Paru', 'status' => 'Selesai', 'gejala' => 'Batuk kering disertai sesak ringan.', 'diagnosa' => 'ISPA', 'resep' => 'Ambroxol 3x1, Paracetamol 3x1'],
-            ['id' => 2, 'tanggal' => '2024-01-15', 'dokter' => 'Dr. Budi Hartono', 'poli' => 'Penyakit Dalam', 'status' => 'Selesai', 'gejala' => 'Sakit ulu hati.', 'diagnosa' => 'Gastritis Akut', 'resep' => 'Omeprazole 1x1, Antasida 3x1'],
-            ['id' => 3, 'tanggal' => '2023-11-10', 'dokter' => 'Dr. Sarah Wijaya', 'poli' => 'Umum', 'status' => 'Dibatalkan', 'gejala' => 'Pusing dan demam.', 'diagnosa' => '-', 'resep' => '-'],
-            ['id' => 4, 'tanggal' => '2023-08-05', 'dokter' => 'Dr. Andi Saputra', 'poli' => 'Gigi', 'status' => 'Selesai', 'gejala' => 'Sakit gigi geraham.', 'diagnosa' => 'Karies Gigi', 'resep' => 'Amoxicillin 3x1'],
-        ];
-        $riwayatTerfilter = $semuaRiwayat;
-        if ($tahunAktif !== 'all') {
-            $riwayatTerfilter = array_filter($riwayatTerfilter, function ($item) use ($tahunAktif) { return date('Y', strtotime($item['tanggal'])) == $tahunAktif; });
-        }
+
+        $query = PemesananJadwal::with(['dokter', 'jadwal', 'antrian.rekamMedis'])
+            ->where('email', $email);
+
         if ($statusAktif !== 'all') {
-            $riwayatTerfilter = array_filter($riwayatTerfilter, function ($item) use ($statusAktif) { return $item['status'] == $statusAktif; });
+            $query->where('status', $statusAktif);
         }
-        return view('pages.pasien.riwayat_medis', ['riwayat' => array_values($riwayatTerfilter), 'tahunAktif' => $tahunAktif, 'statusAktif' => $statusAktif]);
+
+        $riwayat = $query->orderByDesc('tanggal')->get()->map(function ($booking) {
+            $rekam = $booking->antrian?->rekamMedis;
+            return [
+                'id' => $booking->id,
+                'tanggal' => $booking->tanggal,
+                'dokter' => $booking->dokter?->nama ?? '-',
+                'poli' => 'Umum',
+                'status' => $booking->status,
+                'gejala' => $booking->keluhan ?? '-',
+                'diagnosa' => $rekam?->diagnosa ?? ($booking->status === 'Selesai' ? 'Menunggu diagnosa' : '-'),
+                'resep' => $rekam?->catatan_dokter ?? '-',
+            ];
+        })->toArray();
+
+        if ($tahunAktif !== 'all') {
+            $riwayat = array_filter($riwayat, function ($item) use ($tahunAktif) {
+                return date('Y', strtotime($item['tanggal'])) == $tahunAktif;
+            });
+        }
+
+        return view('pages.pasien.riwayat_medis', [
+            'userName' => $user?->name ?? 'Pasien',
+            'userRole' => 'Pasien',
+            'userInitial' => $user ? substr($user->name, 0, 2) : 'PS',
+            'riwayat' => array_values($riwayat),
+            'tahunAktif' => $tahunAktif,
+            'statusAktif' => $statusAktif,
+        ]);
     }
 
     public function downloadPdf($id)
     {
-        $semua = [
-            ['id' => 1, 'tanggal' => '2024-05-20', 'dokter' => 'Dr. Ani Lestari', 'poli' => 'Paru', 'gejala' => 'Batuk kering.', 'diagnosa' => 'ISPA', 'resep' => 'Ambroxol 3x1'],
-            ['id' => 2, 'tanggal' => '2024-01-15', 'dokter' => 'Dr. Budi Hartono', 'poli' => 'Penyakit Dalam', 'gejala' => 'Sakit ulu hati.', 'diagnosa' => 'Gastritis Akut', 'resep' => 'Omeprazole 1x1'],
-            ['id' => 3, 'tanggal' => '2023-11-10', 'dokter' => 'Dr. Sarah Wijaya', 'poli' => 'Umum', 'gejala' => 'Pusing.', 'diagnosa' => '-', 'resep' => '-'],
-            ['id' => 4, 'tanggal' => '2023-08-05', 'dokter' => 'Dr. Andi Saputra', 'poli' => 'Gigi', 'gejala' => 'Sakit gigi.', 'diagnosa' => 'Karies Gigi', 'resep' => 'Amoxicillin 3x1'],
+        $email = session('email');
+
+        $booking = PemesananJadwal::with(['dokter', 'jadwal', 'antrian.rekamMedis'])
+            ->where('email', $email)
+            ->where('id', $id)
+            ->firstOrFail();
+
+        if ($booking->status !== 'Selesai') {
+            abort(404);
+        }
+
+        $rekam = $booking->antrian?->rekamMedis;
+        if (!$rekam) {
+            abort(404);
+        }
+
+        $data = [
+            'dokter' => $booking->dokter?->nama ?? '-',
+            'tanggal' => $booking->tanggal,
+            'poli' => 'Umum',
+            'pasien' => $booking->nama_pasien ?? $booking->email,
+            'gejala' => $booking->keluhan ?? '-',
+            'diagnosa' => $rekam->diagnosa ?? '-',
+            'resep' => $rekam->catatan_dokter ?? '-',
         ];
-        $item = collect($semua)->firstWhere('id', $id);
-        if (!$item) return abort(404);
-        return Pdf::loadView('pages.pasien.pdf_riwayat', ['data' => $item])->download('rekam-medis-' . $id . '.pdf');
+
+        return Pdf::loadView('pages.pasien.pdf_riwayat', ['data' => $data])->download('rekam-medis-' . $booking->id . '.pdf');
     }
 }

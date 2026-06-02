@@ -12,19 +12,14 @@
 @section('content')
 <div class="space-y-6">
 
+    <div id="notificationDokter" class="hidden rounded-2xl border border-green-200 bg-green-50 text-green-700 px-4 py-3 text-sm shadow-sm"></div>
+
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-5 flex flex-col sm:flex-row justify-between gap-3">
         <div class="relative w-full sm:w-1/3">
             <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
             <input type="text" id="searchDokter" placeholder="Cari email, nama, STR, atau HP..."
                 class="w-full bg-gray-50 rounded-xl pl-10 pr-9 py-2.5 text-sm focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40 outline-none border border-gray-200">
             <button id="btnClearSearch" onclick="clearSearch()" class="absolute right-2 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition hidden"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg></button>
-        </div>
-        <div class="flex items-center gap-2 text-sm text-gray-500">
-            <span>Tampilkan</span>
-            <select class="bg-gray-50 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40 border border-gray-200">
-                <option>10</option><option>25</option><option>50</option>
-            </select>
-            <span>entri</span>
         </div>
     </div>
 
@@ -70,8 +65,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex justify-between items-center px-5 py-3 text-sm text-gray-500 border-t border-gray-100">
-            <span id="infoJumlah">Menampilkan {{ count($dokters) }} data dokter</span>
+        <div class="flex justify-center items-center px-5 py-3 text-sm text-gray-500 border-t border-gray-100">
+            <span id="infoJumlah" class="text-center">Menampilkan {{ count($dokters) }} data dokter</span>
         </div>
     </div>
 
@@ -108,13 +103,6 @@
                 <div>
                     <label class="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-1.5">Password</label>
                     <input type="password" id="tPass" placeholder="Masukkan password" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
-                </div>
-                <div>
-                    <label class="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-1.5">Status</label>
-                    <select id="tStatus" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40 bg-white">
-                        <option value="Aktif">Aktif</option>
-                        <option value="Nonaktif">Nonaktif</option>
-                    </select>
                 </div>
             </div>
             <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
@@ -163,6 +151,7 @@
                     <select id="eStatus" class="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40 bg-white">
                         <option value="Aktif">Aktif</option>
                         <option value="Nonaktif">Nonaktif</option>
+                        <option value="Cuti">Cuti</option>
                     </select>
                 </div>
             </div>
@@ -182,6 +171,20 @@ const storeUrl = '{{ route('data.dokter.store') }}';
 const updateUrlBase = '{{ route('data.dokter.update', ['dokter' => 0]) }}';
 let selRow = null;
 let selRowId = null;
+
+function showNotification(message, type = 'success') {
+    const notice = document.getElementById('notificationDokter');
+    if (!notice) return;
+    notice.textContent = message;
+    notice.classList.remove('hidden', 'border-green-200', 'bg-green-50', 'text-green-700', 'border-red-200', 'bg-red-50', 'text-red-700');
+    if (type === 'error') {
+        notice.classList.add('border-red-200', 'bg-red-50', 'text-red-700');
+    } else {
+        notice.classList.add('border-green-200', 'bg-green-50', 'text-green-700');
+    }
+    notice.classList.remove('hidden');
+    window.setTimeout(function () { notice.classList.add('hidden'); }, 4500);
+}
 
 function tampilSemua() {
     let t = 0;
@@ -220,7 +223,6 @@ document.getElementById('searchDokter').addEventListener('input', function () {
 
 function openTambah() {
     ['tEmail', 'tNama', 'tSTR', 'tHP', 'tPass'].forEach(function (id) { document.getElementById(id).value = ''; });
-    document.getElementById('tStatus').value = 'Aktif';
     document.getElementById('modalTambah').classList.remove('hidden');
     document.getElementById('modalTambah').classList.add('flex');
     document.body.style.overflow = 'hidden';
@@ -237,11 +239,10 @@ async function simpanDokter() {
     let nama = document.getElementById('tNama').value;
     let str = document.getElementById('tSTR').value;
     let hp = document.getElementById('tHP').value;
-    let status = document.getElementById('tStatus').value;
     let password = document.getElementById('tPass').value;
 
     if (!email || !nama || !str || !hp || !password) {
-        alert("Email, Nama, STR, HP, dan Password harus diisi!");
+        showNotification('Email, Nama, STR, HP, dan Password harus diisi!', 'error');
         return;
     }
 
@@ -252,12 +253,12 @@ async function simpanDokter() {
             'X-CSRF-TOKEN': csrfToken,
             'Accept': 'application/json',
         },
-        body: JSON.stringify({ email: email, nama: nama, str: str, no_hp: hp, status: status, password: password }),
+        body: JSON.stringify({ email: email, nama: nama, str: str, no_hp: hp, password: password }),
     });
 
     if (!response.ok) {
         const result = await response.json().catch(() => ({}));
-        alert(result.message || 'Gagal menyimpan data.');
+        showNotification(result.message || 'Gagal menyimpan data.', 'error');
         return;
     }
 
@@ -276,6 +277,7 @@ async function simpanDokter() {
     );
 
     closeTambah();
+    showNotification('Dokter baru berhasil ditambahkan.', 'success');
 }
 
 function openEdit(btn) {
@@ -332,7 +334,7 @@ async function updateDokter() {
 
     if (!response.ok) {
         const result = await response.json().catch(() => ({}));
-        alert(result.message || 'Gagal memperbarui data.');
+        showNotification(result.message || 'Gagal memperbarui data.', 'error');
         return;
     }
 
@@ -349,6 +351,7 @@ async function updateDokter() {
     statusSpan.innerText = data.status;
 
     closeEdit();
+    showNotification('Perubahan data dokter berhasil disimpan.', 'success');
 }
 
 document.addEventListener('keydown', function (e) {

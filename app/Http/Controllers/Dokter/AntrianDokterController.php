@@ -26,16 +26,24 @@ class AntrianDokterController extends Controller
             'catatan_dokter' => 'nullable',
         ]);
 
-        RekamMedis::create([
-            'antrian_id' => $request->antrian_id,
+        $antrian = Antrian::with('pemesanan')->findOrFail($request->antrian_id);
+
+        RekamMedis::updateOrCreate([
+            'antrian_id' => $antrian->id,
+        ], [
             'diagnosa' => $request->diagnosa,
             'catatan_dokter' => $request->catatan_dokter,
         ]);
 
-        $antrian = Antrian::findOrFail($request->antrian_id);
         $antrian->status = 'selesai';
         $antrian->save();
-        
+
+        if ($antrian->pemesanan) {
+            $booking = $antrian->pemesanan;
+            $booking->status = 'Selesai';
+            $booking->save();
+        }
+
         return back()->with('success', 'Rekam medis berhasil disimpan.');
     }
 }

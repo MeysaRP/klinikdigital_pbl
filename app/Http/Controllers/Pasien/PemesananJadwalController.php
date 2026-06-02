@@ -14,6 +14,7 @@ class PemesananJadwalController extends Controller
     public function index()
     {
         $email = session('email');
+        $user = User::where('email', $email)->first();
         $jadwals = Jadwal::with('dokter')->where('status', 'Aktif')->get();
         $bookings = [];
 
@@ -25,7 +26,13 @@ class PemesananJadwalController extends Controller
                 ->get();
         }
 
-        return view('pages.pasien.pemesanan_jadwal', compact('jadwals', 'bookings'));
+        return view('pages.pasien.pemesanan_jadwal', [
+            'jadwals' => $jadwals,
+            'bookings' => $bookings,
+            'userName' => $user?->name ?? 'Pasien',
+            'userRole' => 'Pasien',
+            'userInitial' => $user ? substr($user->name, 0, 2) : 'PS',
+        ]);
     }
 
     public function proses(Request $request)
@@ -91,13 +98,19 @@ class PemesananJadwalController extends Controller
     public function berhasil($bookingId)
     {
         $email = session('email');
+        $user = User::where('email', $email)->first();
 
         $booking = PemesananJadwal::with(['dokter', 'jadwal'])
             ->where('id', $bookingId)
             ->where('email', $email)
             ->firstOrFail();
 
-        return view('pages.pasien.pemesanan_berhasil', compact('booking'));
+        return view('pages.pasien.pemesanan_berhasil', [
+            'booking' => $booking,
+            'userName' => $user?->name ?? 'Pasien',
+            'userRole' => 'Pasien',
+            'userInitial' => $user ? substr($user->name, 0, 2) : 'PS',
+        ]);
     }
 
     public function batal($bookingId)
