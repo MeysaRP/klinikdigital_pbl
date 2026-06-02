@@ -81,13 +81,23 @@
                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                     </svg>
             </button>
-        @else
-            <span class="text-green-600 text-sm font-medium">
-                Sudah Diisi
-            </span>
-        @endif
-    </td>
-        </tr>
+                    @else
+                        <button 
+                            onclick="openDetail(this)"
+                            data-nama="{{ $antrian->pemesanan->nama_pasien ?? '-' }}"
+                            data-no="{{ $antrian->nomor_antrian }}"
+                            data-keluhan="{{ $antrian->pemesanan->keluhan ?? '-' }}"
+                            data-diagnosa="{{ $antrian->rekamMedis->diagnosa ?? '-' }}"
+                            data-catatan="{{ $antrian->rekamMedis->catatan_dokter ?? '-' }}"
+                            data-status="{{ $antrian->status }}"
+                            data-resep="{{ json_encode($antrian->rekamMedis->resep_obat ?? []) }}"
+                            class="bg-[#09637E] text-white text-xs px-3 py-1.5 rounded-lg hover:bg-[#074d61] transition font-medium"
+>
+                            Detail  
+                    </button>
+                    @endif
+                </td>
+            </tr>
             @empty
                 <tr>
                 <td colspan="5" class="text-center py-5 text-gray-400">
@@ -205,7 +215,6 @@ function filterPasien() {
 }
 
 function openModal(btn) {
-
     document.getElementById('rmAntrianId').value = btn.dataset.id;
     document.getElementById('rmNama').value = btn.dataset.nama;
     document.getElementById('rmNo').value = btn.dataset.no;
@@ -214,6 +223,14 @@ function openModal(btn) {
     document.getElementById('rmDiagnosa').value = '';
     document.getElementById('rmCatatan').value = '';
     document.getElementById('obatContainer').innerHTML = buatBarisObat();
+
+    const inputs = document.querySelectorAll('#modalRM input, #modalRM textarea, #modalRM select');
+    inputs.forEach(input => input.removeAttribute('readonly'));
+    document.getElementById('rmStatus').removeAttribute('disabled');
+
+    const btnSimpan = document.querySelector('#modalRM button[type="submit"]');
+    if(btnSimpan) btnSimpan.style.display = 'block';
+
     document.getElementById('modalRM').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 }
@@ -225,9 +242,9 @@ function closeModal() {
 
 function buatBarisObat() {
     return '<div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center obat-row">' +
-        '<input type="text" placeholder="Nama Obat" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
-        '<input type="text" placeholder="Dosis" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
-        '<input type="text" placeholder="Keterangan" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
+        '<input type="text" name="obat_nama[]" placeholder="Nama Obat" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
+        '<input type="text" name="obat_dosis[]" placeholder="Dosis" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
+        '<input type="text" name="obat_ket[]" placeholder="Keterangan" class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">' +
         '</div>';
 }
 
@@ -236,6 +253,53 @@ function tambahObat() {
 }
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+function openDetail(btn) {
+    document.getElementById('rmNama').value = btn.dataset.nama;
+    document.getElementById('rmNo').value = btn.dataset.no;
+    document.getElementById('rmKeluhan').value = btn.dataset.keluhan;
+    document.getElementById('rmStatus').value = btn.dataset.status;
+    
+    document.getElementById('rmDiagnosa').value = btn.dataset.diagnosa;
+    document.getElementById('rmCatatan').value = btn.dataset.catatan;
+
+    const resepJson = btn.dataset.resep; 
+    let resepData = [];
+    try {
+        resepData = JSON.parse(resepJson);
+        // Fallback kalau data di database double-encoded
+        if (typeof resepData === 'string') {
+            resepData = JSON.parse(resepData);
+        }
+        if (!Array.isArray(resepData)) resepData = [];
+    } catch(e) {
+        resepData = [];
+    }
+    
+    let htmlObat = '';
+    if (resepData.length > 0) {
+        resepData.forEach(obat => {
+            htmlObat += '<div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center obat-row">' +
+                '<input type="text" value="' + (obat.nama_obat || '') + '" readonly class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 text-gray-500">' +
+                '<input type="text" value="' + (obat.dosis || '') + '" readonly class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 text-gray-500">' +
+                '<input type="text" value="' + (obat.keterangan || '') + '" readonly class="flex-1 min-w-0 border border-gray-200 rounded-xl px-3 py-2.5 text-sm bg-gray-50 text-gray-500">' +
+                '</div>';
+        });
+    } else {
+        htmlObat = '<p class="text-sm text-gray-400 italic">Tidak ada resep obat</p>';
+    }
+    document.getElementById('obatContainer').innerHTML = htmlObat;
+
+    const inputs = document.querySelectorAll('#modalRM input, #modalRM textarea, #modalRM select');
+    inputs.forEach(input => input.setAttribute('readonly', true));
+    document.getElementById('rmStatus').setAttribute('disabled', true);
+
+    const btnSimpan = document.querySelector('#modalRM button[type="submit"]');
+    if(btnSimpan) btnSimpan.style.display = 'none';
+
+    document.getElementById('modalRM').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
 </script>
 
 @endsection
