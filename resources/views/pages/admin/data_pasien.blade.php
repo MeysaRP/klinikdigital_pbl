@@ -23,7 +23,7 @@
     </div>
 
     <!-- TABLE -->
-    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div class="overflow-x-auto">
 
             <table class="w-full text-sm min-w-[700px]">
@@ -42,7 +42,7 @@
 
                 <tbody>
                 @foreach ($pasien as $p)
-                <tr class="pasien-row border-b"
+                <tr class="pasien-row"
                     data-id="{{ $p->id }}"
                     data-nama="{{ $p->name }}">
 
@@ -131,7 +131,7 @@
 
             <div class="flex gap-2 mt-3">
                 <button onclick="closeEditModal()" class="flex-1 bg-gray-300 p-2 rounded">Batal</button>
-                <button onclick="saveEdit()" class="flex-1 bg-blue-600 text-white p-2 rounded">Simpan</button>
+                <button onclick="saveEdit()" class="flex-1 text-white p-2 rounded" style="background-color: #09637E;">Simpan</button>
             </div>
 
         </div>
