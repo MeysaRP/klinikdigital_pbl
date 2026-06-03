@@ -46,7 +46,10 @@
                         <svg class="w-5 h-5 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                         Pilih Tanggal
                     </h3>
-                    <input type="date" name="tanggal" value="{{ old('tanggal', now()->format('Y-m-d')) }}" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-[#09637E] focus:border-[#09637E]">
+                    <input type="date" id="tanggalInput" name="tanggal" value="{{ old('tanggal', $selectedDate ?? now()->format('Y-m-d')) }}" onchange="handleTanggalChange()" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-[#09637E] focus:border-[#09637E]">
+                    @if(!empty($selectedDayName))
+                        <p class="mt-2 text-sm text-gray-500">Menampilkan jadwal dokter untuk <strong>{{ $selectedDayName }}</strong> pada tanggal <strong>{{ \Carbon\Carbon::parse(old('tanggal', $selectedDate ?? now()->format('Y-m-d')))->format('d M Y') }}</strong>.</p>
+                    @endif
                     @error('tanggal')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -59,7 +62,13 @@
                     </h3>
 
                     @if($jadwals->isEmpty())
-                        <div class="text-sm text-gray-500">Belum ada jadwal dokter yang tersedia saat ini.</div>
+                        <div class="text-sm text-gray-500">
+                            @if(!empty($selectedDayName))
+                                Tidak ada jadwal dokter tersedia untuk <strong>{{ $selectedDayName }}</strong> pada tanggal <strong>{{ \Carbon\Carbon::parse(old('tanggal', $selectedDate ?? now()->format('Y-m-d')))->format('d M Y') }}</strong>.
+                            @else
+                                Belum ada jadwal dokter yang tersedia saat ini.
+                            @endif
+                        </div>
                     @else
                         <div class="space-y-3">
                             @foreach($jadwals as $jadwal)
@@ -109,7 +118,7 @@
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
                                         <p class="font-semibold text-gray-900">{{ $booking->dokter->nama ?? 'Dokter' }}</p>
-                                        <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($booking->tanggal)->format('d M Y') }} • {{ date('H:i', strtotime($booking->jam_mulai)) }} - {{ date('H:i', strtotime($booking->jam_selesai)) }} WIB</p>
+                                        <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($booking->tanggal)->format('d M Y') }} • {{ $booking->slot_mulai }} - {{ $booking->slot_selesai }} WIB</p>
                                         <p class="text-sm text-gray-500 mt-1">No. Antrian: {{ sprintf('%02d', $booking->nomor_antrian) }}</p>
                                     </div>
                                     <div class="text-right">
@@ -131,4 +140,16 @@
 
     </div>
 </div>
+
+<script>
+    function handleTanggalChange() {
+        const tanggal = document.getElementById('tanggalInput').value;
+        if (!tanggal) {
+            return;
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('tanggal', tanggal);
+        window.location.href = url.toString();
+    }
+</script>
 @endsection

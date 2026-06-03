@@ -14,14 +14,17 @@
 
     <!-- NOTIFIKASI SUKSES -->
     @if(session('success'))
-    <div class="bg-green-100 border border-green-300 text-green-700 px-5 py-3 rounded-xl flex items-center justify-between shadow-sm">
-        <div class="flex items-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            {{ session('success') }}
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 px-4 py-6">
+        <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-green-200 p-8 text-center">
+            <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-green-600">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-2">Berhasil</h2>
+            <p class="text-sm text-gray-500 mb-6">{{ session('success') }}</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="inline-flex items-center justify-center rounded-xl bg-[#09637E] px-6 py-3 text-sm font-semibold text-white hover:bg-[#074d61] transition">
+                Tutup
+            </button>
         </div>
-        <button onclick="this.parentElement.remove()" class="text-green-700 hover:text-green-900">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
     </div>
     @endif
 

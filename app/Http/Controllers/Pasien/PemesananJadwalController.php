@@ -7,15 +7,45 @@ use App\Models\Jadwal;
 use App\Models\PemesananJadwal;
 use App\Models\Antrian;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PemesananJadwalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $email = session('email');
         $user = User::where('email', $email)->first();
-        $jadwals = Jadwal::with('dokter')->where('status', 'Aktif')->get();
+        $selectedDate = $request->query('tanggal') ?: session('_old_input.tanggal');
+        $selectedDayName = null;
+
+        $jadwalQuery = Jadwal::with('dokter')->where('status', 'Aktif');
+
+        if ($selectedDate) {
+            try {
+                $carbonDate = Carbon::parse($selectedDate);
+                $dayMap = [
+                    'Monday' => 'Senin',
+                    'Tuesday' => 'Selasa',
+                    'Wednesday' => 'Rabu',
+                    'Thursday' => 'Kamis',
+                    'Friday' => 'Jumat',
+                    'Saturday' => 'Sabtu',
+                    'Sunday' => 'Minggu',
+                ];
+
+                $selectedDayName = $dayMap[$carbonDate->format('l')] ?? null;
+
+                if ($selectedDayName) {
+                    $jadwalQuery->whereRaw('LOWER(hari) = ?', [strtolower($selectedDayName)]);
+                }
+            } catch (\Exception $exception) {
+                $selectedDate = null;
+                $selectedDayName = null;
+            }
+        }
+
+        $jadwals = $jadwalQuery->orderBy('hari')->orderBy('jam_mulai')->get();
         $bookings = [];
 
         if ($email) {
@@ -29,6 +59,8 @@ class PemesananJadwalController extends Controller
         return view('pages.pasien.pemesanan_jadwal', [
             'jadwals' => $jadwals,
             'bookings' => $bookings,
+            'selectedDate' => $selectedDate,
+            'selectedDayName' => $selectedDayName,
             'userName' => $user?->name ?? 'Pasien',
             'userRole' => 'Pasien',
             'userInitial' => $user ? substr($user->name, 0, 2) : 'PS',

@@ -27,7 +27,7 @@
                         </span>
                         <span class="flex items-center gap-1">
                             <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>
-                            {{ date('H:i', strtotime($nextBooking->jam_mulai)) }} - {{ date('H:i', strtotime($nextBooking->jam_selesai)) }} WIB
+                            {{ $nextBooking->slot_mulai ?? date('H:i', strtotime($nextBooking->jam_mulai)) }} - {{ $nextBooking->slot_selesai ?? date('H:i', strtotime($nextBooking->jam_selesai)) }} WIB
                         </span>
                     </div>
                     <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Keluhan: {{ $nextBooking->keluhan }}</p>
@@ -87,6 +87,7 @@
                                 <option value="all" {{ $statusAktif == 'all' ? 'selected' : '' }}>Semua Status</option>
                                 <option value="Menunggu" {{ $statusAktif == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
                                 <option value="Selesai" {{ $statusAktif == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+                                <option value="Dibatalkan" {{ $statusAktif == 'Dibatalkan' ? 'selected' : '' }}>Dibatalkan</option>
                             </select>
                         </form>
                     </div>
@@ -101,13 +102,15 @@
                                     {{-- FIXED: "Akan Datang" diganti "Menunggu" --}}
                                     @if($item->status === 'Menunggu')
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-yellow-100 text-yellow-700">Menunggu</span>
+                                    @elseif($item->status === 'Dibatalkan')
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-red-100 text-red-700">Dibatalkan</span>
                                     @else
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-green-100 text-green-700">Selesai</span>
                                     @endif
                                 </div>
                                 <h4 class="font-bold text-gray-900 text-lg">{{ $item->dokter?->nama ?? '-' }}</h4>
                                 <p class="text-sm text-gray-600 mt-1">
-                                    <span class="font-semibold text-[#09637E]">{{ date('d F Y', strtotime($item->tanggal)) }}</span> &bull; {{ date('H:i', strtotime($item->jam_mulai)) }} - {{ date('H:i', strtotime($item->jam_selesai)) }} WIB
+                                    <span class="font-semibold text-[#09637E]">{{ date('d F Y', strtotime($item->tanggal)) }}</span> &bull; {{ $item->slot_mulai ?? date('H:i', strtotime($item->jam_mulai)) }} - {{ $item->slot_selesai ?? date('H:i', strtotime($item->jam_selesai)) }} WIB
                                 </p>
                                 <p class="text-xs text-gray-500 italic mt-1">Keluhan: {{ $item->keluhan ?? '-' }}</p>
                             </div>
@@ -117,10 +120,11 @@
                                     onclick="openDetailModal(this)"
                                     data-dokter="{{ $item->dokter?->nama ?? '-' }}"
                                     data-tanggal="{{ date('d F Y', strtotime($item->tanggal)) }}"
-                                    data-jam="{{ date('H:i', strtotime($item->jam_mulai)) }} - {{ date('H:i', strtotime($item->jam_selesai)) }} WIB"
+                                    data-jam="{{ $item->slot_mulai ?? date('H:i', strtotime($item->jam_mulai)) }} - {{ $item->slot_selesai ?? date('H:i', strtotime($item->jam_selesai)) }} WIB"
                                     data-keluhan="{{ $item->keluhan ?? '-' }}"
                                     data-status="{{ $item->status }}"
-                                    data-antrian="{{ $item->nomor_antrian ?? '-' }}">
+                                    data-antrian="{{ $item->nomor_antrian ?? '-' }}"
+                                    data-booking-id="{{ $item->id }}">
                                     Lihat Detail
                                 </button>
                             </div>
@@ -149,7 +153,17 @@
                     {{-- FIXED: semua $profil['...'] diganti $profil->... --}}
                     <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Nama</span><span class="text-gray-900 font-semibold">{{ $profil?->name ?? '-' }}</span></div>
                     <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Tanggal Lahir</span><span class="text-gray-900 font-semibold">{{ $profil?->tgl_lahir ? date('d F Y', strtotime($profil->tgl_lahir)) : '-' }}</span></div>
-                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Jenis Kelamin</span><span class="text-gray-900 font-semibold">{{ $profil?->jk == 'L' ? 'Laki-laki' : ($profil?->jk == 'P' ? 'Perempuan' : '-') }}</span></div>
+                    @php
+                        $jkValue = strtolower(trim($profil?->jk ?? ''));
+                        if (in_array($jkValue, ['l', 'laki-laki', 'male'])) {
+                            $jkLabel = 'Laki-laki';
+                        } elseif (in_array($jkValue, ['p', 'perempuan', 'female'])) {
+                            $jkLabel = 'Perempuan';
+                        } else {
+                            $jkLabel = '-';
+                        }
+                    @endphp
+                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Jenis Kelamin</span><span class="text-gray-900 font-semibold">{{ $jkLabel }}</span></div>
                     <div class="flex justify-between items-center"><span class="font-medium text-gray-500">No. HP</span><span class="text-gray-900 font-semibold">{{ $profil?->no_hp ?? '-' }}</span></div>
                     <div class="flex justify-between items-start"><span class="font-medium text-gray-500">Alamat</span><span class="text-gray-900 font-semibold text-right ml-2">{{ $profil?->alamat ?? '-' }}</span></div>
                 </div>
@@ -246,6 +260,8 @@
 
 <!-- Script -->
 <script>
+const cancelBookingBaseUrl = "{{ url('pemesanan-batal') }}";
+
 function openDetailModal(btn) {
     const dokter = btn.getAttribute('data-dokter');
     const tanggal = btn.getAttribute('data-tanggal');
@@ -253,6 +269,7 @@ function openDetailModal(btn) {
     const keluhan = btn.getAttribute('data-keluhan');
     const status = btn.getAttribute('data-status');
     const antrian = btn.getAttribute('data-antrian');
+    const bookingId = btn.getAttribute('data-booking-id');
 
     document.getElementById('modalDokter').textContent = dokter;
     document.getElementById('modalTanggal').textContent = tanggal;
@@ -264,12 +281,20 @@ function openDetailModal(btn) {
     const footerEl = document.getElementById('modalFooter');
 
     if (status === 'Menunggu') {
-        // FIXED: "Akan Datang" diganti "Menunggu"
         statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-yellow-100 text-yellow-700';
         statusEl.textContent = 'Menunggu';
         footerEl.innerHTML = `
             <button onclick="closeDetailModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition">Tutup</button>
-            <a href="{{ route('pemesanan.jadwal') }}" class="flex-1 py-2.5 bg-[#09637E] hover:bg-[#074d61] text-white text-sm font-semibold rounded-xl transition block text-center">Ubah Jadwal</a>
+            <form method="POST" action="${cancelBookingBaseUrl}/${bookingId}" class="flex-1">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <button type="submit" class="w-full py-2.5 bg-[#E11D48] hover:bg-[#c81b44] text-white text-sm font-semibold rounded-xl transition">Batalkan Pemesanan</button>
+            </form>
+        `;
+    } else if (status === 'Dibatalkan') {
+        statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-red-100 text-red-700';
+        statusEl.textContent = 'Dibatalkan';
+        footerEl.innerHTML = `
+            <button onclick="closeDetailModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition">Tutup</button>
         `;
     } else {
         statusEl.className = 'px-3 py-1 text-xs rounded-full font-medium bg-green-100 text-green-700';
