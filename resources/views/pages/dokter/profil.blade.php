@@ -1,8 +1,8 @@
 @extends('layouts.dashboard', [
-    'pageTitle' => 'Profil',
-    'userName' => 'Dr. Santi Wijaya',
-    'userRole' => 'Dokter',
-    'userInitial' => 'DS'
+    'pageTitle' => 'Profil Saya',  
+    'userName'  => session('name'), 
+    'userRole'  => 'Dokter',
+    'userInitial' => substr(session('name'), 0, 1) 
 ])
 
 @section('sidebar')
@@ -32,10 +32,8 @@
 
                 <!-- FOTO -->
                 <div class="relative flex-shrink-0">
-                    <div class="w-24 h-24 rounded-2xl bg-white border-4 border-white shadow-md flex items-center justify-center">
-                        <svg class="w-12 h-12 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
-                        </svg>
+                    <div class="w-24 h-24 rounded-2xl bg-white border-4 border-white shadow-md flex items-center justify-center text-3xl font-bold text-[#09637E]">
+                        {{ strtoupper(substr($dokter->name, 0, 1)) }} 
                     </div>
                 </div>
 
@@ -43,12 +41,12 @@
                 <div class="flex-1 pb-1">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-900">Dr. Santi Wijaya</h3>
+                            <h3 class="text-xl font-bold text-gray-900">{{ $dokter->name }}</h3> 
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-green-50 text-green-700 rounded-full border border-green-100">
                                 <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                                Aktif
+                                {{ $dokter->status ?? 'Aktif' }} 
                             </span>
                         </div>
                     </div>
@@ -61,14 +59,14 @@
                     <div class="w-9 h-9 bg-gray-50 rounded-lg flex items-center justify-center text-sm">📅</div>
                     <div>
                         <p class="text-[11px] text-gray-400 uppercase tracking-wide font-medium">Bergabung</p>
-                        <p class="text-sm font-semibold text-gray-800">Januari 2024</p>
+                        <p class="text-sm font-semibold text-gray-800">{{ $dokter->created_at->format('F Y') }}</p> 
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 bg-gray-50 rounded-lg flex items-center justify-center text-sm">👥</div>
                     <div>
                         <p class="text-[11px] text-gray-400 uppercase tracking-wide font-medium">Total Pasien</p>
-                        <p class="text-sm font-semibold text-gray-800">148</p>
+                        <p class="text-sm font-semibold text-gray-800">-</p> <!-- Ini bisa disambungkan nanti jika ada relasi -->
                     </div>
                 </div>
             </div>
@@ -91,7 +89,7 @@
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">👤</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-gray-400">Nama Lengkap</p>
-                    <p class="text-sm font-semibold text-gray-900">Dr. Santi Wijaya</p>
+                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->name }}</p> 
                 </div>
             </div>
 
@@ -99,7 +97,7 @@
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">🩺</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-gray-400">No. STR</p>
-                    <p class="text-sm font-semibold text-gray-900">12345678</p>
+                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->no_str ?? '-' }}</p> 
                 </div>
             </div>
 
@@ -107,7 +105,7 @@
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">📱</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-gray-400">No. Handphone</p>
-                    <p class="text-sm font-semibold text-gray-900">081250101875</p>
+                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->no_hp ?? '-' }}</p> 
                 </div>
             </div>
 
@@ -115,7 +113,7 @@
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">📧</div>
                 <div class="flex-1 min-w-0">
                      <p class="text-xs text-gray-400">Email</p>
-                     <p class="text-sm font-semibold text-gray-900">dr.sarah@meditech.local</p>
+                     <p class="text-sm font-semibold text-gray-900">{{ $dokter->email }}</p> 
                 </div>
             </div>
 
@@ -125,7 +123,7 @@
                     <p class="text-xs text-gray-400">Status</p>
                     <span class="inline-flex items-center gap-1.5 mt-0.5 px-2.5 py-1 text-xs font-medium bg-green-50 text-green-700 rounded-full border border-green-100">
                         <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                        Aktif
+                        {{ $dokter->status ?? 'Aktif' }} 
                     </span>
                 </div>
             </div>

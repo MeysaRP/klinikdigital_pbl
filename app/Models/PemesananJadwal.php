@@ -57,7 +57,7 @@ class PemesananJadwal extends Model
 
     public function dokter()
     {
-        return $this->belongsTo(Dokter::class);
+        return $this->belongsTo(User::class, 'dokter_id');
     }
 
     public function jadwal()

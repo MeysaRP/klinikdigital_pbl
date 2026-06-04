@@ -11,7 +11,12 @@ class AntrianDokterController extends Controller
 {
     public function index()
     {
+        $dokterId = session('id'); 
+
         $antrians = Antrian::with('pemesanan', 'rekamMedis')
+            ->whereHas('pemesanan', function($query) use ($dokterId) {
+                $query->where('dokter_id', $dokterId); // Filter berdasarkan dokter_id di tabel pemesanan
+            })
             ->orderBy('id')
             ->get();
 
@@ -19,46 +24,45 @@ class AntrianDokterController extends Controller
     }
 
     public function simpanRekamMedis(Request $request)
-{
-    $request->validate([
-        'antrian_id' => 'required|exists:antrians,id',
-        'diagnosa' => 'required',
-        'catatan_dokter' => 'nullable',
-    ]);
+    {
+        $request->validate([
+            'antrian_id' => 'required|exists:antrians,id',
+            'diagnosa' => 'required',
+            'catatan_dokter' => 'nullable',
+        ]);
 
-    $antrian = Antrian::with('pemesanan')->findOrFail($request->antrian_id);
+        $antrian = Antrian::with('pemesanan')->findOrFail($request->antrian_id);
 
-    $resepObat = [];
-    if ($request->has('obat_nama')) {
-        for ($i = 0; $i < count($request->obat_nama); $i++) {
-    
-            if (!empty($request->obat_nama[$i])) {
-                $resepObat[] = [
-                    'nama_obat'   => $request->obat_nama[$i],
-                    'dosis'       => $request->obat_dosis[$i] ?? '-',
-                    'keterangan'  => $request->obat_ket[$i] ?? '-'
-                ];
+        $resepObat = [];
+        if ($request->has('obat_nama')) {
+            for ($i = 0; $i < count($request->obat_nama); $i++) {
+                if (!empty($request->obat_nama[$i])) {
+                    $resepObat[] = [
+                        'nama_obat'   => $request->obat_nama[$i],
+                        'dosis'       => $request->obat_dosis[$i] ?? '-',
+                        'keterangan'  => $request->obat_ket[$i] ?? '-'
+                    ];
+                }
             }
         }
+
+        RekamMedis::updateOrCreate([
+            'antrian_id' => $antrian->id,
+        ], [
+            'diagnosa'       => $request->diagnosa,
+            'catatan_dokter' => $request->catatan_dokter,
+            'resep_obat'     => $resepObat,
+        ]);
+
+        $antrian->status = $request->status; 
+        $antrian->save();
+
+        if ($antrian->pemesanan) {
+            $booking = $antrian->pemesanan;
+            $booking->status = 'Selesai';
+            $booking->save();
+        }
+
+        return back()->with('success', 'Rekam medis berhasil disimpan.');
     }
-
-    RekamMedis::updateOrCreate([
-        'antrian_id' => $antrian->id,
-    ], [
-        'diagnosa'       => $request->diagnosa,
-        'catatan_dokter' => $request->catatan_dokter,
-        'resep_obat'     => $resepObat,
-    ]);
-
-    $antrian->status = $request->status; 
-    $antrian->save();
-
-    if ($antrian->pemesanan) {
-        $booking = $antrian->pemesanan;
-        $booking->status = 'Selesai';
-        $booking->save();
-    }
-
-    return back()->with('success', 'Rekam medis berhasil disimpan.');
-}
 }

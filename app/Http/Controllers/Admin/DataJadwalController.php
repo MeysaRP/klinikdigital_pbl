@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jadwal;
-use App\Models\Dokter;
+use App\Models\User; 
 use Illuminate\Http\Request;
 
 class DataJadwalController extends Controller
@@ -13,14 +13,14 @@ class DataJadwalController extends Controller
     {
         return view('pages.admin.data_jadwal', [
             'jadwal' => Jadwal::with('dokter')->get(),
-            'dokters' => Dokter::orderBy('nama')->get(),
+            'dokters' => User::where('role', 'dokter')->orderBy('name')->get(), 
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'dokter_id' => 'required|exists:dokters,id',
+            'dokter_id' => 'required|exists:users,id', 
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
@@ -38,7 +38,7 @@ class DataJadwalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'dokter_id' => 'required|exists:dokters,id',
+            'dokter_id' => 'required|exists:users,id', 
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',

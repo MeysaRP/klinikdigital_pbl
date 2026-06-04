@@ -1,8 +1,8 @@
 @extends('layouts.dashboard', [
-    'pageTitle' => 'Antrian Pasien',
-    'userName' => 'Dr. Sarah Wijaya',
-    'userRole' => 'Dokter',
-    'userInitial' => 'DS'
+    'pageTitle' => 'Jadwal Saya', 
+    'userName'  => session('name'), 
+    'userRole'  => 'Dokter',
+    'userInitial' => substr(session('name'), 0, 1) 
 ])
 
 @section('sidebar')

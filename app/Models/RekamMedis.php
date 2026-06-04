@@ -12,7 +12,7 @@ class RekamMedis extends Model
         'antrian_id',
         'diagnosa',
         'catatan_dokter',
-        'resep_obat', // <--- TAMBAHKAN INI
+        'resep_obat',
     ];
     
     protected $casts = [

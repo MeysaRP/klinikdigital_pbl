@@ -25,6 +25,8 @@ class User extends Authenticatable
         'tgl_lahir',
         'jk',
         'no_hp',
+        'no_str',     
+        'status',     
         'kategori',
         'no_identitas',
         'role',

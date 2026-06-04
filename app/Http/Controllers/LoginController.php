@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\User;
-// use App\Models\Dokter; // Tidak perlu lagi karena data ada di User
 use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -32,7 +31,6 @@ class LoginController extends Controller
             'role.required' => 'Role wajib dipilih!',
         ]);
 
-        // Login mencari di tabel users
         $user = User::where('email', $request->email)->where('role', $request->role)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
@@ -40,12 +38,14 @@ class LoginController extends Controller
                 'login' => true,
                 'role' => $user->role,
                 'email' => $user->email,
+                'id'    => $user->id,      
+                'name'  => $user->name,     
             ]);
 
-            if ($user->role === 'admin') return redirect('/dashboard/admin');
-            if ($user->role === 'dokter') return redirect('/dashboard/dokter');
-            return redirect('/dashboard/pasien');
-        }
+           if ($user->role === 'admin') return redirect('/dashboard/admin');
+           if ($user->role === 'dokter') return redirect('/dashboard/dokter');
+           return redirect('/dashboard/pasien');
+    }
 
         return back()->with('error', 'Email / password / role salah!');
     }
@@ -73,8 +73,7 @@ class LoginController extends Controller
         ]);
 
         $email = $request->email;
-        
-        // HANYA cek di tabel users (karena semua data disana)
+
         $user = User::where('email', $email)->first();
 
         if ($user) {
@@ -100,7 +99,6 @@ class LoginController extends Controller
             }
         }
 
-        // Ubah 'success' menjadi 'status' supaya muncul di View
         return back()->with('status', 'Jika email terdaftar, link reset password telah dikirim.');
     }
 

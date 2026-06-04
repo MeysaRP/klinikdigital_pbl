@@ -39,7 +39,7 @@
                 <tbody id="tableJadwal">
                     @foreach($jadwal as $j)
                     <tr class="text-center hover:bg-gray-50 border-b border-gray-100">
-                        <td class="px-4 py-2 nama">{{ $j->dokter->nama ?? '-' }}</td>
+                        <td class="px-4 py-2 nama">{{ $j->dokter->name ?? '-' }}</td>
                         <td class="px-4 py-2">{{ $j->hari }}</td>
                         <td class="px-4 py-2">{{ $j->jam_mulai }} - {{ $j->jam_selesai }}</td>
                         <td class="px-4 py-2">{{ $j->kuota_pasien }}</td>
@@ -90,7 +90,7 @@
                     <select name="dokter_id" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
                         <option value="" disabled selected>-- Pilih Dokter --</option>
                         @foreach($dokters as $d)
-                            <option value="{{ $d->id }}">{{ $d->nama }}</option>
+                            <option value="{{ $d->id }}">{{ $d->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -172,7 +172,7 @@
                     <label>Dokter</label>
                     <select id="eDokter" name="dokter_id" class="border w-full px-2 py-2 rounded">
                         @foreach($dokters as $d)
-                            <option value="{{ $d->id }}">{{ $d->nama }}</option>
+                            <option value="{{ $d->id }}">{{ $d->name }}</option>
                         @endforeach
                     </select>
                 </div>

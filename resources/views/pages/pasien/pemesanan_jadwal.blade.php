@@ -76,7 +76,7 @@
                                     <div class="flex items-start gap-3">
                                         <input type="radio" name="jadwal_id" value="{{ $jadwal->id }}" class="mt-1 text-[#09637E] focus:ring-[#09637E]" {{ old('jadwal_id') == $jadwal->id ? 'checked' : '' }}>
                                         <div>
-                                            <p class="font-semibold text-gray-900">{{ $jadwal->dokter->nama ?? 'Dokter Tidak Ditemukan' }}</p>
+                                            <p class="font-semibold text-gray-900">{{ $jadwal->dokter->name ?? 'Dokter Tidak Ditemukan' }}</p>
                                             <p class="text-sm text-gray-500">{{ ucfirst(strtolower($jadwal->hari)) }} • {{ date('H:i', strtotime($jadwal->jam_mulai)) }} - {{ date('H:i', strtotime($jadwal->jam_selesai)) }} WIB</p>
                                             <p class="text-sm text-gray-500 mt-1">Kuota pasien: {{ $jadwal->kuota_pasien }}</p>
                                         </div>
@@ -117,7 +117,7 @@
                             <div class="border border-gray-200 rounded-2xl p-4 bg-gray-50">
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
-                                        <p class="font-semibold text-gray-900">{{ $booking->dokter->nama ?? 'Dokter' }}</p>
+                                        <p class="font-semibold text-gray-900">{{ $booking->dokter->name ?? 'Dokter' }}</p>
                                         <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($booking->tanggal)->format('d M Y') }} • {{ $booking->slot_mulai }} - {{ $booking->slot_selesai }} WIB</p>
                                         <p class="text-sm text-gray-500 mt-1">No. Antrian: {{ sprintf('%02d', $booking->nomor_antrian) }}</p>
                                     </div>

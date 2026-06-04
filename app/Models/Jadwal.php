@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PemesananJadwal;
+use App\Models\User; 
 
 class Jadwal extends Model
 {
@@ -17,9 +19,13 @@ class Jadwal extends Model
         'status',
     ];
 
-    // RELASI ke dokter
     public function dokter()
     {
-        return $this->belongsTo(Dokter::class);
+        return $this->belongsTo(User::class, 'dokter_id');
+    }
+
+    public function pemesanan()
+    {
+        return $this->hasMany(PemesananJadwal::class, 'jadwal_id');
     }
 }
