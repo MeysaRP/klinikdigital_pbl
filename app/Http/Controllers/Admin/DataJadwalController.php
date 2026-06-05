@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Jadwal;
-use App\Models\User; 
+use App\Models\Dokter;
 use Illuminate\Http\Request;
 
 class DataJadwalController extends Controller
@@ -13,14 +13,14 @@ class DataJadwalController extends Controller
     {
         return view('pages.admin.data_jadwal', [
             'jadwal' => Jadwal::with('dokter')->get(),
-            'dokters' => User::where('role', 'dokter')->orderBy('name')->get(), 
+            'dokters' => Dokter::orderBy('nama')->get(),
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'dokter_id' => 'required|exists:users,id', 
+            'dokter_id' => 'required|exists:dokters,id',
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
@@ -29,7 +29,12 @@ class DataJadwalController extends Controller
         ]);
 
         Jadwal::create($request->only(
-            'dokter_id', 'hari', 'jam_mulai', 'jam_selesai', 'kuota_pasien', 'status'
+            'dokter_id',
+            'hari',
+            'jam_mulai',
+            'jam_selesai',
+            'kuota_pasien',
+            'status'
         ));
 
         return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan');
@@ -38,7 +43,7 @@ class DataJadwalController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'dokter_id' => 'required|exists:users,id', 
+            'dokter_id' => 'required|exists:dokters,id',
             'hari' => 'required',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
@@ -47,7 +52,12 @@ class DataJadwalController extends Controller
         ]);
 
         Jadwal::findOrFail($id)->update($request->only(
-            'dokter_id', 'hari', 'jam_mulai', 'jam_selesai', 'kuota_pasien', 'status'
+            'dokter_id',
+            'hari',
+            'jam_mulai',
+            'jam_selesai',
+            'kuota_pasien',
+            'status'
         ));
 
         return redirect()->back()->with('success', 'Jadwal berhasil diupdate');

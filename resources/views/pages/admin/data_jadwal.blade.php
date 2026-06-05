@@ -39,10 +39,16 @@
                 <tbody id="tableJadwal">
                     @foreach($jadwal as $j)
                     <tr class="text-center hover:bg-gray-50 border-b border-gray-100">
-                        <td class="px-4 py-2 nama">{{ $j->dokter->name ?? '-' }}</td>
+
+                        {{-- ✅ AMAN RELASI DOKTER --}}
+                        <td class="px-4 py-2 nama">
+                            {{ optional($j->dokter)->nama ?? '-' }}
+                        </td>
+
                         <td class="px-4 py-2">{{ $j->hari }}</td>
                         <td class="px-4 py-2">{{ $j->jam_mulai }} - {{ $j->jam_selesai }}</td>
                         <td class="px-4 py-2">{{ $j->kuota_pasien }}</td>
+
                         <td class="px-4 py-2">
                             <span class="px-3 py-1 rounded-full text-xs font-medium
                             @if($j->status=='Aktif') bg-green-100 text-green-600
@@ -51,6 +57,7 @@
                                 {{ $j->status }}
                             </span>
                         </td>
+
                         <td class="px-4 py-2">
                             <button type="button"
                                 class="bg-yellow-500 text-white px-3 py-1 rounded text-xs"
@@ -86,18 +93,18 @@
             <div class="space-y-3 text-sm">
 
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Pilih Dokter</label>
-                    <select name="dokter_id" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                    <label>Pilih Dokter</label>
+                    <select name="dokter_id" class="border w-full px-2 py-2 rounded">
                         <option value="" disabled selected>-- Pilih Dokter --</option>
                         @foreach($dokters as $d)
-                            <option value="{{ $d->id }}">{{ $d->name }}</option>
+                            <option value="{{ $d->id }}">{{ $d->nama }}</option>
                         @endforeach
                     </select>
                 </div>
 
                 <div>
-                    <label class="block mb-1 font-medium text-gray-700">Hari Praktik</label>
-                    <select name="hari" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                    <label>Hari</label>
+                    <select name="hari" class="border w-full px-2 py-2 rounded">
                         <option>Senin</option>
                         <option>Selasa</option>
                         <option>Rabu</option>
@@ -110,7 +117,7 @@
 
                 <div>
                     <label>Jam Mulai</label>
-                    <select name="jam_mulai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                    <select name="jam_mulai" class="border w-full px-2 py-2 rounded">
                         @for($i=0;$i<24;$i++)
                             <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
                         @endfor
@@ -119,7 +126,7 @@
 
                 <div>
                     <label>Jam Selesai</label>
-                    <select name="jam_selesai" class="border border-gray-300 w-full px-2 py-2 rounded bg-white">
+                    <select name="jam_selesai" class="border w-full px-2 py-2 rounded">
                         @for($i=0;$i<24;$i++)
                             <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
                         @endfor
@@ -129,12 +136,12 @@
                 <div>
                     <label>Kuota</label>
                     <input type="number" name="kuota_pasien"
-                        class="border border-gray-300 w-full px-2 py-2 rounded" min="1">
+                        class="border w-full px-2 py-2 rounded" min="1">
                 </div>
 
                 <div>
                     <label>Status</label>
-                    <select name="status" class="border border-gray-300 w-full px-2 py-2 rounded">
+                    <select name="status" class="border w-full px-2 py-2 rounded">
                         <option>Aktif</option>
                         <option>Nonaktif</option>
                         <option>Cuti</option>
@@ -169,10 +176,10 @@
             <div class="space-y-3 text-sm">
 
                 <div>
-                    <label>Dokter</label>
+                    <label>Pilih Dokter</label>
                     <select id="eDokter" name="dokter_id" class="border w-full px-2 py-2 rounded">
                         @foreach($dokters as $d)
-                            <option value="{{ $d->id }}">{{ $d->name }}</option>
+                           <option value="{{ $d->id }}">{{ $d->nama }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -279,7 +286,7 @@ function closeEdit() {
     modal.classList.remove('flex');
 }
 
-/* ================= SEARCH ================= */
+/* SEARCH */
 document.addEventListener('DOMContentLoaded', function () {
     const search = document.getElementById('searchJadwal');
 

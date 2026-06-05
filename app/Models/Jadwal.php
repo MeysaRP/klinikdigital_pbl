@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PemesananJadwal;
-use App\Models\User; 
+use App\Models\Dokter;
 
 class Jadwal extends Model
 {
@@ -21,7 +21,7 @@ class Jadwal extends Model
 
     public function dokter()
     {
-        return $this->belongsTo(User::class, 'dokter_id');
+        return $this->belongsTo(Dokter::class, 'dokter_id');
     }
 
     public function pemesanan()

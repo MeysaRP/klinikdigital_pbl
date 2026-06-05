@@ -13,7 +13,7 @@ class DataDokterController extends Controller
     public function index() 
     { 
         return view('pages.admin.data_dokter', [
-            'dokters' => User::where('role', 'dokter')->orderBy('id')->get()
+            'dokters' => Dokter::orderBy('id')->get()
         ]); 
     }
 
@@ -21,70 +21,48 @@ class DataDokterController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users|unique:dokters', 
+            'email' => 'required|email|unique:dokters,email', 
             'no_str' => 'nullable',
             'no_hp' => 'nullable',
             'status' => 'required',
             'password' => 'required|min:6',
         ]);
 
-        $user = User::create([
-            'name' => $request->name,
+        $dokter = Dokter::create([
+            'nama' => $request->name,
             'email' => $request->email,
-            'no_str' => $request->no_str,
-            'no_hp' => $request->no_hp,
-            'status' => $request->status,
-            'password' => bcrypt($request->password),
-            'role' => 'dokter',
-        ]);
-
-        Dokter::create([
-            'nama' => $request->name,      
-            'email' => $request->email,
-            'str' => $request->no_str,     
+            'str' => $request->no_str,
             'no_hp' => $request->no_hp,
             'status' => $request->status,
             'password' => bcrypt($request->password),
         ]);
 
-        return response()->json($user);
+        return response()->json($dokter);
     }
 
-    public function update(Request $request, User $dokter) 
+    public function update(Request $request, Dokter $dokter)
     {
         $v = $request->validate([
-            'email'   => 'required|email|unique:users,email,'.$dokter->id, 
-            'name'    => 'required', 
-            'no_str'  => 'required', 
+            'email'   => 'required|email|unique:dokters,email,'.$dokter->id,
+            'name'    => 'required',
+            'no_str'  => 'required',
             'no_hp'   => 'required',
             'status'  => 'required',
             'password'=> 'nullable|min:6'
         ]);
-        
-        $dokter->email = $v['email']; 
-        $dokter->name = $v['name'];     
-        $dokter->no_str = $v['no_str']; 
-        $dokter->no_hp = $v['no_hp']; 
+
+        $dokter->email = $v['email'];
+        $dokter->nama = $v['name'];
+        $dokter->str = $v['no_str'];
+        $dokter->no_hp = $v['no_hp'];
         $dokter->status = $v['status'];
-        
+
         if (!empty($v['password'])) {
             $dokter->password = Hash::make($v['password']);
         }
+
         $dokter->save();
 
-        $dokterData = Dokter::where('email', $request->email)->first();
-        if ($dokterData) {
-            $dokterData->nama = $v['name'];
-            $dokterData->email = $v['email'];
-            $dokterData->str = $v['no_str'];
-            $dokterData->no_hp = $v['no_hp'];
-            $dokterData->status = $v['status'];
-            if (!empty($v['password'])) {
-                $dokterData->password = Hash::make($v['password']);
-            }
-            $dokterData->save();
-        }
-        
         return response()->json($dokter);
     }
 }
