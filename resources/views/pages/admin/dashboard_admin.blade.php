@@ -46,6 +46,47 @@
 
 </div>
 
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4">
+
+    <form method="GET" class="flex flex-col sm:flex-row gap-3">
+
+        <!-- Filter Tanggal -->
+        <input type="date"
+               name="tanggal"
+               value="{{ $tanggal }}"
+               class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full sm:w-auto">
+
+        <!-- Filter Dokter -->
+        <select name="dokter_id"
+                class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full sm:w-auto">
+
+            <option value="">Semua Dokter</option>
+
+            @foreach($dokters as $dokter)
+                <option value="{{ $dokter->id }}"
+                    {{ $dokterId == $dokter->id ? 'selected' : '' }}>
+                    {{ $dokter->nama }}
+                </option>
+            @endforeach
+
+        </select>
+
+        <!-- Button -->
+        <button type="submit"
+                class="bg-[#09637E] text-white px-4 py-2 rounded-lg text-sm hover:opacity-90">
+            Filter
+        </button>
+
+        <!-- Reset -->
+        <a href="{{ route('dashboard.admin') }}"
+           class="px-4 py-2 rounded-lg text-sm border border-gray-200 text-gray-600 hover:bg-gray-50">
+            Reset
+        </a>
+
+    </form>
+
+</div>
+
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 
         <div class="px-4 sm:px-6 py-4 border-b border-gray-100">
