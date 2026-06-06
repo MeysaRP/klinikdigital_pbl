@@ -16,37 +16,48 @@ class PemesananJadwalController extends Controller
     {
         $email = session('email');
         $user = User::where('email', $email)->first();
-        $selectedDate = $request->query('tanggal') ?: session('_old_input.tanggal');
+
+        $selectedDate = $request->query('tanggal');
         $selectedDayName = null;
 
-        $jadwalQuery = Jadwal::with('dokter')->where('status', 'Aktif');
+        // query jadwal
+        $jadwalQuery = Jadwal::with('dokter')
+            ->where('status', 'Aktif');
 
+        // filter hari berdasarkan tanggal
         if ($selectedDate) {
             try {
                 $carbonDate = Carbon::parse($selectedDate);
+
                 $dayMap = [
-                    'Monday' => 'Senin',
-                    'Tuesday' => 'Selasa',
-                    'Wednesday' => 'Rabu',
-                    'Thursday' => 'Kamis',
-                    'Friday' => 'Jumat',
-                    'Saturday' => 'Sabtu',
-                    'Sunday' => 'Minggu',
+                    'Monday' => 'senin',
+                    'Tuesday' => 'selasa',
+                    'Wednesday' => 'rabu',
+                    'Thursday' => 'kamis',
+                    'Friday' => 'jumat',
+                    'Saturday' => 'sabtu',
+                    'Sunday' => 'minggu',
                 ];
 
                 $selectedDayName = $dayMap[$carbonDate->format('l')] ?? null;
 
                 if ($selectedDayName) {
-                    $jadwalQuery->whereRaw('LOWER(hari) = ?', [strtolower($selectedDayName)]);
+                    $jadwalQuery->whereRaw('LOWER(hari) = ?', [$selectedDayName]);
                 }
-            } catch (\Exception $exception) {
+
+            } catch (\Exception $e) {
                 $selectedDate = null;
                 $selectedDayName = null;
             }
         }
 
-        $jadwals = $jadwalQuery->orderBy('hari')->orderBy('jam_mulai')->get();
-        $bookings = [];
+        $jadwals = $jadwalQuery
+            ->orderBy('hari')
+            ->orderBy('jam_mulai')
+            ->get();
+
+        // booking user
+        $bookings = collect();
 
         if ($email) {
             $bookings = PemesananJadwal::with(['dokter', 'jadwal'])
@@ -73,12 +84,6 @@ class PemesananJadwalController extends Controller
             'tanggal' => 'required|date|after_or_equal:today',
             'jadwal_id' => 'required|exists:jadwals,id',
             'keluhan' => 'nullable|string|max:500',
-        ], [
-            'tanggal.required' => 'Tanggal harus dipilih!',
-            'tanggal.date' => 'Format tanggal tidak valid!',
-            'tanggal.after_or_equal' => 'Tanggal harus hari ini atau nanti.',
-            'jadwal_id.required' => 'Pilih jadwal dokter terlebih dahulu!',
-            'jadwal_id.exists' => 'Jadwal dokter tidak ditemukan.',
         ]);
 
         $email = session('email');
@@ -87,7 +92,7 @@ class PemesananJadwalController extends Controller
         $jadwal = Jadwal::with('dokter')->findOrFail($request->jadwal_id);
 
         if ($jadwal->status !== 'Aktif') {
-            return back()->with('error', 'Jadwal dokter tidak aktif. Silakan pilih jadwal lain.');
+            return back()->with('error', 'Jadwal tidak aktif');
         }
 
         $jumlahBooking = PemesananJadwal::where('jadwal_id', $jadwal->id)
@@ -96,7 +101,7 @@ class PemesananJadwalController extends Controller
             ->count();
 
         if ($jumlahBooking >= $jadwal->kuota_pasien) {
-            return back()->with('error', 'Kuota pasien untuk jadwal ini sudah penuh. Silakan pilih jadwal lain.');
+            return back()->with('error', 'Kuota penuh');
         }
 
         $nomorAntrian = $jumlahBooking + 1;
@@ -115,16 +120,13 @@ class PemesananJadwalController extends Controller
             'status' => 'Menunggu',
         ]);
 
-        // Simpan ke tabel antrians
         Antrian::create([
             'pemesanan_id' => $booking->id,
             'nomor_antrian' => 'A' . str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT),
             'status' => 'menunggu',
         ]);
 
-        return redirect()->route('pemesanan.berhasil', [
-            'booking' => $booking->id
-        ]);
+        return redirect()->route('pemesanan.berhasil', $booking->id);
     }
 
     public function berhasil($bookingId)
@@ -155,12 +157,13 @@ class PemesananJadwalController extends Controller
             ->first();
 
         if (!$booking) {
-            return back()->with('error', 'Pemesanan tidak ditemukan atau tidak dapat dibatalkan.');
+            return back()->with('error', 'Tidak bisa dibatalkan');
         }
 
-        $booking->status = 'Dibatalkan';
-        $booking->save();
+        $booking->update([
+            'status' => 'Dibatalkan'
+        ]);
 
-        return back()->with('success', 'Pemesanan berhasil dibatalkan.');
+        return back()->with('success', 'Berhasil dibatalkan');
     }
 }

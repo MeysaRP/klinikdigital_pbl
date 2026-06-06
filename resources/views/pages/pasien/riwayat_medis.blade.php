@@ -65,40 +65,65 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @forelse ($riwayat as $item)
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ date('d M Y', strtotime($item['tanggal'])) }}</td>
-                        <td class="px-6 py-4">{{ $item['dokter'] }}</td>
-                        <td class="px-6 py-4">{{ $item['poli'] }}</td>
-                        <td class="px-6 py-4">
-                            @if($item['status'] == 'Selesai')
-                                <span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-700">Selesai</span>
-                            @elseif($item['status'] == 'Menunggu')
-                                <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700">Menunggu</span>
-                            @else
-                                <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-600">Dibatalkan</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <!-- TOMBOL DETAIL (MENGGUNAKAN DATA ATTRIBUTE) -->
-                            <button onclick="openRiwayatModal(this)"
-                                    class="text-[#09637E] hover:text-white hover:bg-[#09637E] border border-[#09637E] px-4 py-1.5 rounded-lg text-sm font-semibold transition"
-                                    data-id="{{ $item['id'] }}"
-                                    data-dokter="{{ $item['dokter'] }}"
-                                    data-tanggal="{{ date('d M Y', strtotime($item['tanggal'])) }}"
-                                    data-gejala="{{ $item['gejala'] }}"
-                                    data-diagnosa="{{ $item['diagnosa'] }}"
-                                    data-resep="{{ $item['resep'] }}">
-                                Detail
-                            </button>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-10 text-center text-gray-400">Tidak ada riwayat medis yang ditemukan.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
+    @forelse ($riwayat as $item)
+    @php
+        $rekamMedis = $item->antrian?->rekamMedis;
+    @endphp
+
+    <tr class="hover:bg-gray-50 transition">
+        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            {{ date('d M Y', strtotime($item->tanggal)) }}
+        </td>
+
+        <td class="px-6 py-4">
+            {{ $item->dokter?->nama ?? '-' }}
+        </td>
+
+        <td class="px-6 py-4">
+            {{ $item->jadwal?->poli ?? '-' }}
+        </td>
+
+        <td class="px-6 py-4">
+            @if($item->status == 'Selesai')
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-green-100 text-green-700">
+                    Selesai
+                </span>
+            @elseif($item->status == 'Menunggu')
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-yellow-100 text-yellow-700">
+                    Menunggu
+                </span>
+            @else
+                <span class="px-3 py-1 text-xs font-bold rounded-full bg-red-100 text-red-600">
+                    {{ $item->status }}
+                </span>
+            @endif
+        </td>
+
+        <td class="px-6 py-4 text-center">
+            <button
+                onclick="openRiwayatModal(this)"
+                class="text-[#09637E] hover:text-white hover:bg-[#09637E] border border-[#09637E] px-4 py-1.5 rounded-lg text-sm font-semibold transition"
+
+                data-id="{{ $item->id }}"
+                data-dokter="{{ $item->dokter?->nama ?? '-' }}"
+                data-tanggal="{{ date('d M Y', strtotime($item->tanggal)) }}"
+                data-gejala="{{ $item->keluhan ?? '-' }}"
+                data-diagnosa="{{ $rekamMedis?->diagnosa ?? '-' }}"
+                data-resep="{{ $rekamMedis?->catatan_dokter ?? '-' }}"
+            >
+                Detail
+            </button>
+        </td>
+    </tr>
+
+    @empty
+    <tr>
+        <td colspan="5" class="px-6 py-10 text-center text-gray-400">
+            Tidak ada riwayat medis yang ditemukan.
+        </td>
+    </tr>
+    @endforelse
+</tbody>
             </table>
         </div>
     </div>

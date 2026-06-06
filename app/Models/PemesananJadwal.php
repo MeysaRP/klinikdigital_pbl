@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Dokter;
 
 class PemesananJadwal extends Model
 {
@@ -57,7 +58,7 @@ class PemesananJadwal extends Model
 
     public function dokter()
     {
-        return $this->belongsTo(User::class, 'dokter_id');
+        return $this->belongsTo(Dokter::class, 'dokter_id');
     }
 
     public function jadwal()
