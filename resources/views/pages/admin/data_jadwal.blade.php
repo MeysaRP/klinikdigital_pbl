@@ -179,7 +179,7 @@
                     <label>Pilih Dokter</label>
                     <select id="eDokter" name="dokter_id" class="border w-full px-2 py-2 rounded">
                         @foreach($dokters as $d)
-                           <option value="{{ $d->id }}">{{ $d->nama }}</option>
+                        <option value="{{ $d->id }}">{{ $d->nama }}</option>
                         @endforeach
                     </select>
                 </div>

@@ -106,40 +106,180 @@
     </div>
 </div>
 
-{{-- ================= MODAL TAMBAH ================= --}}
-<div id="modalTambah" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black/40" onclick="closeTambah()"></div>
+{{-- ================= MODAL TAMBAH DOKTER ================= --}}
+<div id="modalTambah"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4">
 
-    <div class="absolute inset-0 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
 
-            <div class="p-4 border-b flex justify-between">
-                <h3>Tambah Dokter</h3>
-                <button onclick="closeTambah()">✕</button>
+        <div class="px-6 py-5 border-b">
+            <h3 class="text-center font-bold text-lg">
+                Tambah Dokter
+            </h3>
+        </div>
+
+        <div class="p-6 space-y-4">
+
+            <div>
+                <label class="block text-sm mb-1">Email</label>
+                <input id="tEmail"
+                    type="email"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
+                    placeholder="Masukkan Email">
             </div>
 
-            <div class="p-4 space-y-3">
+            <div>
+                <label class="block text-sm mb-1">Nama Dokter</label>
+                <input id="tNama"
+                    type="text"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
+                    placeholder="Masukkan Nama Dokter">
+            </div>
 
-                <input id="tEmail" placeholder="Email">
-                <input id="tNama" placeholder="Nama">
-                <input id="tSTR" placeholder="STR">
-                <input id="tHP" placeholder="HP">
-                <input id="tPass" type="password" placeholder="Password">
+            <div>
+                <label class="block text-sm mb-1">No. STR</label>
+                <input id="tSTR"
+                    type="text"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
+                    placeholder="Masukkan Nomor STR">
+            </div>
 
-                <select id="tStatus">
-                    <option>Aktif</option>
-                    <option>Nonaktif</option>
-                    <option>Cuti</option>
+            <div>
+                <label class="block text-sm mb-1">No. HP</label>
+                <input id="tHP"
+                    type="text"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
+                    placeholder="Masukkan Nomor HP">
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">Password</label>
+
+                <div class="relative">
+                    <input id="tPass"
+                        type="password"
+                        class="w-full border border-gray-300 rounded-xl px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-[#09637E]"
+                        placeholder="Masukkan Password">
+
+                    <button type="button"
+                        onclick="togglePasswordTambah()"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">Status</label>
+
+                <select id="tStatus"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]">
+
+                    <option value="Aktif">Aktif</option>
+                    <option value="Nonaktif">Nonaktif</option>
+                    <option value="Cuti">Cuti</option>
+
                 </select>
-
-            </div>
-
-            <div class="p-4 flex justify-end gap-2">
-                <button onclick="closeTambah()">Batal</button>
-                <button onclick="simpanDokter()">Simpan</button>
             </div>
 
         </div>
+
+        <div class="flex justify-center gap-4 p-6 pt-0">
+
+            <button
+                onclick="closeTambah()"
+                class="border border-black px-6 py-2 rounded-xl hover:bg-gray-100">
+                Batal
+            </button>
+
+            <button
+                onclick="simpanDokter()"
+                class="bg-[#09637E] text-white px-6 py-2 rounded-xl hover:bg-[#074d61]">
+                Simpan
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<div id="modalEdit"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4">
+
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+
+        <div class="px-6 py-5 border-b">
+            <h3 class="text-center font-bold text-lg">
+                Edit Dokter
+            </h3>
+        </div>
+
+        <div class="p-6 space-y-4">
+
+            <input type="hidden" id="eId">
+
+            <div>
+                <label class="block text-sm mb-1">Email</label>
+                <input id="eEmail"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">Nama Dokter</label>
+                <input id="eNama"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">No STR</label>
+                <input id="eSTR"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">No HP</label>
+                <input id="eHP"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">
+                    Password Baru (Opsional)
+                </label>
+
+                <input id="ePass"
+                    type="password"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+            </div>
+
+            <div>
+                <label class="block text-sm mb-1">Status</label>
+
+                <select id="eStatus"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+
+                    <option value="Aktif">Aktif</option>
+                    <option value="Nonaktif">Nonaktif</option>
+                    <option value="Cuti">Cuti</option>
+
+                </select>
+            </div>
+
+        </div>
+
+        <div class="flex justify-center gap-4 p-6 pt-0">
+
+            <button onclick="closeEdit()"
+                class="border border-black px-6 py-2 rounded-xl">
+                Batal
+            </button>
+
+            <button onclick="updateDokter()"
+                class="bg-[#09637E] text-white px-6 py-2 rounded-xl">
+                Simpan
+            </button>
+
+        </div>
+
     </div>
 </div>
 
@@ -156,11 +296,30 @@ function showAlert(icon, title, text) {
 }
 
 function openTambah() {
-    document.getElementById('modalTambah').classList.remove('hidden');
+    document.getElementById('modalTambah')
+        .classList.remove('hidden');
+
+    document.getElementById('modalTambah')
+        .classList.add('flex');
 }
 
 function closeTambah() {
-    document.getElementById('modalTambah').classList.add('hidden');
+    document.getElementById('modalTambah')
+        .classList.add('hidden');
+
+    document.getElementById('modalTambah')
+        .classList.remove('flex');
+}
+
+function togglePasswordTambah() {
+
+    let input = document.getElementById('tPass');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+    } else {
+        input.type = 'password';
+    }
 }
 
 async function simpanDokter() {
@@ -192,25 +351,152 @@ async function simpanDokter() {
     const data = await res.json();
 
     document.getElementById('tableDokter').insertAdjacentHTML('beforeend', `
-        <tr data-dokter-id="${data.id}">
-            <td class="email">${data.email}</td>
-            <td class="nama">${data.nama}</td>
-            <td class="str">${data.str ?? '-'}</td>
-            <td class="hp">${data.no_hp ?? '-'}</td>
-            <td>${data.status}</td>
-            <td><button onclick="openEdit(this)">Edit</button></td>
-        </tr>
-    `);
+<tr data-dokter-id="${data.id}" class="hover:bg-gray-50 transition">
+
+    <td class="px-5 py-3.5 text-xs text-gray-500 email">
+        ${data.email}
+    </td>
+
+    <td class="px-5 py-3.5 font-medium nama">
+        ${data.nama}
+    </td>
+
+    <td class="px-5 py-3.5 str">
+        ${data.str ?? '-'}
+    </td>
+
+    <td class="px-5 py-3.5 hp">
+        ${data.no_hp ?? '-'}
+    </td>
+
+    <td class="px-5 py-3.5">
+        <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
+            ${data.status}
+        </span>
+    </td>
+
+    <td class="px-5 py-3.5 text-right">
+        <button onclick="openEdit(this)"
+            class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#09637E]/10 text-[#09637E] hover:bg-[#09637E] hover:text-white transition">
+            Edit
+        </button>
+    </td>
+
+</tr>
+`);
 
     closeTambah();
     showAlert('success', 'Berhasil', 'Dokter ditambahkan');
 }
 
-function openEdit(btn) {
-    selRow = btn.closest('tr');
-    selRowId = selRow.dataset.dokterId;
+function closeEdit() {
+
+    document.getElementById('modalEdit')
+        .classList.add('hidden');
+
+    document.getElementById('modalEdit')
+        .classList.remove('flex');
 }
 
+function openEdit(btn) {
+
+    selRow = btn.closest('tr');
+    selRowId = selRow.dataset.dokterId;
+
+    document.getElementById('eId').value = selRowId;
+
+    document.getElementById('eEmail').value =
+        selRow.querySelector('.email').innerText.trim();
+
+    document.getElementById('eNama').value =
+        selRow.querySelector('.nama').innerText.trim();
+
+    document.getElementById('eSTR').value =
+        selRow.querySelector('.str').innerText.trim();
+
+    document.getElementById('eHP').value =
+        selRow.querySelector('.hp').innerText.trim();
+
+    document.getElementById('modalEdit')
+        .classList.remove('hidden');
+
+    document.getElementById('modalEdit')
+        .classList.add('flex');
+}
+
+async function updateDokter() {
+
+    const id = document.getElementById('eId').value;
+
+    const email = document.getElementById('eEmail').value;
+    const nama = document.getElementById('eNama').value;
+    const str = document.getElementById('eSTR').value;
+    const hp = document.getElementById('eHP').value;
+    const status = document.getElementById('eStatus').value;
+    const password = document.getElementById('ePass').value;
+
+    try {
+
+        const res = await fetch(
+            updateUrlBase.replace('/0', '/' + id),
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    name: nama,
+                    no_str: str,
+                    no_hp: hp,
+                    status: status,
+                    password: password
+                })
+            }
+        );
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Data dokter gagal diperbarui'
+            });
+
+            console.log(data);
+            return;
+        }
+
+        // Update tabel tanpa refresh
+        selRow.querySelector('.email').innerText = data.email;
+        selRow.querySelector('.nama').innerText = data.nama;
+        selRow.querySelector('.str').innerText = data.str ?? '-';
+        selRow.querySelector('.hp').innerText = data.no_hp ?? '-';
+
+        closeEdit();
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Data dokter berhasil diperbarui',
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+    } catch (err) {
+
+        console.error(err);
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Terjadi kesalahan saat mengupdate data'
+        });
+    }
+}
 </script>
 
 @endsection
