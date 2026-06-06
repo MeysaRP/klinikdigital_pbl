@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Pasien;
 
 use App\Http\Controllers\Controller;
@@ -21,7 +22,18 @@ class DashboardPasienController extends Controller
             $query->where('status', $filterStatus);
         }
 
-        $bookings = $query->orderByDesc('tanggal')->orderByDesc('jam_mulai')->get();
+        // === YANG DIUBAH: Urutkan terdekat di atas ===
+        // 1. Jadwal hari ini & ke depan (prioritas 0), yang lalu (prioritas 1)
+        // 2. Di dalam "ke depan": tanggal terkecil duluan (terdekat)
+        // 3. Di dalam "yang lalu": tanggal terbesar duluan (yang baru saja lewat)
+        // 4. Terakhir urutkan jam_mulai
+        $bookings = $query
+            ->orderByRaw("CASE WHEN tanggal >= CURDATE() THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE WHEN tanggal >= CURDATE() THEN tanggal END ASC")
+            ->orderByRaw("CASE WHEN tanggal < CURDATE() THEN tanggal END DESC")
+            ->orderBy('jam_mulai')
+            ->get();
+        // ================================================
 
         $nextBooking = PemesananJadwal::with(['dokter', 'jadwal', 'antrian.rekamMedis'])
             ->where('email', $email)
@@ -31,7 +43,6 @@ class DashboardPasienController extends Controller
             ->orderBy('jam_mulai')
             ->first();
 
-        // Hitung inisial dengan benar
         $initials = 'PS';
         if ($user && $user->name) {
             $words = explode(' ', trim($user->name));

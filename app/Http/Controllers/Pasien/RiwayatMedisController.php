@@ -15,7 +15,6 @@ class RiwayatMedisController extends Controller
 
         $user = User::where('email', $email)->first();
 
-        $tahunAktif = request('tahun', 'all');
         $statusAktif = request('status', 'all');
 
         $query = PemesananJadwal::with([
@@ -28,10 +27,6 @@ class RiwayatMedisController extends Controller
             $query->where('status', $statusAktif);
         }
 
-        if ($tahunAktif !== 'all') {
-            $query->whereYear('tanggal', $tahunAktif);
-        }
-
         $riwayat = $query->orderByDesc('tanggal')->get();
 
         return view('pages.pasien.riwayat_medis', [
@@ -39,9 +34,27 @@ class RiwayatMedisController extends Controller
             'userRole'    => 'Pasien',
             'userInitial' => $user ? strtoupper(substr($user->nama ?? $user->name, 0, 2)) : 'PS',
             'riwayat'     => $riwayat,
-            'tahunAktif'  => $tahunAktif,
             'statusAktif' => $statusAktif,
         ]);
+    }
+
+    private function toSafeString($value, $default = '-')
+    {
+        if (is_array($value)) {
+            $flat = [];
+            array_walk_recursive($value, function ($item) use (&$flat) {
+                if (!is_array($item)) {
+                    $flat[] = $item;
+                }
+            });
+            return count($flat) > 0 ? implode(', ', $flat) : $default;
+        }
+
+        if (is_object($value)) {
+            return json_encode((array) $value, JSON_UNESCAPED_UNICODE);
+        }
+
+        return $value ?? $default;
     }
 
     public function downloadPdf($id)
@@ -70,11 +83,13 @@ class RiwayatMedisController extends Controller
         $data = [
             'dokter'    => $booking->dokter?->nama ?? '-',
             'tanggal'   => $booking->tanggal,
-            'poli'      => $booking->jadwal?->poli ?? 'Umum',
+            'poli'      => 'Umum',
             'pasien'    => $booking->nama_pasien ?? $booking->email,
-            'gejala'    => $booking->keluhan ?? '-',
-            'diagnosa'  => $rekam->diagnosa ?? '-',
-            'resep'     => $rekam->catatan_dokter ?? '-',
+            'gejala'    => $this->toSafeString($booking->keluhan),
+            'diagnosa'  => $this->toSafeString($rekam->diagnosa),
+            'catatan'   => $this->toSafeString($rekam->catatan_dokter),
+            'resep'     => $this->toSafeString($rekam->resep_obat),
+            'resep_raw' => $rekam->resep_obat,
         ];
 
         return Pdf::loadView('pages.pasien.pdf_riwayat', compact('data'))

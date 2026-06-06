@@ -20,31 +20,25 @@ class PemesananJadwalController extends Controller
         $selectedDate = $request->query('tanggal');
         $selectedDayName = null;
 
-        // query jadwal
         $jadwalQuery = Jadwal::with('dokter')
             ->where('status', 'Aktif');
 
-        // filter hari berdasarkan tanggal
         if ($selectedDate) {
             try {
                 $carbonDate = Carbon::parse($selectedDate);
-
                 $dayMap = [
-                    'Monday' => 'senin',
-                    'Tuesday' => 'selasa',
+                    'Monday'    => 'senin',
+                    'Tuesday'   => 'selasa',
                     'Wednesday' => 'rabu',
-                    'Thursday' => 'kamis',
-                    'Friday' => 'jumat',
-                    'Saturday' => 'sabtu',
-                    'Sunday' => 'minggu',
+                    'Thursday'  => 'kamis',
+                    'Friday'    => 'jumat',
+                    'Saturday'  => 'sabtu',
+                    'Sunday'    => 'minggu',
                 ];
-
                 $selectedDayName = $dayMap[$carbonDate->format('l')] ?? null;
-
                 if ($selectedDayName) {
                     $jadwalQuery->whereRaw('LOWER(hari) = ?', [$selectedDayName]);
                 }
-
             } catch (\Exception $e) {
                 $selectedDate = null;
                 $selectedDayName = null;
@@ -56,9 +50,24 @@ class PemesananJadwalController extends Controller
             ->orderBy('jam_mulai')
             ->get();
 
-        // booking user
-        $bookings = collect();
+        $urutanHari = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
 
+        $jadwalPerHari = [];
+        foreach ($urutanHari as $hari) {
+            $filtered = $jadwals->filter(function ($j) use ($hari) {
+                return strtolower($j->hari) === $hari;
+            })->values();
+
+            if ($filtered->isNotEmpty()) {
+                $jadwalPerHari[] = [
+                    'hari'    => ucfirst($hari),
+                    'jumlah'  => $filtered->count(),
+                    'jadwals' => $filtered,
+                ];
+            }
+        }
+
+        $bookings = collect();
         if ($email) {
             $bookings = PemesananJadwal::with(['dokter', 'jadwal'])
                 ->where('email', $email)
@@ -67,27 +76,55 @@ class PemesananJadwalController extends Controller
                 ->get();
         }
 
+        // Kirim tanggal yang sudah dipesan (status Menunggu) untuk diblokir di frontend
+        $tanggalSudahDipesan = [];
+        if ($email) {
+            $tanggalSudahDipesan = PemesananJadwal::where('email', $email)
+                ->where('status', 'Menunggu')
+                ->pluck('tanggal')
+                ->map(fn($t) => Carbon::parse($t)->format('Y-m-d'))
+                ->unique()
+                ->values()
+                ->toArray();
+        }
+
         return view('pages.pasien.pemesanan_jadwal', [
-            'jadwals' => $jadwals,
-            'bookings' => $bookings,
-            'selectedDate' => $selectedDate,
-            'selectedDayName' => $selectedDayName,
-            'userName' => $user?->name ?? 'Pasien',
-            'userRole' => 'Pasien',
-            'userInitial' => $user ? substr($user->name, 0, 2) : 'PS',
+            'jadwalPerHari'        => $jadwalPerHari,
+            'bookings'             => $bookings,
+            'selectedDate'         => $selectedDate,
+            'selectedDayName'      => $selectedDayName,
+            'userName'             => $user?->name ?? 'Pasien',
+            'userRole'             => 'Pasien',
+            'userInitial'          => $user ? substr($user->name, 0, 2) : 'PS',
+            'tanggalSudahDipesan'  => $tanggalSudahDipesan,
         ]);
     }
 
     public function proses(Request $request)
     {
         $request->validate([
-            'tanggal' => 'required|date|after_or_equal:today',
+            'tanggal'   => 'required|date|after_or_equal:today',
             'jadwal_id' => 'required|exists:jadwals,id',
-            'keluhan' => 'nullable|string|max:500',
+            'keluhan'   => 'nullable|string|max:500',
         ]);
 
         $email = session('email');
         $user = User::where('email', $email)->first();
+
+        // =============================================
+        // CEK: Sudah pernah pesan di tanggal ini?
+        // =============================================
+        $sudahPesan = PemesananJadwal::where('email', $email)
+            ->where('tanggal', $request->tanggal)
+            ->where('status', 'Menunggu')
+            ->exists();
+
+        if ($sudahPesan) {
+            return back()
+                ->with('popup_error', 'Pemesanan sudah dilakukan pada hari ini. Silakan pilih tanggal lain untuk memesan jadwal baru.')
+                ->withInput();
+        }
+        // =============================================
 
         $jadwal = Jadwal::with('dokter')->findOrFail($request->jadwal_id);
 
@@ -107,23 +144,23 @@ class PemesananJadwalController extends Controller
         $nomorAntrian = $jumlahBooking + 1;
 
         $booking = PemesananJadwal::create([
-            'user_id' => $user?->id,
-            'dokter_id' => $jadwal->dokter_id,
-            'jadwal_id' => $jadwal->id,
-            'email' => $email,
-            'nama_pasien' => $user?->name,
-            'tanggal' => $request->tanggal,
-            'jam_mulai' => $jadwal->jam_mulai,
-            'jam_selesai' => $jadwal->jam_selesai,
+            'user_id'       => $user?->id,
+            'dokter_id'     => $jadwal->dokter_id,
+            'jadwal_id'     => $jadwal->id,
+            'email'         => $email,
+            'nama_pasien'   => $user?->name,
+            'tanggal'       => $request->tanggal,
+            'jam_mulai'     => $jadwal->jam_mulai,
+            'jam_selesai'   => $jadwal->jam_selesai,
             'nomor_antrian' => $nomorAntrian,
-            'keluhan' => $request->keluhan,
-            'status' => 'Menunggu',
+            'keluhan'       => $request->keluhan,
+            'status'        => 'Menunggu',
         ]);
 
         Antrian::create([
-            'pemesanan_id' => $booking->id,
+            'pemesanan_id'  => $booking->id,
             'nomor_antrian' => 'A' . str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT),
-            'status' => 'menunggu',
+            'status'        => 'menunggu',
         ]);
 
         return redirect()->route('pemesanan.berhasil', $booking->id);
@@ -140,9 +177,9 @@ class PemesananJadwalController extends Controller
             ->firstOrFail();
 
         return view('pages.pasien.pemesanan_berhasil', [
-            'booking' => $booking,
-            'userName' => $user?->name ?? 'Pasien',
-            'userRole' => 'Pasien',
+            'booking'     => $booking,
+            'userName'    => $user?->name ?? 'Pasien',
+            'userRole'    => 'Pasien',
             'userInitial' => $user ? substr($user->name, 0, 2) : 'PS',
         ]);
     }
