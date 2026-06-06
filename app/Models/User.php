@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,5 +53,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // FUNGSI BARU: Auto nambahin "Dr. " untuk role dokter
+    public function getNameAttribute($value)
+    {
+        // Kalau role-nya dokter dan namanya belum diawali "Dr. ", tambahkan
+        if ($this->role === 'dokter' && !str_starts_with($value, 'Dr. ')) {
+            return 'Dr. ' . $value;
+        }
+        
+        // Kalau bukan dokter, atau sudah ada "Dr. "-nya, kembalikan nama aslinya
+        return $value;
     }
 }

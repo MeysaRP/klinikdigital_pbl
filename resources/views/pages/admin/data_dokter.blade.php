@@ -63,7 +63,6 @@
                             {{ $dokter->email }}
                         </td>
 
-                        {{-- FIX UTAMA DI SINI --}}
                         <td class="px-5 py-3.5 font-medium nama">
                             {{ $dokter->nama }}
                         </td>
@@ -122,32 +121,32 @@
                 <label class="block text-sm mb-1">Email</label>
                 <input id="tEmail"
                     type="email"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
-                    placeholder="Masukkan Email">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition"
+                    placeholder="contoh: sarahwijaya@gmail.com">
             </div>
 
             <div>
                 <label class="block text-sm mb-1">Nama Dokter</label>
                 <input id="tNama"
                     type="text"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
-                    placeholder="Masukkan Nama Dokter">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition"
+                    placeholder="contoh: sarah wijaya">
             </div>
 
             <div>
                 <label class="block text-sm mb-1">No. STR</label>
                 <input id="tSTR"
                     type="text"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
-                    placeholder="Masukkan Nomor STR">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition"
+                    placeholder="contoh: STR001">
             </div>
 
             <div>
                 <label class="block text-sm mb-1">No. HP</label>
                 <input id="tHP"
                     type="text"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]"
-                    placeholder="Masukkan Nomor HP">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition"
+                    placeholder="contoh: 081234567899">
             </div>
 
             <div>
@@ -156,12 +155,16 @@
                 <div class="relative">
                     <input id="tPass"
                         type="password"
-                        class="w-full border border-gray-300 rounded-xl px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-[#09637E]"
+                        class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition"
                         placeholder="Masukkan Password">
 
                     <button type="button"
-                        onclick="togglePasswordTambah()"
-                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        onclick="togglePassword('tPass', 'iconTambah')"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <svg id="iconTambah" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
@@ -172,13 +175,13 @@
 
             <button
                 onclick="closeTambah()"
-                class="border border-black px-6 py-2 rounded-xl hover:bg-gray-100">
+                class="bg-gray-100 text-gray-600 px-6 py-2 rounded-xl hover:bg-gray-200 transition font-medium">
                 Batal
             </button>
 
             <button
                 onclick="simpanDokter()"
-                class="bg-[#09637E] text-white px-6 py-2 rounded-xl hover:bg-[#074d61]">
+                class="bg-[#09637E] text-white px-6 py-2 rounded-xl hover:bg-[#074d61] transition font-medium">
                 Simpan
             </button>
 
@@ -187,83 +190,74 @@
     </div>
 </div>
 
+{{-- ================= MODAL EDIT DOKTER ================= --}}
 <div id="modalEdit"
     class="fixed inset-0 z-50 hidden items-start sm:items-center justify-center bg-black/40 p-4 overflow-y-auto">
-
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[calc(100vh-4rem)] overflow-y-auto">
-
         <div class="px-6 py-5">
             <h3 class="text-center font-bold text-lg">
                 Edit Dokter
             </h3>
         </div>
-
         <div class="p-6 space-y-4">
-
             <input type="hidden" id="eId">
-
             <div>
                 <label class="block text-sm mb-1">Email</label>
                 <input id="eEmail"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
             </div>
-
             <div>
                 <label class="block text-sm mb-1">Nama Dokter</label>
                 <input id="eNama"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
             </div>
-
             <div>
                 <label class="block text-sm mb-1">No STR</label>
                 <input id="eSTR"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
             </div>
-
             <div>
                 <label class="block text-sm mb-1">No HP</label>
                 <input id="eHP"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
             </div>
-
             <div>
-                <label class="block text-sm mb-1">
-                    Password Baru (Opsional)
-                </label>
-
-                <input id="ePass"
-                    type="password"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
+                <label class="block text-sm mb-1">Password Baru (Opsional)</label>
+                <div class="relative">
+                    <input id="ePass"
+                        type="password"
+                        class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 pr-12 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition"
+                        placeholder="Kosongkan jika tidak diubah">
+                    
+                    <button type="button"
+                        onclick="togglePassword('ePass', 'iconEdit')"
+                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
+                        <svg id="iconEdit" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-
             <div>
                 <label class="block text-sm mb-1">Status</label>
-
                 <select id="eStatus"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3">
-
+                    class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
                     <option value="Aktif">Aktif</option>
                     <option value="Nonaktif">Nonaktif</option>
-
                 </select>
             </div>
-
         </div>
-
         <div class="flex justify-center gap-4 p-6 pt-0">
-
             <button onclick="closeEdit()"
-                class="border border-black px-6 py-2 rounded-xl">
+                class="bg-gray-100 text-gray-600 px-6 py-2 rounded-xl hover:bg-gray-200 transition font-medium">
                 Batal
             </button>
-
             <button onclick="updateDokter()"
-                class="bg-[#09637E] text-white px-6 py-2 rounded-xl">
+                class="bg-[#09637E] text-white px-6 py-2 rounded-xl hover:bg-[#074d61] transition font-medium">
                 Simpan
             </button>
-
         </div>
-
     </div>
 </div>
 
@@ -316,14 +310,19 @@ function closeTambah() {
         .classList.remove('flex');
 }
 
-function togglePasswordTambah() {
-
-    let input = document.getElementById('tPass');
+// Fungsi toggle password dengan ikon mata
+function togglePassword(inputId, iconId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(iconId);
 
     if (input.type === 'password') {
         input.type = 'text';
+        // Ubah ikon menjadi mata coret (password terlihat)
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l18 18"></path>';
     } else {
         input.type = 'password';
+        // Ubah ikon menjadi mata biasa (password tersembunyi)
+        icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>';
     }
 }
 

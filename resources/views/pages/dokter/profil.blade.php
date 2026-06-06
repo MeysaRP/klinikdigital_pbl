@@ -2,7 +2,7 @@
     'pageTitle' => 'Profil Saya',  
     'userName'  => session('name'), 
     'userRole'  => 'Dokter',
-    'userInitial' => substr(session('name'), 0, 1) 
+    'userInitial' => strtoupper(substr(str_replace('Dr. ', '', session('name')), 0, 1)) 
 ])
 
 @section('sidebar')
@@ -10,6 +10,10 @@
 @endsection
 
 @section('content')
+@php
+    $dokter = \App\Models\Dokter::where('email', session('email'))->first();
+@endphp
+
 <div class="space-y-6">
 
     <!-- CARD PROFIL -->
@@ -33,7 +37,7 @@
                 <!-- FOTO -->
                 <div class="relative flex-shrink-0">
                     <div class="w-24 h-24 rounded-2xl bg-white border-4 border-white shadow-md flex items-center justify-center text-3xl font-bold text-[#09637E]">
-                        {{ strtoupper(substr($dokter->name, 0, 1)) }} 
+                        {{ strtoupper(substr($dokter->getRawOriginal('nama'), 0, 1)) }} 
                     </div>
                 </div>
 
@@ -41,7 +45,7 @@
                 <div class="flex-1 pb-1">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-900">{{ $dokter->name }}</h3> 
+                            <h3 class="text-xl font-bold text-gray-900">{{ $dokter->nama }}</h3> 
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-green-50 text-green-700 rounded-full border border-green-100">
@@ -66,7 +70,7 @@
                     <div class="w-9 h-9 bg-gray-50 rounded-lg flex items-center justify-center text-sm">👥</div>
                     <div>
                         <p class="text-[11px] text-gray-400 uppercase tracking-wide font-medium">Total Pasien</p>
-                        <p class="text-sm font-semibold text-gray-800">-</p> <!-- Ini bisa disambungkan nanti jika ada relasi -->
+                        <p class="text-sm font-semibold text-gray-800">-</p>
                     </div>
                 </div>
             </div>
@@ -89,7 +93,7 @@
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">👤</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-gray-400">Nama Lengkap</p>
-                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->name }}</p> 
+                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->nama }}</p> 
                 </div>
             </div>
 
@@ -97,7 +101,7 @@
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">🩺</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-gray-400">No. STR</p>
-                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->no_str ?? '-' }}</p> 
+                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->str ?? '-' }}</p>
                 </div>
             </div>
 

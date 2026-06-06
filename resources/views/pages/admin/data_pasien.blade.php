@@ -17,18 +17,23 @@
 
     <!-- SEARCH -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <input type="text" oninput="cariPasien(this.value)"
-            placeholder="Cari Pasien..."
-            class="w-full max-w-sm border rounded-xl px-4 py-2">
+        <div class="relative w-full max-w-sm">
+            <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input type="text" oninput="cariPasien(this.value)"
+                placeholder="Cari Pasien..."
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
+        </div>
     </div>
 
     <!-- TABLE -->
-    <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
 
             <table class="w-full text-sm min-w-[700px]">
 
-                <thead class="bg-gray-50 text-gray-500 text-xs uppercase">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-semibold">
                     <tr>
                         <th class="px-5 py-3.5 text-left">ID</th>
                         <th class="px-5 py-3.5 text-left">Nama</th>
@@ -40,15 +45,15 @@
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody class="text-gray-700 divide-y divide-gray-100">
                 @foreach ($pasien as $p)
-                <tr class="pasien-row"
+                <tr class="pasien-row hover:bg-gray-50 transition"
                     data-id="{{ $p->id }}"
                     data-nama="{{ $p->name }}">
 
-                    <td class="px-5 py-3.5">{{ $p->id }}</td>
+                    <td class="px-5 py-3.5 text-xs text-gray-500">{{ $p->id }}</td>
 
-                    <td class="px-5 py-3.5">{{ $p->name }}</td>
+                    <td class="px-5 py-3.5 font-medium">{{ $p->name }}</td>
 
                     <td class="px-5 py-3.5 pasien-no_hp">
                         {{ $p->no_hp }}
@@ -65,12 +70,12 @@
                         @endphp
 
                         @if($jk == 'laki-laki' || $jk == 'l' || $jk == 'male')
-                            <span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
+                            <span class="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
                                 Laki-Laki
                             </span>
 
                         @elseif($jk == 'perempuan' || $jk == 'p' || $jk == 'female')
-                            <span class="px-2 py-1 text-xs bg-pink-100 text-pink-700 rounded-full">
+                            <span class="px-3 py-1 text-xs bg-pink-100 text-pink-700 rounded-full font-medium">
                                 Perempuan
                             </span>
 
@@ -93,7 +98,7 @@
                             data-no_hp="{{ $p->no_hp }}"
                             data-alamat="{{ $p->alamat }}"
                             onclick="openEditModal(this)"
-                            class="px-3 py-1.5 text-xs bg-amber-50 text-amber-600 rounded-lg">
+                            class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#09637E]/10 text-[#09637E] hover:bg-[#09637E] hover:text-white transition">
                             Edit
                         </button>
                     </td>
@@ -109,29 +114,54 @@
 </div>
 
 <!-- MODAL -->
-<div id="modalEdit" class="fixed inset-0 hidden z-50">
-    <div class="absolute inset-0 bg-black/40" onclick="closeEditModal()"></div>
+<div id="modalEdit" class="fixed inset-0 hidden z-50 items-center justify-center">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeEditModal()"></div>
 
-    <div class="absolute inset-0 flex items-center justify-center">
-        <div class="bg-white w-full max-w-md p-5 rounded-xl">
+    <div class="relative flex items-center justify-center min-h-screen p-4 w-full">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-y-auto max-h-[calc(100vh-4rem)]">
 
-            <h2 class="text-center font-bold mb-3">Edit Pasien</h2>
+            <div class="px-6 py-5">
+                <h2 class="text-center font-bold text-lg">Edit Pasien</h2>
+            </div>
 
-            <input id="edit_nama" class="w-full border p-2 mb-2 rounded">
-            <input id="edit_tgl" type="date" class="w-full border p-2 mb-2 rounded">
+            <div class="p-6 pt-0 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Nama Pasien</label>
+                    <input id="edit_nama" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
+                </div>
 
-            <select id="edit_jk" class="w-full border p-2 mb-2 rounded">
-                <option value="">Pilih Jenis Kelamin</option>
-                <option value="Laki-Laki">Laki-Laki</option>
-                <option value="Perempuan">Perempuan</option>
-            </select>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Tanggal Lahir</label>
+                    <input id="edit_tgl" type="date" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
+                </div>
 
-            <input id="edit_hp" class="w-full border p-2 mb-2 rounded">
-            <input id="edit_alamat" class="w-full border p-2 mb-2 rounded">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Jenis Kelamin</label>
+                    <select id="edit_jk" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="Laki-Laki">Laki-Laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
 
-            <div class="flex gap-2 mt-3">
-                <button onclick="closeEditModal()" class="flex-1 bg-gray-300 p-2 rounded">Batal</button>
-                <button onclick="saveEdit()" class="flex-1 text-white p-2 rounded" style="background-color: #09637E;">Simpan</button>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">No HP</label>
+                    <input id="edit_hp" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Alamat</label>
+                    <input id="edit_alamat" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4 p-6 pt-2">
+                <button onclick="closeEditModal()" class="bg-gray-100 text-gray-600 px-6 py-2.5 rounded-xl hover:bg-gray-200 transition font-medium">
+                    Batal
+                </button>
+                <button onclick="saveEdit()" class="bg-[#09637E] text-white px-6 py-2.5 rounded-xl hover:bg-[#074d61] transition font-medium shadow-md shadow-[#09637E]/30">
+                    Simpan
+                </button>
             </div>
 
         </div>
@@ -152,10 +182,12 @@ function openEditModal(btn) {
     document.getElementById('edit_alamat').value = btn.dataset.alamat;
 
     document.getElementById('modalEdit').classList.remove('hidden');
+    document.getElementById('modalEdit').classList.add('flex');
 }
 
 function closeEditModal() {
     document.getElementById('modalEdit').classList.add('hidden');
+    document.getElementById('modalEdit').classList.remove('flex');
 }
 
 function saveEdit() {
@@ -190,7 +222,9 @@ function saveEdit() {
         Swal.fire({
             icon: 'success',
             title: 'Berhasil',
-            text: data.message
+            text: data.message,
+            timer: 2000,
+            showConfirmButton: false
         });
 
     })
