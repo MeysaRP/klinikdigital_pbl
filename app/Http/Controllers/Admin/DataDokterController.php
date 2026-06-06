@@ -4,27 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Dokter; 
+use App\Models\Dokter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class DataDokterController extends Controller
 {
-    public function index() 
-    { 
+    public function index()
+    {
         return view('pages.admin.data_dokter', [
             'dokters' => Dokter::orderBy('id')->get()
-        ]); 
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:dokters,email', 
+            'email' => 'required|email|unique:dokters,email',
             'no_str' => 'nullable',
             'no_hp' => 'nullable',
-            'status' => 'required',
             'password' => 'required|min:6',
         ]);
 
@@ -33,7 +32,7 @@ class DataDokterController extends Controller
             'email' => $request->email,
             'str' => $request->no_str,
             'no_hp' => $request->no_hp,
-            'status' => $request->status,
+            'status' => 'Aktif',
             'password' => bcrypt($request->password),
         ]);
 
@@ -47,7 +46,7 @@ class DataDokterController extends Controller
             'name'    => 'required',
             'no_str'  => 'required',
             'no_hp'   => 'required',
-            'status'  => 'required',
+            'status'  => 'required|in:Aktif,Nonaktif',
             'password'=> 'nullable|min:6'
         ]);
 

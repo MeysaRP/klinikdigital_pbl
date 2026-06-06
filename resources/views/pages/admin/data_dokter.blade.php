@@ -22,7 +22,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
 
-            <input type="text" id="searchDokter" placeholder="Cari email, nama, STR, atau HP..."
+            <input type="text" id="searchDokter" placeholder="Cari nama dokter..."
                 class="w-full bg-gray-50 rounded-xl pl-10 pr-9 py-2.5 text-sm focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40 outline-none border border-gray-200">
 
             <button id="btnClearSearch" onclick="clearSearch()"
@@ -76,13 +76,11 @@
                             {{ $dokter->no_hp ?? '-' }}
                         </td>
 
-                        <td class="px-5 py-3.5">
+                        <td class="px-5 py-3.5 status">
                             @if ($dokter->status === 'Aktif')
                                 <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Aktif</span>
                             @else
-                                <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-600 font-medium">
-                                    {{ $dokter->status }}
-                                </span>
+                                <span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-600 font-medium">Nonaktif</span>
                             @endif
                         </td>
 
@@ -100,7 +98,7 @@
             </table>
         </div>
 
-        <div class="flex justify-center px-5 py-3 text-sm text-gray-500 border-t">
+        <div class="flex justify-center px-5 py-3 text-sm text-gray-500">
             Menampilkan {{ count($dokters) }} data dokter
         </div>
     </div>
@@ -108,11 +106,11 @@
 
 {{-- ================= MODAL TAMBAH DOKTER ================= --}}
 <div id="modalTambah"
-    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4">
+    class="fixed inset-0 z-50 hidden items-start sm:items-center justify-center bg-black/40 p-4 overflow-y-auto">
 
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[calc(100vh-4rem)] overflow-y-auto">
 
-        <div class="px-6 py-5 border-b">
+        <div class="px-6 py-5">
             <h3 class="text-center font-bold text-lg">
                 Tambah Dokter
             </h3>
@@ -168,19 +166,6 @@
                 </div>
             </div>
 
-            <div>
-                <label class="block text-sm mb-1">Status</label>
-
-                <select id="tStatus"
-                    class="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#09637E]">
-
-                    <option value="Aktif">Aktif</option>
-                    <option value="Nonaktif">Nonaktif</option>
-                    <option value="Cuti">Cuti</option>
-
-                </select>
-            </div>
-
         </div>
 
         <div class="flex justify-center gap-4 p-6 pt-0">
@@ -203,11 +188,11 @@
 </div>
 
 <div id="modalEdit"
-    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 p-4">
+    class="fixed inset-0 z-50 hidden items-start sm:items-center justify-center bg-black/40 p-4 overflow-y-auto">
 
-    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md max-h-[calc(100vh-4rem)] overflow-y-auto">
 
-        <div class="px-6 py-5 border-b">
+        <div class="px-6 py-5">
             <h3 class="text-center font-bold text-lg">
                 Edit Dokter
             </h3>
@@ -259,7 +244,6 @@
 
                     <option value="Aktif">Aktif</option>
                     <option value="Nonaktif">Nonaktif</option>
-                    <option value="Cuti">Cuti</option>
 
                 </select>
             </div>
@@ -290,6 +274,27 @@ const updateUrlBase = '{{ route("data.dokter.update", ["dokter" => 0]) }}';
 
 let selRow = null;
 let selRowId = null;
+
+document.getElementById('searchDokter').addEventListener('input', filterDokter);
+
+function filterDokter() {
+    const query = document.getElementById('searchDokter').value.trim().toLowerCase();
+    const rows = document.querySelectorAll('#tableDokter tr');
+    const clearButton = document.getElementById('btnClearSearch');
+
+    clearButton.classList.toggle('hidden', query.length === 0);
+
+    rows.forEach(row => {
+        const name = row.querySelector('.nama')?.innerText.trim().toLowerCase() ?? '';
+        row.style.display = name.includes(query) ? '' : 'none';
+    });
+}
+
+function clearSearch() {
+    document.getElementById('searchDokter').value = '';
+    document.getElementById('btnClearSearch').classList.add('hidden');
+    document.querySelectorAll('#tableDokter tr').forEach(row => row.style.display = '');
+}
 
 function showAlert(icon, title, text) {
     Swal.fire({ icon, title, text, timer: 2000, showConfirmButton: false });
@@ -329,7 +334,6 @@ async function simpanDokter() {
     let str = document.getElementById('tSTR').value;
     let hp = document.getElementById('tHP').value;
     let password = document.getElementById('tPass').value;
-    let status = document.getElementById('tStatus').value;
 
     const res = await fetch(storeUrl, {
         method: 'POST',
@@ -343,8 +347,7 @@ async function simpanDokter() {
             name: nama,
             no_str: str,
             no_hp: hp,
-            password,
-            status
+            password
         })
     });
 
@@ -369,7 +372,7 @@ async function simpanDokter() {
         ${data.no_hp ?? '-'}
     </td>
 
-    <td class="px-5 py-3.5">
+<td class="px-5 py-3.5 status">
         <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
             ${data.status}
         </span>
@@ -416,6 +419,9 @@ function openEdit(btn) {
 
     document.getElementById('eHP').value =
         selRow.querySelector('.hp').innerText.trim();
+
+    document.getElementById('eStatus').value =
+        selRow.querySelector('.status').innerText.trim();
 
     document.getElementById('modalEdit')
         .classList.remove('hidden');
@@ -475,6 +481,9 @@ async function updateDokter() {
         selRow.querySelector('.nama').innerText = data.nama;
         selRow.querySelector('.str').innerText = data.str ?? '-';
         selRow.querySelector('.hp').innerText = data.no_hp ?? '-';
+        selRow.querySelector('.status').innerHTML = data.status === 'Aktif'
+            ? '<span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">Aktif</span>'
+            : '<span class="px-3 py-1 text-xs rounded-full bg-red-100 text-red-600 font-medium">Nonaktif</span>';
 
         closeEdit();
 
