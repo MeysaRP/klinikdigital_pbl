@@ -22,18 +22,15 @@ class DashboardPasienController extends Controller
             $query->where('status', $filterStatus);
         }
 
-        // === YANG DIUBAH: Urutkan terdekat di atas ===
-        // 1. Jadwal hari ini & ke depan (prioritas 0), yang lalu (prioritas 1)
-        // 2. Di dalam "ke depan": tanggal terkecil duluan (terdekat)
-        // 3. Di dalam "yang lalu": tanggal terbesar duluan (yang baru saja lewat)
-        // 4. Terakhir urutkan jam_mulai
+        // === Urutkan: Menunggu duluan (terdekat), lalu Selesai/Dibatalkan (terbaru) ===
         $bookings = $query
-            ->orderByRaw("CASE WHEN tanggal >= CURDATE() THEN 0 ELSE 1 END")
-            ->orderByRaw("CASE WHEN tanggal >= CURDATE() THEN tanggal END ASC")
-            ->orderByRaw("CASE WHEN tanggal < CURDATE() THEN tanggal END DESC")
-            ->orderBy('jam_mulai')
+            ->orderByRaw("CASE WHEN status = 'Menunggu' THEN 0 ELSE 1 END")
+            ->orderByRaw("CASE WHEN status = 'Menunggu' THEN tanggal END ASC")
+            ->orderByRaw("CASE WHEN status = 'Menunggu' THEN jam_mulai END ASC")
+            ->orderByRaw("CASE WHEN status != 'Menunggu' THEN tanggal END DESC")
+            ->orderByRaw("CASE WHEN status != 'Menunggu' THEN jam_mulai END DESC")
             ->get();
-        // ================================================
+        // =======================================================================
 
         $nextBooking = PemesananJadwal::with(['dokter', 'jadwal', 'antrian.rekamMedis'])
             ->where('email', $email)

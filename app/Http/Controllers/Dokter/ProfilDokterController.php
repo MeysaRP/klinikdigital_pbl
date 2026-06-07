@@ -3,20 +3,27 @@
 namespace App\Http\Controllers\Dokter;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Dokter;
 
 class ProfilDokterController extends Controller
 {
     public function index()
     {
         $dokterId = session('id');
-        
-        $dokter = User::find($dokterId);
 
-        if (!$dokter || $dokter->role !== 'dokter') {
-            return redirect()->route('login');
+        // YANG DIPERBAIKI: dari User::find() diganti Dokter::find()
+        $dokter = Dokter::find($dokterId);
+
+        if (!$dokter) {
+            return redirect()->route('login')->with('error', 'Data dokter tidak ditemukan.');
         }
 
-        return view('pages.dokter.profil', compact('dokter'));
+        // YANG DITAMBAHKAN: kirim data untuk layout (sidebar/topbar)
+        return view('pages.dokter.profil', [
+            'dokter'      => $dokter,
+            'userName'    => $dokter->nama,
+            'userRole'    => 'Dokter',
+            'userInitial' => strtoupper(substr($dokter->nama, 0, 2)),
+        ]);
     }
 }

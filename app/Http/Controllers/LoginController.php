@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\Dokter;
 use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -31,6 +32,49 @@ class LoginController extends Controller
             'role.required' => 'Role wajib dipilih!',
         ]);
 
+        // ==============================================
+        // LOGIN DOKTER (Cek ke tabel dokters)
+        // ==============================================
+        if ($request->role === 'dokter') {
+            $dokter = Dokter::where('email', $request->email)->first();
+
+            if ($dokter) {
+                $isValid = false;
+
+                // 1. Cek apakah password di DB sudah pakai bcrypt (diawali $2y$)
+                if (str_starts_with($dokter->password, '$2y$')) {
+                    try {
+                        $isValid = Hash::check($request->password, $dokter->password);
+                    } catch (\Exception $e) {
+                        $isValid = false;
+                    }
+                }
+
+                // 2. Jika bukan bcrypt, atau Hash::check gagal, cek sebagai plain text
+                if (!$isValid) {
+                    $isValid = ($dokter->password === $request->password);
+                }
+
+                // 3. Kalau valid, buat session dan redirect
+                if ($isValid) {
+                    session([
+                        'login' => true,
+                        'role'  => 'dokter',
+                        'email' => $dokter->email,
+                        'id'    => $dokter->id,
+                        'name'  => $dokter->nama,
+                    ]);
+
+                    return redirect('/dashboard/dokter');
+                }
+            }
+
+            return back()->with('error', 'Email / password / role salah!');
+        }
+
+        // ==============================================
+        // LOGIN PASIEN & ADMIN (Cek ke tabel users)
+        // ==============================================
         $user = User::where('email', $request->email)->where('role', $request->role)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
@@ -38,14 +82,13 @@ class LoginController extends Controller
                 'login' => true,
                 'role' => $user->role,
                 'email' => $user->email,
-                'id'    => $user->id,      
-                'name'  => $user->name,     
+                'id'    => $user->id,
+                'name'  => $user->name,
             ]);
 
-           if ($user->role === 'admin') return redirect('/dashboard/admin');
-           if ($user->role === 'dokter') return redirect('/dashboard/dokter');
-           return redirect('/dashboard/pasien');
-    }
+            if ($user->role === 'admin') return redirect('/dashboard/admin');
+            return redirect('/dashboard/pasien');
+        }
 
         return back()->with('error', 'Email / password / role salah!');
     }
@@ -74,9 +117,11 @@ class LoginController extends Controller
 
         $email = $request->email;
 
+        // Cek di tabel users ATAU dokters
         $user = User::where('email', $email)->first();
+        $dokter = Dokter::where('email', $email)->first();
 
-        if ($user) {
+        if ($user || $dokter) {
             DB::table('password_reset_tokens')->where('email', $email)->delete();
             $token = Str::random(60);
             DB::table('password_reset_tokens')->insert([
@@ -140,17 +185,23 @@ class LoginController extends Controller
 
         $newPassword = Hash::make($request->password);
 
-        // Update password di tabel users
+        // Update password di tabel users (pasien/admin)
         $user = User::where('email', $email)->first();
-        if ($user) { 
-            $user->password = $newPassword; 
-            $user->save(); 
+        if ($user) {
+            $user->password = $newPassword;
+            $user->save();
+        }
+
+        // Update password di tabel dokters
+        $dokter = Dokter::where('email', $email)->first();
+        if ($dokter) {
+            $dokter->password = $newPassword;
+            $dokter->save();
         }
 
         // Hapus token
         DB::table('password_reset_tokens')->where('email', $email)->delete();
 
-        // Ubah 'success' menjadi 'status'
         return redirect()->route('login')->with('status', 'Password berhasil diubah!');
     }
 }
