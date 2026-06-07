@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\DataDokterController;
 use App\Http\Controllers\Admin\DataPasienController;
 use App\Http\Controllers\Admin\DataJadwalController;
+use App\Http\Controllers\Admin\ProfilAdminController;
 
 Route::get('/', [HomepageController::class, 'index'])->name('home');
 
@@ -52,7 +53,7 @@ Route::prefix('dashboard')->middleware('auth.session')->group(function () {
         Route::get('/riwayat-medis/download-pdf/{id}', [RiwayatMedisController::class, 'downloadPdf'])->name('riwayat.download-pdf');
     });
 
-        Route::prefix('dokter')->middleware('role:dokter')->group(function () {
+    Route::prefix('dokter')->middleware('role:dokter')->group(function () {
         Route::get('/', [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
         Route::get('/jadwal', [JadwalDokterController::class, 'index'])->name('dokter.jadwal');
         Route::get('/antrian', [AntrianDokterController::class, 'index'])->name('dokter.antrian');
@@ -65,22 +66,26 @@ Route::prefix('dashboard')->middleware('auth.session')->group(function () {
 
     Route::prefix('admin')->middleware('role:admin')->group(function () {
 
-    Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
+        Route::get('/', [DashboardAdminController::class, 'index'])->name('dashboard.admin');
 
-    // DATA DOKTER
-    Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
-    Route::post('/data_dokter', [DataDokterController::class, 'store'])->name('data.dokter.store');
-    Route::put('/data_dokter/{dokter}', [DataDokterController::class, 'update'])->name('data.dokter.update');
+        // PROFIL ADMIN
+        Route::get('/profil', [ProfilAdminController::class, 'index'])->name('admin.profil');
+        Route::post('/profil', [ProfilAdminController::class, 'update'])->name('admin.profil.update');
 
-    // DATA PASIEN
-    Route::get('/data_pasien', [DataPasienController::class, 'index'])->name('data.pasien');
-    Route::post('/data_pasien', [DataPasienController::class, 'store'])->name('data.pasien.store'); // optional
-    Route::put('/data_pasien/{id}', [DataPasienController::class, 'update'])->name('data.pasien.update');
+        // DATA DOKTER
+        Route::get('/data_dokter', [DataDokterController::class, 'index'])->name('data.dokter');
+        Route::post('/data_dokter', [DataDokterController::class, 'store'])->name('data.dokter.store');
+        Route::put('/data_dokter/{dokter}', [DataDokterController::class, 'update'])->name('data.dokter.update');
 
-    // DATA JADWAL
-    Route::get('/data_jadwal', [DataJadwalController::class, 'index'])->name('data.jadwal');
-    Route::post('/data_jadwal', [DataJadwalController::class, 'store'])->name('data.jadwal.store');
-    Route::put('/data_jadwal/{id}', [DataJadwalController::class, 'update'])->name('data.jadwal.update');
+        // DATA PASIEN
+        Route::get('/data_pasien', [DataPasienController::class, 'index'])->name('data.pasien');
+        Route::post('/data_pasien', [DataPasienController::class, 'store'])->name('data.pasien.store');
+        Route::put('/data_pasien/{id}', [DataPasienController::class, 'update'])->name('data.pasien.update');
 
-});
+        // DATA JADWAL
+        Route::get('/data_jadwal', [DataJadwalController::class, 'index'])->name('data.jadwal');
+        Route::post('/data_jadwal', [DataJadwalController::class, 'store'])->name('data.jadwal.store');
+        Route::put('/data_jadwal/{id}', [DataJadwalController::class, 'update'])->name('data.jadwal.update');
+
+    });
 });
