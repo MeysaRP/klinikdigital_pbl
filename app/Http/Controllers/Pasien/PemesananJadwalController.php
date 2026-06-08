@@ -141,7 +141,11 @@ class PemesananJadwalController extends Controller
             return back()->with('error', 'Kuota penuh');
         }
 
-        $nomorAntrian = $jumlahBooking + 1;
+        $lastNomorAntrian = PemesananJadwal::where('dokter_id', $jadwal->dokter_id)
+            ->where('tanggal', $request->tanggal)
+            ->max('nomor_antrian');
+
+        $nomorAntrian = $lastNomorAntrian ? $lastNomorAntrian + 1 : 1;
 
         $booking = PemesananJadwal::create([
             'user_id'       => $user?->id,
