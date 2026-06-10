@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class DataDokterController extends Controller
 {
+    // Menampilkan daftar dokter
     public function index()
     {
         return view('pages.admin.data_dokter', [
@@ -17,6 +18,7 @@ class DataDokterController extends Controller
         ]);
     }
 
+    // Menambahkan dokter baru
     public function store(Request $request)
     {
         $request->validate([
@@ -27,6 +29,7 @@ class DataDokterController extends Controller
             'password' => 'required|min:6',
         ]);
 
+    // Buat user untuk login dokter
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -36,7 +39,8 @@ class DataDokterController extends Controller
             'role' => 'dokter',
             'password' => Hash::make($request->password),
         ]);
-
+        
+    // Buat data dokter
         $dokter = Dokter::create([
             'nama' => $request->name,
             'email' => $request->email,
@@ -49,6 +53,7 @@ class DataDokterController extends Controller
         return response()->json($dokter);
     }
 
+    // Mengupdate data dokter
     public function update(Request $request, Dokter $dokter)
     {
         $v = $request->validate([
@@ -80,11 +85,11 @@ class DataDokterController extends Controller
             $user->no_str = $v['no_str'];
             $user->no_hp = $v['no_hp'];
             $user->status = $v['status'];
-            
+
             if (!empty($v['password'])) {
                 $user->password = Hash::make($v['password']);
             }
-            
+
             $user->save();
         }
 
