@@ -119,7 +119,7 @@
     </td>
 
     <td class="px-5 py-3.5">
-        {{ $antrian->pemesanan->dokter->name ?? '-' }}
+        {{ $antrian->pemesanan->dokter->nama ?? '-' }}
     </td>
 
     <td class="px-5 py-3.5">

@@ -48,7 +48,6 @@ class DataDokterController extends Controller
 
         return response()->json($dokter);
     }
-
     public function update(Request $request, Dokter $dokter)
     {
         $v = $request->validate([
