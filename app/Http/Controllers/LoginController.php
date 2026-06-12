@@ -32,9 +32,7 @@ class LoginController extends Controller
             'role.required' => 'Role wajib dipilih!',
         ]);
 
-        // ==============================================
         // LOGIN DOKTER (Cek ke tabel dokters)
-        // ==============================================
         if ($request->role === 'dokter') {
             $dokter = Dokter::where('email', $request->email)->first();
 
@@ -71,10 +69,8 @@ class LoginController extends Controller
 
             return back()->with('error', 'Email / password / role salah!');
         }
-
-        // ==============================================
+        
         // LOGIN PASIEN & ADMIN (Cek ke tabel users)
-        // ==============================================
         $user = User::where('email', $request->email)->where('role', $request->role)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {

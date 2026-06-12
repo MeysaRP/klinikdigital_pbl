@@ -17,12 +17,15 @@ class PemesananJadwalController extends Controller
         $email = session('email');
         $user = User::where('email', $email)->first();
 
+        // Ambil tanggal yang dipilih dari query parameter
         $selectedDate = $request->query('tanggal');
         $selectedDayName = null;
 
+        // Query untuk mendapatkan jadwal berdasarkan tanggal yang dipilih
         $jadwalQuery = Jadwal::with('dokter')
             ->where('status', 'Aktif');
 
+        // Jika ada tanggal yang dipilih, filter jadwal berdasarkan hari dalam minggu
         if ($selectedDate) {
             try {
                 $carbonDate = Carbon::parse($selectedDate);
@@ -100,6 +103,7 @@ class PemesananJadwalController extends Controller
         ]);
     }
 
+    // Proses pemesanan jadwal
     public function proses(Request $request)
     {
         $request->validate([
@@ -111,9 +115,7 @@ class PemesananJadwalController extends Controller
         $email = session('email');
         $user = User::where('email', $email)->first();
 
-        // =============================================
-        // CEK: Sudah pernah pesan di tanggal ini?
-        // =============================================
+        // Cek apakah sudah ada pemesanan dengan status Menunggu pada tanggal yang sama
         $sudahPesan = PemesananJadwal::where('email', $email)
             ->where('tanggal', $request->tanggal)
             ->where('status', 'Menunggu')
@@ -124,7 +126,6 @@ class PemesananJadwalController extends Controller
                 ->with('popup_error', 'Pemesanan sudah dilakukan pada hari ini. Silakan pilih tanggal lain untuk memesan jadwal baru.')
                 ->withInput();
         }
-        // =============================================
 
         $jadwal = Jadwal::with('dokter')->findOrFail($request->jadwal_id);
 
@@ -141,6 +142,7 @@ class PemesananJadwalController extends Controller
             return back()->with('error', 'Kuota penuh');
         }
 
+        // Hitung nomor antrian berikutnya untuk dokter dan tanggal yang sama
         $lastNomorAntrian = PemesananJadwal::where('dokter_id', $jadwal->dokter_id)
             ->where('tanggal', $request->tanggal)
             ->max('nomor_antrian');
@@ -161,6 +163,7 @@ class PemesananJadwalController extends Controller
             'status'        => 'Menunggu',
         ]);
 
+        // Buat data antrian untuk booking ini
         Antrian::create([
             'pemesanan_id'  => $booking->id,
             'nomor_antrian' => 'A' . str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT),
@@ -170,6 +173,7 @@ class PemesananJadwalController extends Controller
         return redirect()->route('pemesanan.berhasil', $booking->id);
     }
 
+    // Halaman pemesanan berhasil
     public function berhasil($bookingId)
     {
         $email = session('email');
@@ -188,10 +192,12 @@ class PemesananJadwalController extends Controller
         ]);
     }
 
+    // Fungsi untuk membatalkan pemesanan
     public function batal($bookingId)
     {
         $email = session('email');
 
+        // Cek apakah booking dengan ID tersebut milik pasien yang sedang login dan berstatus Menunggu
         $booking = PemesananJadwal::where('id', $bookingId)
             ->where('email', $email)
             ->where('status', 'Menunggu')

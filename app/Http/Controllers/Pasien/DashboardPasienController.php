@@ -15,14 +15,16 @@ class DashboardPasienController extends Controller
 
         $filterStatus = request()->get('status', 'all');
 
+        // Query untuk mendapatkan semua pemesanan jadwal pasien dengan filter status
         $query = PemesananJadwal::with(['dokter', 'jadwal', 'antrian.rekamMedis'])
             ->where('email', $email);
 
+        // Terapkan filter status jika tidak 'all'
         if ($filterStatus !== 'all') {
             $query->where('status', $filterStatus);
         }
 
-        // === Urutkan: Menunggu duluan (terdekat), lalu Selesai/Dibatalkan (terbaru) ===
+        // Urutkan: Menunggu duluan (terdekat), lalu Selesai/Dibatalkan (terbaru)
         $bookings = $query
             ->orderByRaw("CASE WHEN status = 'Menunggu' THEN 0 ELSE 1 END")
             ->orderByRaw("CASE WHEN status = 'Menunggu' THEN tanggal END ASC")
@@ -30,8 +32,8 @@ class DashboardPasienController extends Controller
             ->orderByRaw("CASE WHEN status != 'Menunggu' THEN tanggal END DESC")
             ->orderByRaw("CASE WHEN status != 'Menunggu' THEN jam_mulai END DESC")
             ->get();
-        // =======================================================================
 
+        // Dapatkan booking berikutnya yang berstatus Menunggu dan tanggalnya hari ini atau setelahnya
         $nextBooking = PemesananJadwal::with(['dokter', 'jadwal', 'antrian.rekamMedis'])
             ->where('email', $email)
             ->where('status', 'Menunggu')
