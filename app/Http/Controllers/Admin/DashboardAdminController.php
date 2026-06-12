@@ -13,36 +13,39 @@ use Carbon\Carbon;
 class DashboardAdminController extends Controller
 {
     public function index(Request $request)
-    {
-        $totalDokter = Dokter::count();
-        $totalPasien = User::where('role', 'pasien')->count();
-        $totalJadwal = Jadwal::count();
+{
+    $totalDokter = Dokter::count();
+    $totalPasien = User::where('role', 'pasien')->count();
+    $totalJadwal = Jadwal::count();
 
-        // filter input
-        $tanggal = $request->tanggal ?? Carbon::today()->toDateString();
-        $dokterId = $request->dokter_id;
+    // filter tanggal (default hari ini)
+    $tanggal = $request->filled('tanggal')
+        ? $request->tanggal
+        : Carbon::today()->toDateString();
 
-        $antrians = Antrian::with(['pemesanan.dokter'])
-            ->whereDate('created_at', $tanggal)
-            ->when($dokterId, function ($query) use ($dokterId) {
-                $query->whereHas('pemesanan', function ($q) use ($dokterId) {
-                    $q->where('dokter_id', $dokterId);
-                });
-            })
-            ->latest()
-            ->take(10)
-            ->get();
+    $dokterId = $request->dokter_id;
 
-        $dokters = Dokter::orderBy('nama')->get();
+    $antrians = Antrian::with(['pemesanan.dokter'])
+        ->whereDate('created_at', $tanggal)
+        ->when($dokterId, function ($query) use ($dokterId) {
+            $query->whereHas('pemesanan', function ($q) use ($dokterId) {
+                $q->where('dokter_id', $dokterId);
+            });
+        })
+        ->latest()
+        ->paginate(10) // 🔥 FIX: pagination
+        ->withQueryString(); // 🔥 supaya filter tidak hilang saat pindah halaman
 
-        return view('pages.admin.dashboard_admin', compact(
-            'totalDokter',
-            'totalPasien',
-            'totalJadwal',
-            'antrians',
-            'dokters',
-            'tanggal',
-            'dokterId'
-        ));
-    }
+    $dokters = Dokter::orderBy('nama')->get();
+
+    return view('pages.admin.dashboard_admin', compact(
+        'totalDokter',
+        'totalPasien',
+        'totalJadwal',
+        'antrians',
+        'dokters',
+        'tanggal',
+        'dokterId'
+    ));
+}
 }
