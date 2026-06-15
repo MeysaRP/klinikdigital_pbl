@@ -1,8 +1,8 @@
 @extends('layouts.dashboard', [
-    'pageTitle' => 'Data Jadwal',
-    'userName' => 'Halo, Admin',
-    'userRole' => 'Admin',
-    'userInitial' => 'A'
+'pageTitle' => 'Data Jadwal',
+'userName' => 'Halo, Admin',
+'userRole' => 'Admin',
+'userInitial' => 'A'
 ])
 
 @section('sidebar')
@@ -106,7 +106,7 @@
                     <select name="dokter_id" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
                         <option value="" disabled selected>-- Pilih Dokter --</option>
                         @foreach($dokters as $d)
-                            <option value="{{ $d->id }}">{{ $d->nama }}</option>
+                        <option value="{{ $d->id }}">{{ $d->nama }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -130,7 +130,7 @@
                         <select name="jam_mulai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
                             @for($i=0;$i<24;$i++)
                                 <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                            @endfor
+                                @endfor
                         </select>
                     </div>
 
@@ -139,7 +139,7 @@
                         <select name="jam_selesai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
                             @for($i=0;$i<24;$i++)
                                 <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                            @endfor
+                                @endfor
                         </select>
                     </div>
                 </div>
@@ -216,7 +216,7 @@
                         <select id="eMulai" name="jam_mulai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
                             @for($i=0;$i<24;$i++)
                                 <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                            @endfor
+                                @endfor
                         </select>
                     </div>
 
@@ -225,7 +225,7 @@
                         <select id="eSelesai" name="jam_selesai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
                             @for($i=0;$i<24;$i++)
                                 <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                            @endfor
+                                @endfor
                         </select>
                     </div>
                 </div>
@@ -266,83 +266,83 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-
-function openTambah() {
-    const modal = document.getElementById('modalTambah');
-    modal.classList.remove('hidden','pointer-events-none');
-    modal.classList.add('flex');
-}
-
-function closeTambah() {
-    const modal = document.getElementById('modalTambah');
-    modal.classList.add('hidden','pointer-events-none');
-    modal.classList.remove('flex');
-}
-
-function openEdit(el) {
-    const baseUrl = "{{ route('data.jadwal.update', ['id' => '__ID__']) }}";
-
-    document.getElementById('formEdit').action =
-        baseUrl.replace('__ID__', el.dataset.id);
-
-    // Mengisi ID dokter (tersembunyi) dan Nama dokter (tampilan read-only)
-    document.getElementById('eDokterId').value = el.dataset.dokter;
-    document.getElementById('eDokterNama').value = el.dataset.dokterNama;
-
-    document.getElementById('eHari').value = el.dataset.hari;
-    document.getElementById('eMulai').value = el.dataset.mulai.substring(0,5);
-    document.getElementById('eSelesai').value = el.dataset.selesai.substring(0,5);
-    document.getElementById('eKuota').value = el.dataset.kuota;
-    document.getElementById('eStatus').value = el.dataset.status;
-
-    const modal = document.getElementById('modalEdit');
-    modal.classList.remove('hidden','pointer-events-none');
-    modal.classList.add('flex');
-}
-
-function closeEdit() {
-    const modal = document.getElementById('modalEdit');
-    modal.classList.add('hidden','pointer-events-none');
-    modal.classList.remove('flex');
-}
-
-/* SEARCH */
-document.addEventListener('DOMContentLoaded', function () {
-    const search = document.getElementById('searchJadwal');
-
-    if(search){
-        search.addEventListener('keyup', function(){
-            let val = this.value.toLowerCase();
-            document.querySelectorAll('#tableJadwal tr').forEach(row=>{
-                let namaEl = row.querySelector('.nama');
-                if(!namaEl) return;
-                row.style.display = namaEl.innerText.toLowerCase().includes(val) ? '' : 'none';
-            });
-        });
+    function openTambah() {
+        const modal = document.getElementById('modalTambah');
+        modal.classList.remove('hidden', 'pointer-events-none');
+        modal.classList.add('flex');
     }
-});
 
+    function closeTambah() {
+        const modal = document.getElementById('modalTambah');
+        modal.classList.add('hidden', 'pointer-events-none');
+        modal.classList.remove('flex');
+    }
+
+    function openEdit(el) {
+        const baseUrl = "{{ route('data.jadwal.update', ['id' => '__ID__']) }}";
+
+        document.getElementById('formEdit').action =
+            baseUrl.replace('__ID__', el.dataset.id);
+
+        // Mengisi ID dokter (tersembunyi) dan Nama dokter (tampilan read-only)
+        document.getElementById('eDokterId').value = el.dataset.dokter;
+        document.getElementById('eDokterNama').value = el.dataset.dokterNama;
+
+        document.getElementById('eHari').value = el.dataset.hari;
+        document.getElementById('eMulai').value = el.dataset.mulai.substring(0, 5);
+        document.getElementById('eSelesai').value = el.dataset.selesai.substring(0, 5);
+        document.getElementById('eKuota').value = el.dataset.kuota;
+        document.getElementById('eStatus').value = el.dataset.status;
+
+        const modal = document.getElementById('modalEdit');
+        modal.classList.remove('hidden', 'pointer-events-none');
+        modal.classList.add('flex');
+    }
+
+    function closeEdit() {
+        const modal = document.getElementById('modalEdit');
+        modal.classList.add('hidden', 'pointer-events-none');
+        modal.classList.remove('flex');
+    }
+
+    /* SEARCH */
+    document.addEventListener('DOMContentLoaded', function() {
+        const search = document.getElementById('searchJadwal');
+
+        if (search) {
+            search.addEventListener('keyup', function() {
+                let val = this.value.toLowerCase();
+                document.querySelectorAll('#tableJadwal tr').forEach(row => {
+                    let namaEl = row.querySelector('.nama');
+                    if (!namaEl) return;
+                    row.style.display = namaEl.innerText.toLowerCase().includes(val) ? '' : 'none';
+                });
+            });
+        }
+    });
 </script>
 
 {{-- ================= SWEETALERT ================= --}}
-<script>
 @if(session('success'))
-Swal.fire({
-    icon: 'success',
-    title: 'Berhasil',
-    text: '{{ session('success') }}',
-    timer: 2000,
-    showConfirmButton: false
-});
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: "{{ session('success ') }}",
+        timer: 2000,
+        showConfirmButton: false
+    });
+</script>
 @endif
 
 @if(session('error'))
-Swal.fire({
-    icon: 'error',
-    title: 'Gagal',
-    text: '{{ session('error') }}'
-});
-@endif
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: "{{ session('error ') }}"
+    });
 </script>
+@endif
 
 @endsection
