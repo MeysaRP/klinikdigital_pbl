@@ -94,75 +94,67 @@
         </div>
 
         <div class="overflow-x-auto">
-            <table class="w-full text-sm min-w-[540px]">
-                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-semibold">
-                    <tr>
-                        <th class="px-5 py-3.5 text-left">No</th>
-                        <th class="px-5 py-3.5 text-left">Nama Pasien</th>
-                        <th class="px-5 py-3.5 text-left">Dokter</th>
-                        <th class="px-5 py-3.5 text-left">Jam</th>
-                        <th class="px-5 py-3.5 text-left">Status</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 divide-y divide-gray-100">
+    <table class="w-full text-sm min-w-[540px]">
+        <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide font-semibold">
+            <tr>
+                <th class="px-5 py-3.5 text-left">No</th>
+                <th class="px-5 py-3.5 text-left">Nama Pasien</th>
+                <th class="px-5 py-3.5 text-left">Dokter</th>
+                <th class="px-5 py-3.5 text-left">Jam</th>
+                <th class="px-5 py-3.5 text-left">Status</th>
+            </tr>
+        </thead>
 
-@forelse($antrians as $index => $antrian)
+        <tbody class="text-gray-700 divide-y divide-gray-100">
+            @forelse($antrians as $index => $antrian)
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-5 py-3.5">
+                        {{ $index + 1 }}
+                    </td>
 
-<tr class="hover:bg-gray-50 transition">
+                    <td class="px-5 py-3.5 font-medium">
+                        {{ $antrian->pemesanan->nama_pasien ?? '-' }}
+                    </td>
 
-    <td class="px-5 py-3.5">
-        {{ $index + 1 }}
-    </td>
+                    <td class="px-5 py-3.5">
+                        {{ $antrian->pemesanan->dokter->nama ?? '-' }}
+                    </td>
 
-    <td class="px-5 py-3.5 font-medium">
-        {{ $antrian->pemesanan->nama_pasien ?? '-' }}
-    </td>
+                    <td class="px-5 py-3.5">
+                        {{ $antrian->created_at->format('H:i') }}
+                    </td>
 
-    <td class="px-5 py-3.5">
-        {{ $antrian->pemesanan->dokter->name ?? '-' }}
-    </td>
+                    <td class="px-5 py-3.5">
+                        @if($antrian->status == 'menunggu')
+                            <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">
+                                Menunggu
+                            </span>
+                        @elseif($antrian->status == 'dipanggil')
+                            <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700 font-medium">
+                                Dipanggil
+                            </span>
+                        @elseif($antrian->status == 'selesai')
+                            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
+                                Selesai
+                            </span>
+                        @endif
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5" class="px-5 py-6 text-center text-gray-400">
+                        Belum ada antrian pasien
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 
-    <td class="px-5 py-3.5">
-        {{ $antrian->created_at->format('H:i') }}
-    </td>
-
-    <td class="px-5 py-3.5">
-
-        @if($antrian->status == 'menunggu')
-            <span class="px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700 font-medium">
-                Menunggu
-            </span>
-
-        @elseif($antrian->status == 'dipanggil')
-            <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700 font-medium">
-                Dipanggil
-            </span>
-
-        @elseif($antrian->status == 'selesai')
-            <span class="px-3 py-1 text-xs rounded-full bg-green-100 text-green-700 font-medium">
-                Selesai
-            </span>
-
-        @endif
-
-    </td>
-
-</tr>
-
-@empty
-
-<tr>
-    <td colspan="5" class="px-5 py-6 text-center text-gray-400">
-        Belum ada antrian pasien
-    </td>
-</tr>
-
-@endforelse
-
-</tbody>
-            </table>
-        </div>
-
+{{--  INI BAGIAN PAGINATION (TARUH DI SINI) --}}
+<div class="mt-4 flex justify-center">
+    {{ $antrians->links() }}
+</div>
     </div>
 
 </div>

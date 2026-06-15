@@ -53,6 +53,7 @@ class DataDokterController extends Controller
         return response()->json($dokter);
     }
 
+
     // Mengupdate data dokter
     public function update(Request $request, Dokter $dokter)
     {
