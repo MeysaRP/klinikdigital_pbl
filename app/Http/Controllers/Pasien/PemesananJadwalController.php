@@ -17,35 +17,33 @@ class PemesananJadwalController extends Controller
         $email = session('email');
         $user = User::where('email', $email)->first();
 
-        // Ambil tanggal yang dipilih dari query parameter
-        $selectedDate = $request->query('tanggal');
+        // Ambil tanggal yang dipilih dari query parameter, default ke hari ini
+        $selectedDate = $request->query('tanggal') ?? now()->format('Y-m-d');
         $selectedDayName = null;
 
         // Query untuk mendapatkan jadwal berdasarkan tanggal yang dipilih
         $jadwalQuery = Jadwal::with('dokter')
             ->where('status', 'Aktif');
 
-        // Jika ada tanggal yang dipilih, filter jadwal berdasarkan hari dalam minggu
-        if ($selectedDate) {
-            try {
-                $carbonDate = Carbon::parse($selectedDate);
-                $dayMap = [
-                    'Monday'    => 'senin',
-                    'Tuesday'   => 'selasa',
-                    'Wednesday' => 'rabu',
-                    'Thursday'  => 'kamis',
-                    'Friday'    => 'jumat',
-                    'Saturday'  => 'sabtu',
-                    'Sunday'    => 'minggu',
-                ];
-                $selectedDayName = $dayMap[$carbonDate->format('l')] ?? null;
-                if ($selectedDayName) {
-                    $jadwalQuery->whereRaw('LOWER(hari) = ?', [$selectedDayName]);
-                }
-            } catch (\Exception $e) {
-                $selectedDate = null;
-                $selectedDayName = null;
+        // Filter jadwal berdasarkan hari dalam minggu dari tanggal yang dipilih
+        try {
+            $carbonDate = Carbon::parse($selectedDate);
+            $dayMap = [
+                'Monday'    => 'senin',
+                'Tuesday'   => 'selasa',
+                'Wednesday' => 'rabu',
+                'Thursday'  => 'kamis',
+                'Friday'    => 'jumat',
+                'Saturday'  => 'sabtu',
+                'Sunday'    => 'minggu',
+            ];
+            $selectedDayName = $dayMap[$carbonDate->format('l')] ?? null;
+            if ($selectedDayName) {
+                $jadwalQuery->whereRaw('LOWER(hari) = ?', [$selectedDayName]);
             }
+        } catch (\Exception $e) {
+            $selectedDate = now()->format('Y-m-d');
+            $selectedDayName = null;
         }
 
         $jadwals = $jadwalQuery
@@ -62,10 +60,23 @@ class PemesananJadwalController extends Controller
             })->values();
 
             if ($filtered->isNotEmpty()) {
+                // Hitung kuota terpakai untuk setiap jadwal pada tanggal yang dipilih
+                $filteredWithQuota = $filtered->map(function ($jadwal) use ($selectedDate) {
+                    $jumlahBooking = PemesananJadwal::where('jadwal_id', $jadwal->id)
+                        ->where('tanggal', $selectedDate ?? now()->format('Y-m-d'))
+                        ->where('status', 'Menunggu')
+                        ->count();
+
+                    $jadwal->kuota_terpakai = $jumlahBooking;
+                    $jadwal->is_full = $jumlahBooking >= $jadwal->kuota_pasien;
+
+                    return $jadwal;
+                });
+
                 $jadwalPerHari[] = [
                     'hari'    => ucfirst($hari),
-                    'jumlah'  => $filtered->count(),
-                    'jadwals' => $filtered,
+                    'jumlah'  => $filteredWithQuota->count(),
+                    'jadwals' => $filteredWithQuota,
                 ];
             }
         }

@@ -94,6 +94,17 @@
                 </div>
 
                 <div>
+                    <label class="text-xs text-gray-500 ml-1">Jenis Kelamin</label>
+                    <select name="jk" id="jk"
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                        <option value="">Pilih jenis kelamin</option>
+                        <option value="Laki-laki" {{ old('jk') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ old('jk') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                    <p id="error-jk" class="text-red-500 text-xs hidden">Jenis kelamin wajib dipilih</p>
+                </div>
+
+                <div>
                     <label class="text-xs text-gray-500 ml-1">Kategori</label>
                     <select name="kategori" id="kategori"
                         class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
@@ -122,15 +133,29 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="relative">
                     <input name="password" type="password" id="password" placeholder="Password"
-                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                    <button type="button" onclick="togglePassword('password','passwordIcon')"
+                        class="absolute inset-y-0 right-2 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                        <svg id="passwordIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
                     <p id="error-password" class="text-red-500 text-xs hidden">Password wajib diisi</p>
                 </div>
 
-                <div>
+                <div class="relative">
                     <input name="password_confirmation" type="password" id="confirm" placeholder="Konfirmasi Password"
-                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                        class="w-full px-3 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm pr-10 focus:outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E]/40">
+                    <button type="button" onclick="togglePassword('confirm')"
+                        class="absolute inset-y-0 right-2 flex items-center justify-center text-gray-500 hover:text-gray-700">
+                        <svg id="confirmIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </button>
                     <p id="error-confirm" class="text-red-500 text-xs hidden">Password tidak sama</p>
                 </div>
 
@@ -165,6 +190,11 @@ function updateIdentitasLabel() {
 document.getElementById('kategori').addEventListener('change', updateIdentitasLabel);
 updateIdentitasLabel();
 
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+
 function validateForm() {
     let valid = true;
     function cek(id, errorId, message) {
@@ -183,6 +213,7 @@ function validateForm() {
     cek("email", "error-email", "Email wajib diisi");
     cek("nama", "error-nama", "Nama wajib diisi");
     cek("alamat", "error-alamat", "Alamat wajib diisi");
+    cek("jk", "error-jk", "Jenis kelamin wajib dipilih");
     cek("kategori", "error-kategori", "Kategori wajib dipilih");
     cek("no_identitas", "error-no-identitas", "Identitas wajib diisi");
     cek("tanggal", "error-tanggal", "Tanggal wajib diisi");

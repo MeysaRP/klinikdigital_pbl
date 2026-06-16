@@ -87,9 +87,9 @@
 
                                     <div class="space-y-2 pl-1">
                                         @foreach($group['jadwals'] as $jadwal)
-                                            <label class="jadwal-card flex items-center justify-between p-4 border rounded-xl transition-all duration-200 cursor-pointer {{ old('jadwal_id') == $jadwal->id ? 'border-[#09637E] bg-[#09637E]/5 shadow-sm' : 'border-gray-200 bg-white hover:border-[#09637E]/50 hover:shadow-sm' }}">
+                                            <label class="jadwal-card flex items-center justify-between p-4 border rounded-xl transition-all duration-200 {{ $jadwal->is_full ? 'cursor-not-allowed opacity-50 bg-gray-50' : 'cursor-pointer' }} {{ old('jadwal_id') == $jadwal->id ? 'border-[#09637E] bg-[#09637E]/5 shadow-sm' : ($jadwal->is_full ? 'border-gray-200 bg-gray-50' : 'border-gray-200 bg-white hover:border-[#09637E]/50 hover:shadow-sm') }}">
                                                 <div class="flex items-start gap-3">
-                                                    <input type="radio" name="jadwal_id" value="{{ $jadwal->id }}" class="mt-1 accent-[#09637E]" {{ old('jadwal_id') == $jadwal->id ? 'checked' : '' }} onchange="highlightCard(this)">
+                                                    <input type="radio" name="jadwal_id" value="{{ $jadwal->id }}" class="mt-1 accent-[#09637E]" {{ old('jadwal_id') == $jadwal->id ? 'checked' : '' }} {{ $jadwal->is_full ? 'disabled' : '' }} onchange="highlightCard(this)">
                                                     <div>
                                                         <p class="font-semibold text-gray-900">{{ $jadwal->dokter->nama ?? 'Dokter Tidak Ditemukan' }}</p>
                                                         <p class="text-sm text-gray-500 mt-0.5">
@@ -98,10 +98,23 @@
                                                                 {{ date('H:i', strtotime($jadwal->jam_mulai)) }} - {{ date('H:i', strtotime($jadwal->jam_selesai)) }} WIB
                                                             </span>
                                                         </p>
-                                                        <p class="text-sm text-gray-400 mt-1">Kuota: {{ $jadwal->kuota_pasien }} pasien</p>
+                                                        <p class="text-sm {{ $jadwal->is_full ? 'text-red-600 font-semibold' : 'text-gray-400' }} mt-1">
+                                                            Kuota:
+                                                            @if($jadwal->is_full)
+                                                                <span class="text-red-600">{{ $jadwal->kuota_terpakai }}/{{ $jadwal->kuota_pasien }} (PENUH)</span>
+                                                            @else
+                                                                <span>{{ $jadwal->kuota_terpakai }}/{{ $jadwal->kuota_pasien }}</span>
+                                                            @endif
+                                                        </p>
                                                     </div>
                                                 </div>
-                                                <span class="text-xs rounded-full px-2.5 py-1 font-medium whitespace-nowrap {{ $jadwal->status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">{{ $jadwal->status }}</span>
+                                                <div class="flex items-center gap-2">
+                                                    @if($jadwal->is_full)
+                                                        <span class="text-xs rounded-full px-2.5 py-1 font-medium whitespace-nowrap bg-red-100 text-red-700">Penuh</span>
+                                                    @else
+                                                        <span class="text-xs rounded-full px-2.5 py-1 font-medium whitespace-nowrap {{ $jadwal->status === 'Aktif' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">{{ $jadwal->status }}</span>
+                                                    @endif
+                                                </div>
                                             </label>
                                         @endforeach
                                     </div>
