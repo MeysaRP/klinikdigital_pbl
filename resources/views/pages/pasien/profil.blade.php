@@ -94,6 +94,12 @@
                         <p class="text-gray-800 font-medium">{{ $profil['no_hp'] }}</p>
                     </div>
 
+                    <!-- Kategori -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Kategori</p>
+                        <p class="text-gray-800 font-medium">{{ $profil['kategori'] }}</p>
+                    </div>
+
                     <!-- Alamat (Full Width) -->
                     <div class="md:col-span-2">
                         <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Alamat Lengkap</p>

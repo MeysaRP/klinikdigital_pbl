@@ -51,11 +51,17 @@ class DashboardPasienController extends Controller
             }
         }
 
+        $userKategori = $user?->kategori;
+        if ($userKategori === 'Staff TU') {
+            $userKategori = 'Tenaga Kependidikan';
+        }
+
         return view('pages.pasien.dashboard_pasien', [
             'userName' => $user?->name ?? 'Pasien',
             'userInitial' => $initials,
             'userRole' => 'Pasien',
             'profil' => $user,
+            'userKategori' => $userKategori ?? '-',
             'nextBooking' => $nextBooking,
             'jadwal' => $bookings,
             'statusAktif' => $filterStatus,

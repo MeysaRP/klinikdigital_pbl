@@ -165,6 +165,7 @@
                     @endphp
                     <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Jenis Kelamin</span><span class="text-gray-900 font-semibold">{{ $jkLabel }}</span></div>
                     <div class="flex justify-between items-center"><span class="font-medium text-gray-500">No. HP</span><span class="text-gray-900 font-semibold">{{ $profil?->no_hp ?? '-' }}</span></div>
+                    <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Kategori</span><span class="text-gray-900 font-semibold">{{ $userKategori ?? '-' }}</span></div>
                     <div class="flex justify-between items-start"><span class="font-medium text-gray-500">Alamat</span><span class="text-gray-900 font-semibold text-right ml-2">{{ $profil?->alamat ?? '-' }}</span></div>
                 </div>
                 <a href="{{ route('pasien.profil') }}" class="mt-6 w-full bg-[#09637E] text-white hover:bg-[#074d61] font-semibold py-2.5 rounded-xl transition-colors shadow-sm block text-center">

@@ -12,6 +12,11 @@ class ProfilPasienController extends Controller
         $email = session('email');
         $user = User::where('email', $email)->firstOrFail();
 
+        $kategori = $user->kategori ?? '-';
+        if ($kategori === 'Staff TU') {
+            $kategori = 'Tenaga Kependidikan';
+        }
+
         $profil = [
             'nama' => $user->name,
             'email' => $user->email,
@@ -19,6 +24,7 @@ class ProfilPasienController extends Controller
             'jk' => $user->jk ?? 'Laki-laki',
             'no_hp' => $user->no_hp ?? '-',
             'alamat' => $user->alamat ?? '-',
+            'kategori' => $kategori,
         ];
 
         return view('pages.pasien.profil', compact('profil'));
