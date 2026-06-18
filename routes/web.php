@@ -10,7 +10,7 @@ use App\Http\Controllers\Pasien\RiwayatMedisController;
 use App\Http\Controllers\Pasien\ProfilPasienController;
 use App\Http\Controllers\Dokter\DashboardDokterController;
 use App\Http\Controllers\Dokter\JadwalDokterController;
-use App\Http\Controllers\Dokter\AntrianDokterController;
+use App\Http\Controllers\Dokter\AntrianPasienController;
 use App\Http\Controllers\Dokter\ProfilDokterController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\Admin\DataDokterController;
@@ -56,9 +56,9 @@ Route::prefix('dashboard')->middleware('auth.session')->group(function () {
     Route::prefix('dokter')->middleware('role:dokter')->group(function () {
         Route::get('/', [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
         Route::get('/jadwal', [JadwalDokterController::class, 'index'])->name('dokter.jadwal');
-        Route::get('/antrian', [AntrianDokterController::class, 'index'])->name('dokter.antrian');
+        Route::get('/antrian', [AntrianPasienController::class, 'index'])->name('dokter.antrian');
 
-        Route::post('/antrian/simpan-rekam-medis', [AntrianDokterController::class, 'simpanRekamMedis'])
+        Route::post('/antrian/simpan-rekam-medis', [AntrianPasienController::class, 'simpanRekamMedis'])
             ->name('dokter.rekammedis.simpan');
 
         Route::get('/profil', [ProfilDokterController::class, 'index'])->name('dokter.profil');

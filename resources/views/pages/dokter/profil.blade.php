@@ -69,8 +69,10 @@
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 bg-gray-50 rounded-lg flex items-center justify-center text-sm">👥</div>
                     <div>
-                        <p class="text-[11px] text-gray-400 uppercase tracking-wide font-medium">Total Pasien</p>
-                        <p class="text-sm font-semibold text-gray-800">-</p>
+                        <p class="text-[11px] text-gray-400 uppercase tracking-wide font-medium">Pasien Hari Ini</p>
+                        <p class="text-sm font-semibold text-gray-800">
+                            {{ $totalPasien }}
+                        </p>
                     </div>
                 </div>
             </div>

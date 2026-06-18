@@ -8,7 +8,7 @@ use App\Models\Dokter;
 use App\Models\RekamMedis;
 use Illuminate\Http\Request;
 
-class AntrianDokterController extends Controller
+class AntrianPasienController extends Controller
 {
     public function index(Request $request)
     {
