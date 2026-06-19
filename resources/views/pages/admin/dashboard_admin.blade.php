@@ -121,8 +121,10 @@
                     </td>
 
                     <td class="px-5 py-3.5">
-                        {{ $antrian->created_at->format('H:i') }}
-                    </td>
+    {{ $antrian->pemesanan->slot_mulai ?? '-' }}
+    -
+    {{ $antrian->pemesanan->slot_selesai ?? '-' }}
+</td>
 
                     <td class="px-5 py-3.5">
                         @if($antrian->status == 'menunggu')

@@ -8,14 +8,18 @@ use App\Models\User;
 
 class DataPasienController extends Controller
 {
-    public function index()
-    {
-        $pasien = User::where('role', 'pasien')
-            ->orderBy('id', 'desc')
-            ->get();
+    public function index(Request $request)
+{
+    $query = User::where('role', 'pasien');
 
-        return view('pages.admin.data_pasien', compact('pasien'));
+    if ($request->filled('kategori')) {
+        $query->where('kategori', $request->kategori);
     }
+
+    $pasien = $query->orderBy('id', 'desc')->get();
+
+    return view('pages.admin.data_pasien', compact('pasien'));
+}
 
     public function update(Request $request, $id)
     {
