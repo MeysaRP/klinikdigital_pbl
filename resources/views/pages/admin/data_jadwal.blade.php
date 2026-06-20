@@ -1,6 +1,6 @@
 @extends('layouts.dashboard', [
 'pageTitle' => 'Data Jadwal',
-'userName' => 'Halo, Admin',
+'userName' => 'Halo, ' . (session('name') ?? 'Admin'),
 'userRole' => 'Admin',
 'userInitial' => 'A'
 ])

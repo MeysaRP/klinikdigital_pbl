@@ -1,6 +1,6 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Dashboard Admin',
-    'userName' => 'Halo, Admin',
+    'userName' => 'Halo, ' . (session('name') ?? 'Admin'),
     'userRole' => 'Admin',
     'userInitial' => 'A'
 ])
@@ -58,7 +58,7 @@
 
         <!-- Filter Dokter -->
         <select name="dokter_id"
-                class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full sm:w-auto">
+                class="border border-gray-200 rounded-lg px-3 py-2 text-sm w-full sm:w-auto pr-10">
 
             <option value="">Semua Dokter</option>
 

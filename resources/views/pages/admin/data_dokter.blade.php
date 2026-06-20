@@ -1,6 +1,6 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Data Dokter',
-    'userName' => 'Halo, Admin',
+    'userName' => 'Halo, ' . (session('name') ?? 'Admin'),
     'userRole' => 'Admin',
     'userInitial' => 'A'
 ])
