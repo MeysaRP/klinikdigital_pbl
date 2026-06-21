@@ -1,8 +1,7 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Profil Saya',
     'userName' => $profil['nama'],
-    'userRole' => 'Pasien',
-    'userInitial' => substr($profil['nama'], 0, 2)
+    'userRole' => 'Pasien'
 ])
 
 @section('sidebar')
@@ -35,7 +34,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
                 <!-- Avatar -->
                 <div class="w-28 h-28 rounded-full bg-[#09637E] flex items-center justify-center text-white text-4xl font-bold shadow-lg border-4 border-[#09637E]/20 mx-auto mb-4">
-                    {{ substr($profil['nama'], 0, 2) }}
+                    {{ $userInitial }}
                 </div>
                 <h2 class="text-xl font-bold text-gray-900">{{ $profil['nama'] }}</h2>
                 <p class="text-sm text-gray-500 mt-1">Pasien Terdaftar</p>

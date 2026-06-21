@@ -67,13 +67,13 @@
 
         <!-- Galeri Gambar -->
         <div class="grid lg:grid-cols-2 gap-8 items-stretch">
-            <!-- Gambar Besar -->
+            <!-- Gambar Besar (POLITEKNIK NEGERI BATAM) -->
             <div class="relative rounded-2xl overflow-hidden shadow-lg group">
                 <img
-                    src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700&h=500&fit=crop&crop=center"
-                    alt="Politeknik Negeri Batam"
-                    class="w-full h-full min-h-[350px] object-cover group-hover:scale-105 transition-transform duration-700"
-                >
+    src="{{ asset('images/poltek-batam.jpg') }}"
+    alt="Politeknik Negeri Batam"
+    class="w-full h-full min-h-[350px] object-cover group-hover:scale-105 transition-transform duration-700"
+>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-8">
                     <h3 class="text-2xl font-bold text-white mb-2">Politeknik Negeri Batam</h3>
@@ -86,10 +86,11 @@
 
             <!-- 2 Gambar Kecil -->
             <div class="grid grid-rows-2 gap-4">
+                <!-- Gambar Ruang Tunggu -->
                 <div class="relative rounded-2xl overflow-hidden shadow-lg group">
                     <img
-                        src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=700&h=280&fit=crop&crop=center"
-                        alt="Suasana dalam klinik"
+                        src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700&h=280&fit=crop&crop=center"
+                        alt="Ruang Tunggu"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     >
                     <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -97,9 +98,10 @@
                         <span class="bg-white/20 backdrop-blur-md text-white text-xs font-medium px-3 py-1.5 rounded-full">Ruang Tunggu</span>
                     </div>
                 </div>
+                <!-- Gambar Peralatan Modern -->
                 <div class="relative rounded-2xl overflow-hidden shadow-lg group">
                     <img
-                        src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=700&h=280&fit=crop&crop=center"
+                        src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?w=700&h=280&fit=crop&crop=center"
                         alt="Peralatan medis"
                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     >

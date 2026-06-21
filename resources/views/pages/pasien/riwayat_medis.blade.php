@@ -42,7 +42,7 @@
                     <tr>
                         <th class="px-6 py-3">Tanggal</th>
                         <th class="px-6 py-3">Dokter</th>
-                        <th class="px-6 py-3">Poli</th>
+                        <th class="px-6 py-3">Keluhan</th>
                         <th class="px-6 py-3">Status</th>
                         <th class="px-6 py-3 text-center">Aksi</th>
                     </tr>
@@ -84,7 +84,7 @@
                                 {{ $item->dokter?->nama ?? '-' }}
                             </td>
                             <td class="px-6 py-4">
-                                Umum
+                                {{ $item->keluhan ?? '-' }}
                             </td>
                             <td class="px-6 py-4">
                                 @if($item->status == 'Selesai')

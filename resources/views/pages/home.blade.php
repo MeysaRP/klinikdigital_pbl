@@ -25,7 +25,7 @@
                         rekam medis secara cepat dan aman.
                     </p>
 
-                    <!-- CTA DIUBAH: Hanya 1 tombol yang mengarah ke section Layanan -->
+                    <!-- CTA -->
                     <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                         <a href="#layanan"
                             class="inline-flex items-center justify-center gap-2 py-3 px-6 text-base font-semibold text-white rounded-full bg-[#09637E] hover:bg-[#074d61] shadow-[0_10px_25px_-5px_rgba(9,99,126,0.4)] hover:shadow-[0_20px_35px_-5px_rgba(9,99,126,0.5)] transition-all duration-300 transform hover:-translate-y-0.5">
@@ -41,9 +41,9 @@
                 <!-- Gambar Hero -->
                 <div class="relative w-full flex justify-center">
                     <div class="animate-float">
-                        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&w=800&q=80"
+                        <img src="{{ asset('images/poltek-batam.jpg') }}"
                             class="w-full h-auto max-w-md rounded-2xl shadow-2xl border-4 border-white"
-                            alt="Dokter MediTech">
+                            alt="Politeknik Negeri Batam">
 
                         <div
                             class="absolute -bottom-4 -left-4 bg-white p-4 rounded-xl shadow-lg hidden md:block border border-gray-100">
@@ -68,7 +68,7 @@
         </div>
     </section>
 
-    <!-- LAYANAN SECTION (TIDAK ADA PERUBAHAN) -->
+    <!-- LAYANAN SECTION -->
     <section id="layanan" class="bg-gray-50 py-20 border-t border-gray-100 relative overflow-hidden">
         <!-- Hiasan Background Agar Tidak Kosong -->
         <div class="absolute top-0 left-10 w-72 h-72 bg-[#09637E]/5 rounded-full filter blur-3xl -z-0"></div>

@@ -19,7 +19,7 @@
             <div>
                 <p class="text-sm font-medium text-gray-500 mb-1">Janji Temu Berikutnya</p>
                 @if($nextBooking)
-                    <h2 class="text-xl font-bold text-gray-800">{{ $nextBooking->dokter?->nama ?? 'Dokter' }} (Dokter Umum)</h2>
+                    <h2 class="text-xl font-bold text-gray-800">{{ $nextBooking->dokter?->nama ?? 'Dokter' }} (Dokter)</h2>
                     <div class="flex items-center gap-4 mt-2 text-sm text-gray-600">
                         <span class="flex items-center gap-1 font-semibold text-[#09637E]">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>

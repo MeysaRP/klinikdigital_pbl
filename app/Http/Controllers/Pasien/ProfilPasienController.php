@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Pasien;
 
 use App\Http\Controllers\Controller;
@@ -17,6 +18,15 @@ class ProfilPasienController extends Controller
             $kategori = 'Tenaga Kependidikan';
         }
 
+        $initials = 'PS';
+        if ($user && $user->name) {
+            $words = explode(' ', trim($user->name));
+            $initials = strtoupper(substr($words[0], 0, 1));
+            if (count($words) > 1) {
+                $initials .= strtoupper(substr($words[1], 0, 1));
+            }
+        }
+
         $profil = [
             'nama' => $user->name,
             'email' => $user->email,
@@ -27,7 +37,12 @@ class ProfilPasienController extends Controller
             'kategori' => $kategori,
         ];
 
-        return view('pages.pasien.profil', compact('profil'));
+        return view('pages.pasien.profil', [
+            'profil'      => $profil,
+            'userName'    => $user->name ?? 'Pasien',
+            'userRole'    => 'Pasien',
+            'userInitial' => $initials,
+        ]);
     }
 
     public function update(Request $request)

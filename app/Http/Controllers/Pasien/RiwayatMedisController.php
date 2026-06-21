@@ -32,7 +32,7 @@ class RiwayatMedisController extends Controller
         return view('pages.pasien.riwayat_medis', [
             'userName'    => $user?->nama ?? $user?->name ?? 'Pasien',
             'userRole'    => 'Pasien',
-            'userInitial' => $user ? strtoupper(substr($user->nama ?? $user->name, 0, 2)) : 'PS',
+            'userInitial' => $this->getInitials($user),
             'riwayat'     => $riwayat,
             'statusAktif' => $statusAktif,
         ]);
@@ -83,7 +83,6 @@ class RiwayatMedisController extends Controller
         $data = [
             'dokter'    => $booking->dokter?->nama ?? '-',
             'tanggal'   => $booking->tanggal,
-            'poli'      => 'Umum',
             'pasien'    => $booking->nama_pasien ?? $booking->email,
             'gejala'    => $this->toSafeString($booking->keluhan),
             'diagnosa'  => $this->toSafeString($rekam->diagnosa),
@@ -94,5 +93,19 @@ class RiwayatMedisController extends Controller
 
         return Pdf::loadView('pages.pasien.pdf_riwayat', compact('data'))
             ->download('rekam-medis-' . $booking->id . '.pdf');
+    }
+
+    private function getInitials($user)
+    {
+        $initials = 'PS';
+        $name = $user->nama ?? $user->name;
+        if ($user && $name) {
+            $words = explode(' ', trim($name));
+            $initials = strtoupper(substr($words[0], 0, 1));
+            if (count($words) > 1) {
+                $initials .= strtoupper(substr($words[1], 0, 1));
+            }
+        }
+        return $initials;
     }
 }

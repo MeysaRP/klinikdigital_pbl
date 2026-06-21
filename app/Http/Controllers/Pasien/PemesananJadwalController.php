@@ -109,7 +109,7 @@ class PemesananJadwalController extends Controller
             'selectedDayName'      => $selectedDayName,
             'userName'             => $user?->name ?? 'Pasien',
             'userRole'             => 'Pasien',
-            'userInitial'          => $user ? substr($user->name, 0, 2) : 'PS',
+            'userInitial'          => $this->getInitials($user),
             'tanggalSudahDipesan'  => $tanggalSudahDipesan,
         ]);
     }
@@ -199,7 +199,7 @@ class PemesananJadwalController extends Controller
             'booking'     => $booking,
             'userName'    => $user?->name ?? 'Pasien',
             'userRole'    => 'Pasien',
-            'userInitial' => $user ? substr($user->name, 0, 2) : 'PS',
+            'userInitial' => $this->getInitials($user),
         ]);
     }
 
@@ -223,5 +223,18 @@ class PemesananJadwalController extends Controller
         ]);
 
         return back()->with('success', 'Berhasil dibatalkan');
+    }
+
+    private function getInitials($user)
+    {
+        $initials = 'PS';
+        if ($user && $user->name) {
+            $words = explode(' ', trim($user->name));
+            $initials = strtoupper(substr($words[0], 0, 1));
+            if (count($words) > 1) {
+                $initials .= strtoupper(substr($words[1], 0, 1));
+            }
+        }
+        return $initials;
     }
 }

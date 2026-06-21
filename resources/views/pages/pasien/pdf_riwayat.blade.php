@@ -25,13 +25,12 @@
 
     <div class="header">
         <h1>MediTech Clinic</h1>
-        <p>Jl. Politeknik No. 1, Batam | Telp: (0778) 123456</p>
+        <p>Jl. Ahmad Yani, Tlk. Tering, Kec. Batam Kota, Kota Batam, Kepulauan Riau 29461 | Telp: (0778) 123456</p>
     </div>
 
     <div class="info-box">
         <p><strong>Dokter:</strong> {{ $data['dokter'] }}</p>
         <p><strong>Tanggal Periksa:</strong> {{ date('d F Y', strtotime($data['tanggal'])) }}</p>
-        <p><strong>Poli:</strong> {{ $data['poli'] }}</p>
         <p><strong>Pasien:</strong> {{ $data['pasien'] }}</p>
     </div>
 
