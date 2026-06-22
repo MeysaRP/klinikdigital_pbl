@@ -352,6 +352,15 @@ async function simpanDokter() {
 
     const data = await res.json();
 
+    if (!res.ok) {
+        let errorMsg = 'Gagal menambahkan dokter. Periksa kembali kelengkapan data.';
+        if (data.errors) {
+            errorMsg = Object.values(data.errors).flat().join('\n');
+        }
+        showAlert('error', 'Gagal Menyimpan', errorMsg);
+        return; 
+    }
+
     document.getElementById('tableDokter').insertAdjacentHTML('beforeend', `
 <tr data-dokter-id="${data.id}" class="hover:bg-gray-50 transition">
 
