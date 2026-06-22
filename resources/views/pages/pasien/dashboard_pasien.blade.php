@@ -19,7 +19,7 @@
             <div>
                 <p class="text-sm font-medium text-gray-500 mb-1">Janji Temu Berikutnya</p>
                 @if($nextBooking)
-                    <h2 class="text-xl font-bold text-gray-800">{{ $nextBooking->dokter?->nama ?? 'Dokter' }} (Dokter)</h2>
+                    <h2 class="text-xl font-bold text-gray-800">dr. {{ $nextBooking->dokter?->nama ?? '-' }}</h2>
                     <div class="flex items-center gap-4 mt-2 text-sm text-gray-600">
                         <span class="flex items-center gap-1 font-semibold text-[#09637E]">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
@@ -99,7 +99,6 @@
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
                             <div class="flex-1">
                                 <div class="flex items-center gap-2 mb-2">
-                                    {{-- FIXED: "Akan Datang" diganti "Menunggu" --}}
                                     @if($item->status === 'Menunggu')
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-yellow-100 text-yellow-700">Menunggu</span>
                                     @elseif($item->status === 'Dibatalkan')
@@ -108,7 +107,7 @@
                                         <span class="px-2.5 py-1 text-xs font-semibold rounded-lg bg-green-100 text-green-700">Selesai</span>
                                     @endif
                                 </div>
-                                <h4 class="font-bold text-gray-900 text-lg">{{ $item->dokter?->nama ?? '-' }}</h4>
+                                <h4 class="font-bold text-gray-900 text-lg">dr. {{ $item->dokter?->nama ?? '-' }}</h4>
                                 <p class="text-sm text-gray-600 mt-1">
                                     <span class="font-semibold text-[#09637E]">{{ date('d F Y', strtotime($item->tanggal)) }}</span> &bull; {{ $item->slot_mulai ?? date('H:i', strtotime($item->jam_mulai)) }} - {{ $item->slot_selesai ?? date('H:i', strtotime($item->jam_selesai)) }} WIB
                                 </p>
@@ -118,7 +117,7 @@
                                 <button
                                     class="btn-detail w-full md:w-auto px-5 py-2 text-sm font-semibold text-[#09637E] bg-white border-2 border-[#09637E] rounded-xl hover:bg-[#09637E] hover:text-white shadow-sm transition-all block text-center"
                                     onclick="openDetailModal(this)"
-                                    data-dokter="{{ $item->dokter?->nama ?? '-' }}"
+                                    data-dokter="dr. {{ $item->dokter?->nama ?? '-' }}"
                                     data-tanggal="{{ date('d F Y', strtotime($item->tanggal)) }}"
                                     data-jam="{{ $item->slot_mulai ?? date('H:i', strtotime($item->jam_mulai)) }} - {{ $item->slot_selesai ?? date('H:i', strtotime($item->jam_selesai)) }} WIB"
                                     data-keluhan="{{ $item->keluhan ?? '-' }}"
@@ -143,14 +142,11 @@
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:sticky lg:top-24">
                 <div class="flex flex-col items-center text-center mb-6">
-                    {{-- FIXED: pakai $userInitial dari controller, bukan substr array --}}
                     <div class="w-24 h-24 rounded-full bg-[#09637E] flex items-center justify-center text-white text-3xl font-bold shadow-lg border-4 border-white mb-4">{{ $userInitial }}</div>
-                    {{-- FIXED: $profil['nama'] diganti $profil->name --}}
                     <h3 class="text-xl font-bold text-gray-900">{{ $profil?->name ?? 'Pasien' }}</h3>
                     <p class="text-sm text-gray-500">Pasien Aktif</p>
                 </div>
                 <div class="text-sm space-y-3 text-gray-600 border-t border-gray-100 pt-6">
-                    {{-- FIXED: semua $profil['...'] diganti $profil->... --}}
                     <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Nama</span><span class="text-gray-900 font-semibold">{{ $profil?->name ?? '-' }}</span></div>
                     <div class="flex justify-between items-center"><span class="font-medium text-gray-500">Tanggal Lahir</span><span class="text-gray-900 font-semibold">{{ $profil?->tgl_lahir ? date('d F Y', strtotime($profil->tgl_lahir)) : '-' }}</span></div>
                     @php

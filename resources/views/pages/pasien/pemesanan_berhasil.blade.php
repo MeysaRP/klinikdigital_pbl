@@ -25,7 +25,7 @@
         <div class="bg-[#09637E] text-white rounded-2xl p-6 mb-6 shadow-md">
             <p class="text-sm opacity-80 uppercase tracking-wider font-medium">No. Antrian Anda</p>
             <h1 class="text-6xl font-extrabold mt-2">{{ sprintf('%02d', $booking->nomor_antrian) }}</h1>
-            <p class="text-sm mt-2 opacity-90">{{ $booking->dokter->nama ?? 'Dokter' }} • {{ $booking->slot_mulai }} - {{ $booking->slot_selesai }} WIB</p>
+            <p class="text-sm opacity-90 mt-2">dr. {{ $booking->dokter->nama ?? '-' }} • {{ $booking->slot_mulai }} - {{ $booking->slot_selesai }} WIB</p>
             <p class="text-sm opacity-90 mt-2">Tanggal: {{ \Carbon\Carbon::parse($booking->tanggal)->format('d M Y') }}</p>
         </div>
 

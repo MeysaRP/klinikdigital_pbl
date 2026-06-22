@@ -1,8 +1,8 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Profil Saya',  
-    'userName'  => session('name'), 
+    'userName'  => 'dr. ' . (session('name') ?? 'Dokter'), 
     'userRole'  => 'Dokter',
-    'userInitial' => strtoupper(substr(str_replace('Dr. ', '', session('name')), 0, 1)) 
+    'userInitial' => strtoupper(substr(session('name') ?? 'D', 0, 1)) 
 ])
 
 @section('sidebar')
@@ -45,7 +45,7 @@
                 <div class="flex-1 pb-1">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div>
-                            <h3 class="text-xl font-bold text-gray-900">{{ $dokter->nama }}</h3> 
+                            <h3 class="text-xl font-bold text-gray-900">dr. {{ $dokter->nama }}</h3> 
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-green-50 text-green-700 rounded-full border border-green-100">
@@ -95,7 +95,7 @@
                 <div class="w-10 h-10 bg-gray-50 rounded-xl flex items-center justify-center text-sm">👤</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-xs text-gray-400">Nama Lengkap</p>
-                    <p class="text-sm font-semibold text-gray-900">{{ $dokter->nama }}</p> 
+                    <p class="text-sm font-semibold text-gray-900">dr. {{ $dokter->nama }}</p> 
                 </div>
             </div>
 

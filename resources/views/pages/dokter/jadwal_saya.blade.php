@@ -1,9 +1,8 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Jadwal Saya', 
-    'userName'  => session('name') ?? 'Dokter', 
+    'userName'  => 'dr. ' . (session('name') ?? 'Dokter'), 
     'userRole'  => 'Dokter',
-    // Diperbaiki: Hilangkan "Dr. " dulu biar inisialnya ngambil huruf asli nama
-    'userInitial' => strtoupper(substr(str_replace('Dr. ', '', session('name') ?? 'D'), 0, 1)) 
+    'userInitial' => strtoupper(substr(session('name') ?? 'D', 0, 1)) 
 ])
 
 @section('sidebar')

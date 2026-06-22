@@ -81,7 +81,7 @@
                                 {{ date('d M Y', strtotime($item->tanggal)) }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $item->dokter?->nama ?? '-' }}
+                                dr. {{ $item->dokter?->nama ?? '-' }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ $item->keluhan ?? '-' }}
@@ -100,7 +100,7 @@
                                     onclick="openRiwayatModal(this)"
                                     class="text-[#09637E] hover:text-white hover:bg-[#09637E] border border-[#09637E] px-4 py-1.5 rounded-lg text-sm font-semibold transition"
                                     data-id="{{ $item->id }}"
-                                    data-dokter="{{ $item->dokter?->nama ?? '-' }}"
+                                    data-dokter="dr. {{ $item->dokter?->nama ?? '-' }}"
                                     data-tanggal="{{ date('d M Y', strtotime($item->tanggal)) }}"
                                     data-gejala="{{ $item->keluhan ?? '-' }}"
                                     data-diagnosa="{{ $strDiagnosa }}"

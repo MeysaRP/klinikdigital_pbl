@@ -91,7 +91,7 @@
                                                 <div class="flex items-start gap-3">
                                                     <input type="radio" name="jadwal_id" value="{{ $jadwal->id }}" class="mt-1 accent-[#09637E]" {{ old('jadwal_id') == $jadwal->id ? 'checked' : '' }} {{ $jadwal->is_full ? 'disabled' : '' }} onchange="highlightCard(this)">
                                                     <div>
-                                                        <p class="font-semibold text-gray-900">{{ $jadwal->dokter->nama ?? 'Dokter Tidak Ditemukan' }}</p>
+                                                        <p class="font-semibold text-gray-900">dr. {{ $jadwal->dokter->nama ?? '-' }}</p>
                                                         <p class="text-sm text-gray-500 mt-0.5">
                                                             <span class="inline-flex items-center gap-1 bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-md font-medium">
                                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -162,7 +162,7 @@
                             <div class="border border-gray-200 rounded-2xl p-4 bg-gray-50">
                                 <div class="flex items-start justify-between gap-4">
                                     <div>
-                                        <p class="font-semibold text-gray-900">{{ $booking->dokter->nama ?? 'Dokter' }}</p>
+                                        <p class="font-semibold text-gray-900">dr. {{ $booking->dokter->nama ?? '-' }}</p>
                                         <p class="text-sm text-gray-500">{{ \Carbon\Carbon::parse($booking->tanggal)->format('d M Y') }} • {{ $booking->slot_mulai ?? $booking->jam_mulai }} - {{ $booking->slot_selesai ?? $booking->jam_selesai }} WIB</p>
                                         <p class="text-sm text-gray-500 mt-1">No. Antrian: {{ sprintf('%02d', $booking->nomor_antrian) }}</p>
                                     </div>

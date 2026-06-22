@@ -1,8 +1,8 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Antrian Pasien', 
-    'userName'  => session('name') ?? 'Dokter', 
+    'userName'  => 'dr. ' . (session('name') ?? 'Dokter'), 
     'userRole'  => 'Dokter',
-    'userInitial' => strtoupper(substr(str_replace('Dr. ', '', session('name') ?? 'D'), 0, 1)) 
+    'userInitial' => strtoupper(substr(session('name') ?? 'D', 0, 1)) 
 ])
 
 @section('sidebar')

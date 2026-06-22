@@ -1,9 +1,8 @@
 @extends('layouts.dashboard', [
     'pageTitle' => 'Dashboard Dokter',
-    'userName'  => session('name') ?? 'Dokter',
+    'userName'  => 'dr. ' . (session('name') ?? 'Dokter'),
     'userRole'  => 'Dokter',
-    // Diperbaiki: Hilangkan "Dr. " dulu dari session biar inisialnya ngambil huruf asli nama (misal "J")
-    'userInitial' => strtoupper(substr(str_replace('Dr. ', '', session('name') ?? 'D'), 0, 1))
+    'userInitial' => strtoupper(substr(session('name') ?? 'D', 0, 1))
 ])
 
 @section('sidebar')
@@ -24,7 +23,7 @@
                 <p class="text-sm text-white/70">{{ now()->format('l, d F Y') }}</p>
             </div>
             
-            <h1 class="text-lg font-bold">Selamat datang, {{ session('name') ?? 'Dokter' }}</h1>
+            <h1 class="text-lg font-bold">Selamat datang, dr. {{ session('name') ?? 'Dokter' }}</h1>
             <p class="text-sm text-white/60 mt-1">Semangat menjalani praktek hari ini!</p>
         </div>
     </div>
@@ -56,7 +55,7 @@
                     <p class="text-2xl font-bold text-gray-900 mt-1">{{ $selesaiCount }}</p>
                     <div class="mt-3">
                         <div class="w-full bg-gray-100 rounded-full h-1.5">
-                            <div class="bg-green-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ $persen }}%"></div>
+                            <div class="bg-green-500 h-1.5 rounded-full transition-all duration-500" style="width:'{{ $persen }}%'"></div>
                         </div>
                         <p class="text-xs text-gray-400 mt-1">{{ $persen }}% dari pasien hari ini</p>
                     </div>
