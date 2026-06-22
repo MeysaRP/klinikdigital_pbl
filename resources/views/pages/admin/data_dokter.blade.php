@@ -396,6 +396,10 @@ async function simpanDokter() {
 </tr>
 `);
 
+    // FIX: jalankan ulang filter agar baris baru ikut sesuai status filter/search saat ini.
+    // Tanpa ini, baris baru selalu tampil meski baris lain sedang disembunyikan oleh pencarian.
+    filterDokter();
+
     closeTambah();
     showAlert('success', 'Berhasil', 'Dokter ditambahkan');
 }
