@@ -29,7 +29,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- KOLOM KIRI: FOTO & IDENTITAS -->
+        <!-- KOLOM KIRI: FOTO & IDENTITAS SINGKAT -->
         <div class="lg:col-span-1">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center">
                 <!-- Avatar -->
@@ -40,12 +40,19 @@
                 <p class="text-sm text-gray-500 mt-1">Pasien Terdaftar</p>
 
                 <div class="mt-6 pt-6 border-t border-gray-100 text-left space-y-3">
+                    <!-- 1. Kategori -->
                     <div class="flex items-center gap-3 text-sm text-gray-600">
-                        <svg class="w-4 h-4 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-                        <span>{{ $profil['jk'] }}</span>
+                        <svg class="w-4 h-4 text-[#09637E] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        <span>{{ $profil['kategori'] }}</span>
                     </div>
+                    <!-- 2. NIM / NIK -->
                     <div class="flex items-center gap-3 text-sm text-gray-600">
-                        <svg class="w-4 h-4 text-[#09637E]" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                        <svg class="w-4 h-4 text-[#09637E] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
+                        <span>{{ $labelIdentitas }}: {{ $profil['no_identitas'] }}</span>
+                    </div>
+                    <!-- 3. No HP -->
+                    <div class="flex items-center gap-3 text-sm text-gray-600">
+                        <svg class="w-4 h-4 text-[#09637E] shrink-0" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
                         <span>{{ $profil['no_hp'] }}</span>
                     </div>
                 </div>
@@ -58,48 +65,55 @@
             </div>
         </div>
 
-        <!-- KOLOM KANAN: DETAIL INFO -->
+        <!-- KOLOM KANAN: DETAIL INFO LENGKAP -->
         <div class="lg:col-span-2">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
                 <h3 class="text-lg font-bold text-gray-800 mb-6 border-b border-gray-100 pb-3">Informasi Pribadi</h3>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-                    <!-- Nama Lengkap -->
-                    <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Nama Lengkap</p>
-                        <p class="text-gray-800 font-medium">{{ $profil['nama'] }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Email</p>
-                        <p class="text-gray-800 font-medium">{{ $profil['email'] ?? '-' }}</p>
-                    </div>
-
-                    <!-- Tanggal Lahir -->
-                    <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Tanggal Lahir</p>
-                        <p class="text-gray-800 font-medium">{{ date('d F Y', strtotime($profil['tgl_lahir'])) }}</p>
-                    </div>
-
-                    <!-- Jenis Kelamin -->
-                    <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Jenis Kelamin</p>
-                        <p class="text-gray-800 font-medium">{{ $profil['jk'] }}</p>
-                    </div>
-
-                    <!-- No HP -->
-                    <div>
-                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">No. HP</p>
-                        <p class="text-gray-800 font-medium">{{ $profil['no_hp'] }}</p>
-                    </div>
-
-                    <!-- Kategori -->
+                    <!-- 1. Kategori -->
                     <div>
                         <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Kategori</p>
                         <p class="text-gray-800 font-medium">{{ $profil['kategori'] }}</p>
                     </div>
 
-                    <!-- Alamat (Full Width) -->
+                    <!-- 2. NIM / NIK -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">{{ $labelIdentitas }}</p>
+                        <p class="text-gray-800 font-medium">{{ $profil['no_identitas'] }}</p>
+                    </div>
+
+                    <!-- 3. Nama Lengkap -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Nama Lengkap</p>
+                        <p class="text-gray-800 font-medium">{{ $profil['nama'] }}</p>
+                    </div>
+
+                    <!-- 4. Email -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Email</p>
+                        <p class="text-gray-800 font-medium">{{ $profil['email'] ?? '-' }}</p>
+                    </div>
+
+                    <!-- 5. Jenis Kelamin -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Jenis Kelamin</p>
+                        <p class="text-gray-800 font-medium">{{ $profil['jk'] }}</p>
+                    </div>
+
+                    <!-- 6. Tanggal Lahir -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Tanggal Lahir</p>
+                        <p class="text-gray-800 font-medium">{{ date('d F Y', strtotime($profil['tgl_lahir'])) }}</p>
+                    </div>
+
+                    <!-- 7. No HP -->
+                    <div>
+                        <p class="text-xs font-semibold text-gray-400 uppercase mb-1">No. HP</p>
+                        <p class="text-gray-800 font-medium">{{ $profil['no_hp'] }}</p>
+                    </div>
+
+                    <!-- 8. Alamat (Full Width) -->
                     <div class="md:col-span-2">
                         <p class="text-xs font-semibold text-gray-400 uppercase mb-1">Alamat Lengkap</p>
                         <p class="text-gray-800 font-medium">{{ $profil['alamat'] }}</p>
@@ -126,6 +140,22 @@
             <!-- Body Form -->
             <form action="{{ route('pasien.profil.update') }}" method="POST" class="p-6 space-y-4">
                 @csrf
+
+                <!-- Kategori & NIM/NIK (ReadOnly) -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                        <input type="text" value="{{ $profil['kategori'] }}" readonly
+                            class="w-full border border-gray-200 rounded-xl p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
+                        <p class="text-xs text-gray-400 mt-1">Tidak dapat diubah</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">{{ $labelIdentitas }}</label>
+                        <input type="text" value="{{ $profil['no_identitas'] }}" readonly
+                            class="w-full border border-gray-200 rounded-xl p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
+                        <p class="text-xs text-gray-400 mt-1">Tidak dapat diubah</p>
+                    </div>
+                </div>
 
                 <!-- Nama -->
                 <div>
