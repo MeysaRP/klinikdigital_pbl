@@ -155,6 +155,13 @@
                     <h4 class="text-sm font-bold text-gray-500 uppercase mb-1">Resep Obat</h4>
                     <div id="modalResep" class="text-gray-800 bg-blue-50 p-3 rounded-lg text-sm">-</div>
                 </div>
+                <div class="flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg p-3">
+                    <span class="text-red-600 font-bold text-sm mt-px">[!]</span>
+                    <p class="text-xs text-red-700 leading-relaxed">
+                        Resep obat berlaku maksimal <strong>1x24 jam</strong> sejak tanggal pemeriksaan.
+                        Untuk bukti sah pengambilan obat di apotek, silakan <strong>Unduh PDF</strong> yang tersedia di bawah.
+                    </p>
+                </div>
             </div>
             <div class="flex items-center justify-end p-5 border-t border-gray-200 rounded-b-2xl gap-3 sticky bottom-0 bg-white z-10">
                 <button onclick="closeRiwayatModal()" type="button" class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-100">

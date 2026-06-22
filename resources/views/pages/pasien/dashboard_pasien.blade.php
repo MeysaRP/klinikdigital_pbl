@@ -33,7 +33,8 @@
                     <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Keluhan: {{ $nextBooking->keluhan }}</p>
                 @else
                     <h2 class="text-xl font-bold text-gray-800">Belum ada jadwal berikutnya</h2>
-                    <p class="mt-2 text-xs text-gray-500 bg-gray-50 px-3 py-1 rounded-full inline-block">Silakan buat janji jika Anda membutuhkan konsultasi.</p>
+                    {{-- FIX: Hapus style inline-block agar teks tidak menggantung/aneh saat kosong --}}
+                    <p class="mt-2 text-xs text-gray-500">Silakan buat janji jika Anda membutuhkan konsultasi.</p>
                 @endif
             </div>
             <div class="mt-4 md:mt-0 text-center bg-[#09637E] rounded-2xl p-4 text-white min-w-[140px]">
@@ -55,7 +56,8 @@
         <div class="lg:col-span-2 space-y-6">
 
             {{-- QUICK ACTIONS --}}
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {{-- FIX: Tambahkan px-6 agar sejajar dengan teks "Belum ada jadwal" di atas --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 px-6">
                 <a href="{{ route('pemesanan.jadwal') }}" class="flex items-center p-4 bg-white rounded-2xl shadow-sm border border-gray-200 hover:border-[#09637E] transition-all group">
                     <div class="p-2.5 rounded-xl bg-blue-50 text-[#09637E] mr-3 group-hover:bg-[#09637E] group-hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
@@ -93,7 +95,8 @@
                     </div>
                 </div>
 
-                <div class="divide-y divide-gray-100">
+                {{-- FIX: Tambahkan relative z-10 bg-white agar badge status tidak ketutup dropdown --}}
+                <div class="divide-y divide-gray-100 relative z-10 bg-white">
                     @forelse ($jadwal as $item)
                     <div class="p-5 hover:bg-gray-50 transition-colors">
                         <div class="flex flex-col md:flex-row md:items-center gap-4">
@@ -315,5 +318,4 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeDetailModal();
 });
 </script>
-
 @endsection
