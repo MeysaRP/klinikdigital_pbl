@@ -55,9 +55,9 @@
                     <p class="text-2xl font-bold text-gray-900 mt-1">{{ $selesaiCount }}</p>
                     <div class="mt-3">
                         <div class="w-full bg-gray-100 rounded-full h-1.5">
-                            <div class="bg-green-500 h-1.5 rounded-full transition-all duration-500" style="width:'{{ $persen }}%'"></div>
+                            <div class="bg-green-500 h-1.5 rounded-full transition-all duration-500" style="width: {{ $persen }}%"></div>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1">{{ $persen }}% dari pasien hari ini</p>
+                        <p class="text-xs text-gray-400 mt-1">{{ $persen }}% dari kuota {{ $kuotaHariIni }} pasien</p>
                     </div>
                 </div>
                 <div class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center ml-4">

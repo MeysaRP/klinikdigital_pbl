@@ -83,7 +83,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <h3 class="font-bold text-base sm:text-lg text-gray-800">Jadwal Pemeriksaan Saya</h3>
                         <form method="GET" action="{{ route('dashboard.pasien') }}" class="w-full sm:w-auto">
-                            <select name="status" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-700 text-sm rounded-xl p-2.5 focus:ring-[#09637E] w-full">
+                            <select name="status" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-700 text-sm rounded-xl p-2.5 focus:ring-[#09637E] w-full min-w-[150px]">
                                 <option value="all" {{ $statusAktif == 'all' ? 'selected' : '' }}>Semua Status</option>
                                 <option value="Menunggu" {{ $statusAktif == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
                                 <option value="Selesai" {{ $statusAktif == 'Selesai' ? 'selected' : '' }}>Selesai</option>
