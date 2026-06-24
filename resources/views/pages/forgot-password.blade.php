@@ -32,8 +32,13 @@
 
             <div>
                 <label class="block text-xs text-gray-400 uppercase tracking-wide font-medium mb-1.5">Email</label>
-                <input type="email" name="email" placeholder="Masukkan email Anda"
-                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
+                <input type="email" name="email" value="{{ old('email') }}" placeholder="Masukkan email Anda"
+                    class="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40
+                    @error('email') border-red-500 @enderror">
+
+                @error('email')
+                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <button type="submit"

@@ -67,9 +67,9 @@ class LoginController extends Controller
                 }
             }
 
-            return back()->with('error', 'Email / password / role salah!');
+            return back()->with('error', 'Role / Email / password salah!');
         }
-        
+
         // LOGIN PASIEN & ADMIN (Cek ke tabel users)
         $user = User::where('email', $request->email)->where('role', $request->role)->first();
 
@@ -86,7 +86,7 @@ class LoginController extends Controller
             return redirect('/dashboard/pasien');
         }
 
-        return back()->with('error', 'Email / password / role salah!');
+        return back()->with('error', 'Role / Email / password salah!');
     }
 
     public function logout(Request $request)
@@ -117,27 +117,31 @@ class LoginController extends Controller
         $user = User::where('email', $email)->first();
         $dokter = Dokter::where('email', $email)->first();
 
-        if ($user || $dokter) {
-            DB::table('password_reset_tokens')->where('email', $email)->delete();
-            $token = Str::random(60);
-            DB::table('password_reset_tokens')->insert([
-                'email' => $email,
-                'token' => Hash::make($token),
-                'created_at' => now(),
-            ]);
-            $resetUrl = url('/auth/reset-password/' . $token . '?email=' . urlencode($email));
+        // Validasi jika email tidak terdaftar di kedua tabel
+        if (!$user && !$dokter) {
+            return back()->with('error', 'Email tidak terdaftar!')->withInput();
+        }
 
-            try {
-                Mail::to($email)->send(new ResetPasswordMail($resetUrl));
-            } catch (TransportExceptionInterface $exception) {
-                DB::table('password_reset_tokens')->where('email', $email)->delete();
-                Log::error('Reset password email failed', ['email' => $email, 'error' => $exception->getMessage()]);
-                return back()->with('error', 'Gagal mengirim email reset password. Cek konfigurasi mail (.env) atau gunakan Mailtrap untuk development.');
-            } catch (\Exception $exception) {
-                DB::table('password_reset_tokens')->where('email', $email)->delete();
-                Log::error('Reset password email failed', ['email' => $email, 'error' => $exception->getMessage()]);
-                return back()->with('error', 'Terjadi kesalahan saat mengirim email. Silakan coba lagi nanti.');
-            }
+        // Jika email terdaftar, lanjut proses kirim token
+        DB::table('password_reset_tokens')->where('email', $email)->delete();
+        $token = Str::random(60);
+        DB::table('password_reset_tokens')->insert([
+            'email' => $email,
+            'token' => Hash::make($token),
+            'created_at' => now(),
+        ]);
+        $resetUrl = url('/auth/reset-password/' . $token . '?email=' . urlencode($email));
+
+        try {
+            Mail::to($email)->send(new ResetPasswordMail($resetUrl));
+        } catch (TransportExceptionInterface $exception) {
+            DB::table('password_reset_tokens')->where('email', $email)->delete();
+            Log::error('Reset password email failed', ['email' => $email, 'error' => $exception->getMessage()]);
+            return back()->with('error', 'Gagal mengirim email reset password. Cek konfigurasi mail (.env) atau gunakan Mailtrap untuk development.');
+        } catch (\Exception $exception) {
+            DB::table('password_reset_tokens')->where('email', $email)->delete();
+            Log::error('Reset password email failed', ['email' => $email, 'error' => $exception->getMessage()]);
+            return back()->with('error', 'Terjadi kesalahan saat mengirim email. Silakan coba lagi nanti.');
         }
 
         return back()->with('status', 'Jika email terdaftar, link reset password telah dikirim.');
