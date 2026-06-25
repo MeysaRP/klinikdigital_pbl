@@ -10,13 +10,17 @@ use Illuminate\Http\Request;
 
 class AntrianPasienController extends Controller
 {
+    // Fungsi untuk menampilkan daftar antrian pasien
     public function index(Request $request)
     {
+        // Ambil data dokter berdasarkan email dari session
         $dokter = Dokter::where('email', session('email'))->first();
         $dokterId = $dokter ? $dokter->id : 0;
 
+        // Ambil tanggal dari request atau gunakan tanggal saat ini
         $tanggal = $request->input('tanggal', now()->format('Y-m-d'));
 
+        // Ambil data antrian pasien berdasarkan dokter dan tanggal
         $antrians = Antrian::with('pemesanan', 'rekamMedis')
             ->whereHas('pemesanan', function($query) use ($dokterId, $tanggal) {
                 $query->where('dokter_id', $dokterId)
@@ -34,9 +38,11 @@ class AntrianPasienController extends Controller
             'userInitial'  => $dokter ? strtoupper(substr($dokter->nama, 0, 2)) : 'DK',
         ]);
     }
-
+    
+    // Fungsi untuk menyimpan rekam medis pasien
     public function simpanRekamMedis(Request $request)
     {
+        // Validasi input 
         $request->validate([
             'antrian_id' => 'required|exists:antrians,id',
             'status' => 'required|in:menunggu,selesai',
@@ -44,8 +50,10 @@ class AntrianPasienController extends Controller
             'catatan_dokter' => 'nullable',
         ]);
 
+        // Ambil data antrian berdasarkan ID
         $antrian = Antrian::with('pemesanan')->findOrFail($request->antrian_id);
 
+        // Simpan data resep obat 
         $resepObat = [];
         if ($request->has('obat_nama')) {
             for ($i = 0; $i < count($request->obat_nama); $i++) {
@@ -58,16 +66,18 @@ class AntrianPasienController extends Controller
                 }
             }
         }
-
+        // Simpan data rekam medis
         RekamMedis::updateOrCreate(['antrian_id' => $antrian->id], [
             'diagnosa'       => $request->diagnosa,
             'catatan_dokter' => $request->catatan_dokter,
             'resep_obat'     => $resepObat,
         ]);
 
+        // Update status antrian
         $antrian->status = $request->status;
         $antrian->save();
-
+        
+        // Jika status antrian diubah menjadi 'selesai', update status pemesanan menjadi 'Selesai'
         if ($antrian->pemesanan && $request->status === 'selesai') {
             $antrian->pemesanan->update(['status' => 'Selesai']);
         }
