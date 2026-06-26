@@ -33,8 +33,8 @@ class DashboardAdminController extends Controller
             });
         })
         ->latest()
-        ->paginate(10) // 🔥 FIX: pagination
-        ->withQueryString(); // 🔥 supaya filter tidak hilang saat pindah halaman
+        ->paginate(10) 
+        ->withQueryString(); // supaya filter tidak hilang saat pindah halaman
 
     $dokters = Dokter::orderBy('nama')->get();
 

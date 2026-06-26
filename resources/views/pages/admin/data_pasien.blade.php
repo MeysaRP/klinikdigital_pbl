@@ -197,50 +197,85 @@
         }
 
         function saveEdit() {
+
+            const nama = document.getElementById('edit_nama').value.trim();
+            const tgl = document.getElementById('edit_tgl').value;
+            const jk = document.getElementById('edit_jk').value;
+            const hp = document.getElementById('edit_hp').value.trim();
+            const alamat = document.getElementById('edit_alamat').value.trim();
+
+            if (
+                nama === "" ||
+                tgl === "" ||
+                jk === "" ||
+                hp === "" ||
+                alamat === ""
+            ) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Peringatan",
+                    text: "Data tidak boleh kosong!"
+                });
+
+                return;
+            }
+
             const id = currentRow.dataset.id;
 
             fetch(`/dashboard/admin/data_pasien/${id}`, {
+
                     method: "PUT",
+
                     headers: {
                         "Content-Type": "application/json",
+                        "Accept": "application/json",
                         "X-CSRF-TOKEN": "{{ csrf_token() }}"
                     },
+
                     body: JSON.stringify({
-                        name: document.getElementById('edit_nama').value,
-                        tgl_lahir: document.getElementById('edit_tgl').value,
-                        jk: document.getElementById('edit_jk').value,
-                        no_hp: document.getElementById('edit_hp').value,
-                        alamat: document.getElementById('edit_alamat').value
+                        name: nama,
+                        tgl_lahir: tgl,
+                        jk: jk,
+                        no_hp: hp,
+                        alamat: alamat
                     })
+
                 })
+
                 .then(async res => {
                     const data = await res.json();
-                    if (!res.ok) throw new Error(data.message);
+
+                    if (!res.ok) {
+                        throw new Error(data.message);
+                    }
+
                     return data;
                 })
-                .then(data => {
 
-                    currentRow.querySelector('.pasien-no_hp').textContent =
-                        document.getElementById('edit_hp').value;
+                .then(data => {
 
                     closeEditModal();
 
                     Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil',
-                        text: data.message,
-                        timer: 2000,
-                        showConfirmButton: false
+                        icon: "success",
+                        title: "Berhasil",
+                        text: data.message
+                    }).then(() => {
+                        location.reload();
                     });
 
                 })
+
                 .catch(err => {
+
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: err.message || 'Terjadi kesalahan'
+                        icon: "error",
+                        title: "Gagal",
+                        text: err.message
                     });
+
                 });
+
         }
 
         function cariPasien(q) {

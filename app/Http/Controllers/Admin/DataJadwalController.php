@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 class DataJadwalController extends Controller
 {
+    // Menampilkan halaman data jadwal beserta data dokter
     public function index()
     {
         return view('pages.admin.data_jadwal', [
@@ -16,7 +17,6 @@ class DataJadwalController extends Controller
             'dokters' => Dokter::orderBy('nama')->get(),
         ]);
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -27,7 +27,6 @@ class DataJadwalController extends Controller
             'kuota_pasien' => 'required|integer',
             'status' => 'required',
         ]);
-
         Jadwal::create($request->only(
             'dokter_id',
             'hari',
@@ -51,6 +50,7 @@ class DataJadwalController extends Controller
             'status' => 'required',
         ]);
 
+        // Mencari jadwal berdasarkan ID dan mengupdate datanya
         Jadwal::findOrFail($id)->update($request->only(
             'dokter_id',
             'hari',
@@ -60,6 +60,7 @@ class DataJadwalController extends Controller
             'status'
         ));
 
+        // Kembali ke halaman sebelumnya dengan pesan sukses
         return redirect()->back()->with('success', 'Jadwal berhasil diupdate');
     }
 }

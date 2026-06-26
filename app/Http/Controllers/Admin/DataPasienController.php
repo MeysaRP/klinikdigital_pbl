@@ -9,17 +9,17 @@ use App\Models\User;
 class DataPasienController extends Controller
 {
     public function index(Request $request)
-{
-    $query = User::where('role', 'pasien');
+    {
+        $query = User::where('role', 'pasien');
 
-    if ($request->filled('kategori')) {
-        $query->where('kategori', $request->kategori);
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        $pasien = $query->orderBy('id', 'desc')->get();
+
+        return view('pages.admin.data_pasien', compact('pasien'));
     }
-
-    $pasien = $query->orderBy('id', 'desc')->get();
-
-    return view('pages.admin.data_pasien', compact('pasien'));
-}
 
     public function update(Request $request, $id)
     {
@@ -27,10 +27,10 @@ class DataPasienController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:100',
-            'no_hp' => 'nullable|string|max:15',
-            'alamat' => 'nullable|string|max:255',
-            'tgl_lahir' => 'nullable|date',
-            'jk' => 'nullable|string|max:20',
+            'no_hp' => 'required|string|max:15',
+            'alamat' => 'required|string|max:255',
+            'tgl_lahir' => 'required|date',
+            'jk' => 'required|string|max:20',
         ]);
 
         $pasien->update([
