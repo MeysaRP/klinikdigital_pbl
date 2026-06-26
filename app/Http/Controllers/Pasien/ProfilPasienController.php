@@ -59,12 +59,32 @@ class ProfilPasienController extends Controller
     {
         $user = User::where('email', session('email'))->firstOrFail();
 
-        $user->name = $request->nama ?: $user->name;
-        $user->tgl_lahir = $request->tgl_lahir ?: $user->tgl_lahir;
-        $user->jk = $request->jk ?: $user->jk;
-        $user->no_hp = $request->no_hp ?: $user->no_hp;
-        $user->alamat = $request->alamat ?: $user->alamat;
+        $request->validate([
+            'nama'      => 'required|string|max:255',
+            'tgl_lahir' => 'required|date',
+            'jk'        => 'required|in:Laki-laki,Perempuan',
+            'no_hp'     => 'required|string|max:15',
+            'alamat'    => 'required|string|min:3|not_in:-',
+        ], [
+            'nama.required'      => 'Data wajib diisi',
+            'tgl_lahir.required' => 'Data wajib diisi',
+            'jk.required'        => 'Data wajib diisi',
+            'no_hp.required'     => 'Data wajib diisi',
+            'alamat.required'    => 'Data wajib diisi',
+            'alamat.min'         => 'Data wajib diisi',
+            'alamat.not_in'      => 'Data wajib diisi',
+        ]);
+
+        // Update data setelah lolos validasi
+        $user->name      = $request->nama;
+        $user->tgl_lahir = $request->tgl_lahir;
+        $user->jk        = $request->jk;
+        $user->no_hp     = $request->no_hp;
+        $user->alamat    = $request->alamat;
         $user->save();
+
+        // Update session name biar langsung berubah di sidebar/topbar
+        session(['name' => $request->nama]);
 
         return redirect()->route('pasien.profil')->with('success', 'Profil berhasil diperbarui!');
     }

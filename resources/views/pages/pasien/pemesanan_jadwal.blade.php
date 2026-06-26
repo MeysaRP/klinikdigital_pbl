@@ -124,7 +124,7 @@
                         </div>
                     @endif
                     @error('jadwal_id')
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600">Dokter dan jadwal wajib diisi</p>
                     @enderror
                 </div>
 

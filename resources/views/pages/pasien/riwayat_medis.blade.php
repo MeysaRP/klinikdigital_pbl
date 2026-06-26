@@ -125,7 +125,7 @@
     </div>
 </div>
 
-<!-- ================= POP UP MODAL ================= -->
+<!-- ================= POP UP MODAL DETAIL ================= -->
 <div id="detailModal" tabindex="-1" aria-hidden="true" class="hidden fixed top-0 right-0 left-0 z-50 justify-center items-center flex">
     <div class="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-200">
@@ -173,6 +173,29 @@
                 </a>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL POPUP ERROR ==================== -->
+<div id="modalPopup" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="tutupModal()"></div>
+    <!-- Konten Modal -->
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 transform scale-95 opacity-0 transition-all duration-300" id="modalContent">
+        <!-- Ikon -->
+        <div class="flex justify-center mb-4">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+        </div>
+        <!-- Judul -->
+        <h3 class="text-lg font-bold text-gray-800 text-center mb-2">Unduh Gagal</h3>
+        <!-- Pesan -->
+        <p id="modalPesan" class="text-sm text-gray-500 text-center mb-6"></p>
+        <!-- Tombol -->
+        <button onclick="tutupModal()" class="w-full bg-[#09637E] hover:bg-[#074d61] text-white font-semibold py-2.5 rounded-xl transition-colors">
+            Mengerti
+        </button>
     </div>
 </div>
 
@@ -263,5 +286,49 @@
         document.getElementById('detailModal').classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
     }
+
+    // === MODAL POPUP ERROR FUNCTIONS ===
+    function tampilkanModal(pesan) {
+        const modal = document.getElementById('modalPopup');
+        const content = document.getElementById('modalContent');
+        const text = document.getElementById('modalPesan');
+
+        text.textContent = pesan;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        requestAnimationFrame(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        });
+    }
+
+    function tutupModal() {
+        const modal = document.getElementById('modalPopup');
+        const content = document.getElementById('modalContent');
+
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 200);
+    }
+
+    // Tutup semua modal dengan ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            tutupModal();
+            closeRiwayatModal();
+        }
+    });
+
+    // Auto tampilkan modal kalau ada popup_error dari server
+    @if(session('popup_error'))
+        document.addEventListener('DOMContentLoaded', function() {
+            tampilkanModal('{{ session("popup_error") }}');
+        });
+    @endif
 </script>
 @endsection

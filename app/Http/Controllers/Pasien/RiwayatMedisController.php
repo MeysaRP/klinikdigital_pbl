@@ -69,16 +69,18 @@ class RiwayatMedisController extends Controller
             ])
             ->where('email', $email)
             ->where('id', $id)
-            ->firstOrFail();
+            ->first();
 
-        if ($booking->status !== 'Selesai') {
-            abort(404);
+        // Cek apakah booking ada dan statusnya sudah Selesai
+        if (!$booking || $booking->status !== 'Selesai') {
+            return back()->with('popup_error', 'Tidak bisa diunduh karena data belum diisi oleh dokter');
         }
 
         $rekam = $booking->antrian?->rekamMedis;
 
+        // Cek apakah rekam medisnya sudah diisi dokter
         if (!$rekam) {
-            abort(404);
+            return back()->with('popup_error', 'Tidak bisa diunduh karena data belum diisi oleh dokter');
         }
 
         // Hitung masa berlaku resep (H+1 dari tanggal pemeriksaan)

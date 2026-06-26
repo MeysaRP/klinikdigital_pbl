@@ -29,13 +29,13 @@ class PemesananJadwalController extends Controller
         try {
             $carbonDate = Carbon::parse($selectedDate);
             $dayMap = [
-                'Monday'    => 'senin',
-                'Tuesday'   => 'selasa',
+                'Monday' => 'senin',
+                'Tuesday' => 'selasa',
                 'Wednesday' => 'rabu',
-                'Thursday'  => 'kamis',
-                'Friday'    => 'jumat',
-                'Saturday'  => 'sabtu',
-                'Sunday'    => 'minggu',
+                'Thursday' => 'kamis',
+                'Friday' => 'jumat',
+                'Saturday' => 'sabtu',
+                'Sunday' => 'minggu',
             ];
             $selectedDayName = $dayMap[$carbonDate->format('l')] ?? null;
             if ($selectedDayName) {
@@ -74,8 +74,8 @@ class PemesananJadwalController extends Controller
                 });
 
                 $jadwalPerHari[] = [
-                    'hari'    => ucfirst($hari),
-                    'jumlah'  => $filteredWithQuota->count(),
+                    'hari' => ucfirst($hari),
+                    'jumlah' => $filteredWithQuota->count(),
                     'jadwals' => $filteredWithQuota,
                 ];
             }
@@ -103,14 +103,14 @@ class PemesananJadwalController extends Controller
         }
 
         return view('pages.pasien.pemesanan_jadwal', [
-            'jadwalPerHari'        => $jadwalPerHari,
-            'bookings'             => $bookings,
-            'selectedDate'         => $selectedDate,
-            'selectedDayName'      => $selectedDayName,
-            'userName'             => $user?->name ?? 'Pasien',
-            'userRole'             => 'Pasien',
-            'userInitial'          => $this->getInitials($user),
-            'tanggalSudahDipesan'  => $tanggalSudahDipesan,
+            'jadwalPerHari' => $jadwalPerHari,
+            'bookings' => $bookings,
+            'selectedDate' => $selectedDate,
+            'selectedDayName' => $selectedDayName,
+            'userName' => $user?->name ?? 'Pasien',
+            'userRole' => 'Pasien',
+            'userInitial' => $this->getInitials($user),
+            'tanggalSudahDipesan' => $tanggalSudahDipesan,
         ]);
     }
 
@@ -118,9 +118,11 @@ class PemesananJadwalController extends Controller
     public function proses(Request $request)
     {
         $request->validate([
-            'tanggal'   => 'required|date|after_or_equal:today',
+            'tanggal' => 'required|date|after_or_equal:today',
             'jadwal_id' => 'required|exists:jadwals,id',
-            'keluhan'   => 'nullable|string|max:500',
+            'keluhan' => 'nullable|string|max:500',
+        ], [
+            'jadwal_id.required' => 'Dokter dan jadwal wajib diisi',
         ]);
 
         $email = session('email');
@@ -161,24 +163,24 @@ class PemesananJadwalController extends Controller
         $nomorAntrian = $lastNomorAntrian ? $lastNomorAntrian + 1 : 1;
 
         $booking = PemesananJadwal::create([
-            'user_id'       => $user?->id,
-            'dokter_id'     => $jadwal->dokter_id,
-            'jadwal_id'     => $jadwal->id,
-            'email'         => $email,
-            'nama_pasien'   => $user?->name,
-            'tanggal'       => $request->tanggal,
-            'jam_mulai'     => $jadwal->jam_mulai,
-            'jam_selesai'   => $jadwal->jam_selesai,
+            'user_id' => $user?->id,
+            'dokter_id' => $jadwal->dokter_id,
+            'jadwal_id' => $jadwal->id,
+            'email' => $email,
+            'nama_pasien' => $user?->name,
+            'tanggal' => $request->tanggal,
+            'jam_mulai' => $jadwal->jam_mulai,
+            'jam_selesai' => $jadwal->jam_selesai,
             'nomor_antrian' => $nomorAntrian,
-            'keluhan'       => $request->keluhan,
-            'status'        => 'Menunggu',
+            'keluhan' => $request->keluhan,
+            'status' => 'Menunggu',
         ]);
 
         // Buat data antrian untuk booking ini
         Antrian::create([
-            'pemesanan_id'  => $booking->id,
+            'pemesanan_id' => $booking->id,
             'nomor_antrian' => 'A' . str_pad($nomorAntrian, 3, '0', STR_PAD_LEFT),
-            'status'        => 'menunggu',
+            'status' => 'menunggu',
         ]);
 
         return redirect()->route('pemesanan.berhasil', $booking->id);
@@ -196,9 +198,9 @@ class PemesananJadwalController extends Controller
             ->firstOrFail();
 
         return view('pages.pasien.pemesanan_berhasil', [
-            'booking'     => $booking,
-            'userName'    => $user?->name ?? 'Pasien',
-            'userRole'    => 'Pasien',
+            'booking' => $booking,
+            'userName' => $user?->name ?? 'Pasien',
+            'userRole' => 'Pasien',
             'userInitial' => $this->getInitials($user),
         ]);
     }

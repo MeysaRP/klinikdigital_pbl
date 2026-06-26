@@ -126,8 +126,8 @@
 </div>
 
 <!-- ================= POP UP MODAL EDIT PROFIL ================= -->
-<div id="editModal" tabindex="-1" aria-hidden="true" class="hidden fixed top-0 right-0 left-0 z-50 justify-center items-center flex">
-    <div class="relative w-full max-w-lg max-h-full mx-4">
+<div id="editModal" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4">
+    <div class="relative w-full max-w-lg my-auto">
         <div class="relative bg-white rounded-2xl shadow-2xl border border-gray-200">
             <!-- Header -->
             <div class="flex items-center justify-between p-5 border-b border-gray-200 bg-gray-50 rounded-t-2xl">
@@ -145,14 +145,12 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
-                        <input type="text" value="{{ $profil['kategori'] }}" readonly
-                            class="w-full border border-gray-200 rounded-xl p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
+                        <input type="text" value="{{ $profil['kategori'] }}" readonly class="w-full border border-gray-200 rounded-xl p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
                         <p class="text-xs text-gray-400 mt-1">Tidak dapat diubah</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">{{ $labelIdentitas }}</label>
-                        <input type="text" value="{{ $profil['no_identitas'] }}" readonly
-                            class="w-full border border-gray-200 rounded-xl p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
+                        <input type="text" value="{{ $profil['no_identitas'] }}" readonly class="w-full border border-gray-200 rounded-xl p-2.5 text-sm bg-gray-50 text-gray-500 cursor-not-allowed">
                         <p class="text-xs text-gray-400 mt-1">Tidak dapat diubah</p>
                     </div>
                 </div>
@@ -160,36 +158,51 @@
                 <!-- Nama -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-                    <input type="text" name="nama" value="{{ $profil['nama'] }}" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
+                    <input type="text" name="nama" value="{{ old('nama', $profil['nama']) }}" class="w-full border @error('nama') border-red-500 @else border-gray-300 @enderror rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
+                    @error('nama')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <!-- Tanggal Lahir -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Tanggal Lahir</label>
-                        <input type="date" name="tgl_lahir" value="{{ $profil['tgl_lahir'] }}" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
+                        <input type="date" name="tgl_lahir" value="{{ old('tgl_lahir', $profil['tgl_lahir']) }}" class="w-full border @error('tgl_lahir') border-red-500 @else border-gray-300 @enderror rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
+                        @error('tgl_lahir')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <!-- Jenis Kelamin -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Jenis Kelamin</label>
-                        <select name="jk" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
-                            <option value="Laki-laki" {{ $profil['jk'] == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                            <option value="Perempuan" {{ $profil['jk'] == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                        <select name="jk" class="w-full border @error('jk') border-red-500 @else border-gray-300 @enderror rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
+                            <option value="Laki-laki" {{ (old('jk', $profil['jk']) == 'Laki-laki') ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="Perempuan" {{ (old('jk', $profil['jk']) == 'Perempuan') ? 'selected' : '' }}>Perempuan</option>
                         </select>
+                        @error('jk')
+                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 
                 <!-- No HP -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">No. HP</label>
-                    <input type="text" name="no_hp" value="{{ $profil['no_hp'] }}" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
+                    <input type="text" name="no_hp" value="{{ old('no_hp', $profil['no_hp']) }}" class="w-full border @error('no_hp') border-red-500 @else border-gray-300 @enderror rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">
+                    @error('no_hp')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Alamat -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Alamat Lengkap</label>
-                    <textarea name="alamat" rows="3" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">{{ $profil['alamat'] }}</textarea>
+                    <textarea name="alamat" rows="3" class="w-full border @error('alamat') border-red-500 @else border-gray-300 @enderror rounded-xl p-2.5 text-sm focus:ring-[#09637E] focus:border-[#09637E]">{{ old('alamat', $profil['alamat']) }}</textarea>
+                    @error('alamat')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <!-- Footer -->
@@ -217,5 +230,11 @@
         document.getElementById('editModal').classList.add('hidden');
         document.body.classList.remove('overflow-hidden');
     }
+
+    @if($errors->any())
+        document.addEventListener("DOMContentLoaded", function() {
+            openEditModal();
+        });
+    @endif
 </script>
 @endsection
