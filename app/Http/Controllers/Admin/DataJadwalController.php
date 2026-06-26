@@ -18,35 +18,26 @@ class DataJadwalController extends Controller
         ]);
     }
     public function store(Request $request)
-    {
-        $request->validate([
-            'dokter_id' => 'required|exists:dokters,id',
-            'hari' => 'required',
-            'jam_mulai' => 'required',
-            'jam_selesai' => 'required',
-            'kuota_pasien' => 'required|integer',
-        ]);
+{
+    $request->validate([
+        'dokter_id' => 'required|exists:dokters,id',
+        'hari' => 'required',
+        'jam_mulai' => 'required',
+        'jam_selesai' => 'required',
+        'kuota_pasien' => 'required|integer',
+    ]);
 
-        Jadwal::create($request->only(
-            'dokter_id',
-            'hari',
-            'jam_mulai',
-            'jam_selesai',
-            'kuota_pasien',
-            'status'
-        ));
+    Jadwal::create([
+        'dokter_id' => $request->dokter_id,
+        'hari' => $request->hari,
+        'jam_mulai' => $request->jam_mulai,
+        'jam_selesai' => $request->jam_selesai,
+        'kuota_pasien' => $request->kuota_pasien,
+        'status' => 'Aktif', // Otomatis diisi Aktif saat baru dibuat
+    ]);
 
-        Jadwal::create([
-            'dokter_id' => $request->dokter_id,
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-            'kuota_pasien' => $request->kuota_pasien,
-            'status' => 'Aktif',  
-        ]);
-
-        return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan');
-    }
+    return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan');
+}
 
     public function update(Request $request, $id)
     {
@@ -70,6 +61,6 @@ class DataJadwalController extends Controller
         ));
 
         // Kembali ke halaman sebelumnya dengan pesan sukses
-        return redirect()->back()->with('success', 'Jadwal berhasil diupdate');
+        return redirect()->back()->with('success', 'Jadwal berhasil diperbarui');
     }
 }

@@ -14,7 +14,7 @@
 
     <div class="space-y-5">
 
-                <!-- SEARCH & FILTER -->
+        <!-- SEARCH & FILTER -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4">
             <form method="GET" class="flex flex-col sm:flex-row gap-3">
                 <!-- Search -->
@@ -34,8 +34,7 @@
                 </select>
 
                 <!-- Button Filter -->
-                <button type="submit"
-                        class="bg-[#09637E] text-white px-4 py-2 rounded-lg text-sm hover:opacity-90">
+                <button type="submit" class="bg-[#09637E] text-white px-4 py-2 rounded-lg text-sm hover:opacity-90">
                     Filter
                 </button>
 
@@ -67,7 +66,7 @@
                     </thead>
 
                     <tbody class="text-gray-700 divide-y divide-gray-100">
-                        @foreach ($pasien as $p)
+                        @forelse ($pasien as $p)
                             <tr class="pasien-row hover:bg-gray-50 transition" data-id="{{ $p->id }}"
                                 data-nama="{{ $p->name }}">
 
@@ -127,7 +126,23 @@
                                 </td>
 
                             </tr>
-                        @endforeach
+                        @empty
+                            {{-- Tampilan jika dari database langsung kosong --}}
+                            <tr id="noDataRowEmpty">
+                                <td colspan="9" class="px-5 py-10 text-center text-gray-500">
+                                    Data tidak ditemukan
+                                </td>
+                            </tr>
+                        @endforelse
+
+                        {{-- Tampilan jika data ada, tapi hasil cari di search box tidak ketemu --}}
+                        @if ($pasien->isNotEmpty())
+                            <tr id="noDataRowSearch" class="hidden">
+                                <td colspan="9" class="px-5 py-10 text-center text-gray-500">
+                                    Data tidak ditemukan
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
 
                 </table>
@@ -303,11 +318,28 @@
         }
 
         function cariPasien(q) {
-            document.querySelectorAll('.pasien-row').forEach(row => {
-                row.style.display =
-                    row.dataset.nama.toLowerCase().includes(q.toLowerCase()) ?
-                    '' : 'none';
+            let visibleCount = 0;
+            const rows = document.querySelectorAll('.pasien-row');
+            const noDataRow = document.getElementById('noDataRowSearch');
+
+            rows.forEach(row => {
+                // Cek apakah nama mengandung text yang dicari
+                if (row.dataset.nama.toLowerCase().includes(q.toLowerCase())) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
             });
+
+            // Jika tidak ada baris yang muncul, tampilkan tulisan "Data tidak ditemukan"
+            if (noDataRow) {
+                if (visibleCount === 0) {
+                    noDataRow.classList.remove('hidden');
+                } else {
+                    noDataRow.classList.add('hidden');
+                }
+            }
         }
     </script>
 @endsection

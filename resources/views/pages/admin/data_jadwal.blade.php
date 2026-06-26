@@ -43,8 +43,8 @@
                 </thead>
 
                 <tbody id="tableJadwal" class="text-gray-700 divide-y divide-gray-100">
-                    @foreach($jadwal as $j)
-                    <tr class="hover:bg-gray-50 transition">
+                    @forelse($jadwal as $j)
+                    <tr class="jadwal-row hover:bg-gray-50 transition">
 
                         <td class="px-5 py-3.5 font-medium nama">
                             {{ optional($j->dokter)->nama ?? 'Dokter Tidak Ditemukan (ID: ' . $j->dokter_id . ')' }}
@@ -79,7 +79,21 @@
                             </button>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr id="noDataRowEmpty">
+                        <td colspan="6" class="px-5 py-10 text-center text-gray-500">
+                            Data tidak ditemukan
+                        </td>
+                    </tr>
+                    @endforelse
+
+                    @if ($jadwal->isNotEmpty())
+                    <tr id="noDataRowSearch" class="hidden">
+                        <td colspan="6" class="px-5 py-10 text-center text-gray-500">
+                            Data tidak ditemukan
+                        </td>
+                    </tr>
+                    @endif
                 </tbody>
 
             </table>
@@ -87,11 +101,11 @@
     </div>
 </div>
 
-{{-- ================= MODAL TAMBAH (TANPA STATUS) ================= --}}
+{{-- ================= MODAL TAMBAH ================= --}}
 <div id="modalTambah" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center z-50 pointer-events-none p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-y-auto max-h-[calc(100vh-4rem]">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-y-auto max-h-[calc(100vh-4rem)]">
 
-        <form action="{{ route('data.jadwal.store') }}" method="POST">
+        <form action="{{ route('data.jadwal.store') }}" method="POST" onsubmit="return validateTambahJadwal()">
             @csrf
 
             <div class="px-6 py-5">
@@ -102,17 +116,19 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Pilih Dokter</label>
-                    <select name="dokter_id" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                    <select name="dokter_id" id="tDokter" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
                         <option value="" disabled selected>-- Pilih Dokter --</option>
                         @foreach($dokters as $d)
                         <option value="{{ $d->id }}">{{ $d->nama }}</option>
                         @endforeach
                     </select>
+                    <p id="errDokter" class="text-red-500 text-xs mt-1 hidden">Data wajib diisi</p>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Hari</label>
-                    <select name="hari" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                    <select name="hari" id="tHari" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                        <option value="" disabled selected>-- Pilih Hari --</option>
                         <option>Senin</option>
                         <option>Selasa</option>
                         <option>Rabu</option>
@@ -121,32 +137,42 @@
                         <option>Sabtu</option>
                         <option>Minggu</option>
                     </select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Jam Mulai</label>
-                        <select name="jam_mulai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
-                            @for($i=0;$i<24;$i++)
-                                <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                                @endfor
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Jam Selesai</label>
-                        <select name="jam_selesai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
-                            @for($i=0;$i<24;$i++)
-                                <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                                @endfor
-                        </select>
-                    </div>
+                    <p id="errHari" class="text-red-500 text-xs mt-1 hidden">Data wajib diisi</p>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Kuota</label>
-                    <input type="number" name="kuota_pasien"
-                        class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition" min="1" placeholder="Contoh: 15">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Jam Mulai</label>
+                            <select name="jam_mulai" id="tMulai" onchange="hitungKuotaOtomatis('tMulai', 'tSelesai', 'tKuota')" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                                <option value="" disabled selected>-- Jam Mulai --</option>
+                                @for($i=0;$i<24;$i++)
+                                    <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                                @endfor
+                            </select>
+                            <p id="errMulai" class="text-red-500 text-xs mt-1 hidden">Data wajib diisi</p>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Jam Selesai</label>
+                            <select name="jam_selesai" id="tSelesai" onchange="hitungKuotaOtomatis('tMulai', 'tSelesai', 'tKuota')" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                                <option value="" disabled selected>-- Jam Selesai --</option>
+                                @for($i=0;$i<24;$i++)
+                                    <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                                @endfor
+                            </select>
+                            <p id="errSelesai" class="text-red-500 text-xs mt-1 hidden">Data wajib diisi</p>
+                        </div>
+                    </div>
+                    <p id="errWaktuTambah" class="text-red-500 text-xs mt-2 hidden">Jam selesai harus lebih besar dari jam mulai!</p>
+                </div>
+                
+                {{-- KUOTA OTOMATIS (READ-ONLY) --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Kuota Pasien (Otomatis)</label>
+                    <input type="number" name="kuota_pasien" id="tKuota"
+                        class="w-full border border-gray-200 bg-gray-100 rounded-xl px-4 py-2.5 outline-none cursor-not-allowed text-gray-500 font-semibold" readonly placeholder="Pilih jam praktik terlebih dahulu">
+                    <p class="text-xs text-gray-400 mt-1">*Dihitung otomatis (15 menit / pasien)</p>
                 </div>
 
             </div>
@@ -166,11 +192,11 @@
     </div>
 </div>
 
-{{-- ================= MODAL EDIT (ADA STATUS) ================= --}}
+{{-- ================= MODAL EDIT ================= --}}
 <div id="modalEdit" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center z-50 pointer-events-none p-4">
     <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-y-auto max-h-[calc(100vh-4rem)]">
 
-        <form id="formEdit" method="POST">
+        <form id="formEdit" method="POST" onsubmit="return validateEditJadwal()">
             @csrf
             @method('PUT')
 
@@ -180,7 +206,6 @@
 
             <div class="p-6 pt-0 space-y-4">
 
-                {{-- DOKTER: Read-Only, tidak bisa diubah saat edit jadwal --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Dokter</label>
                     <input type="hidden" id="eDokterId" name="dokter_id">
@@ -200,33 +225,37 @@
                     </select>
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Jam Mulai</label>
-                        <select id="eMulai" name="jam_mulai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
-                            @for($i=0;$i<24;$i++)
-                                <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                                @endfor
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-600 mb-1">Jam Selesai</label>
-                        <select id="eSelesai" name="jam_selesai" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
-                            @for($i=0;$i<24;$i++)
-                                <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
-                                @endfor
-                        </select>
-                    </div>
-                </div>
-
                 <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Kuota</label>
-                    <input type="number" id="eKuota" name="kuota_pasien"
-                        class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition" min="1">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Jam Mulai</label>
+                            <select id="eMulai" name="jam_mulai" onchange="hitungKuotaOtomatis('eMulai', 'eSelesai', 'eKuota')" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                                @for($i=0;$i<24;$i++)
+                                    <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600 mb-1">Jam Selesai</label>
+                            <select id="eSelesai" name="jam_selesai" onchange="hitungKuotaOtomatis('eMulai', 'eSelesai', 'eKuota')" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
+                                @for($i=0;$i<24;$i++)
+                                    <option value="{{ sprintf('%02d:00',$i) }}">{{ sprintf('%02d:00',$i) }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <p id="errWaktuEdit" class="text-red-500 text-xs mt-2 hidden">Jam selesai harus lebih besar dari jam mulai!</p>
                 </div>
 
-                {{-- DROPDOWN STATUS HANYA ADA DI EDIT --}}
+                {{-- KUOTA OTOMATIS (READ-ONLY) --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-1">Kuota Pasien (Otomatis)</label>
+                    <input type="number" id="eKuota" name="kuota_pasien"
+                        class="w-full border border-gray-200 bg-gray-100 rounded-xl px-4 py-2.5 outline-none cursor-not-allowed text-gray-500 font-semibold" readonly>
+                    <p class="text-xs text-gray-400 mt-1">*Dihitung otomatis (15 menit / pasien)</p>
+                </div>
+
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
                     <select id="eStatus" name="status" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
@@ -261,12 +290,80 @@
         const modal = document.getElementById('modalTambah');
         modal.classList.remove('hidden', 'pointer-events-none');
         modal.classList.add('flex');
+        
+        // Sembunyikan teks merah validasi saat modal dibuka
+        document.getElementById('errDokter').classList.add('hidden');
+        document.getElementById('errHari').classList.add('hidden');
+        document.getElementById('errMulai').classList.add('hidden');
+        document.getElementById('errSelesai').classList.add('hidden');
+        document.getElementById('errWaktuTambah').classList.add('hidden');
+        
+        // Reset perhitungan saat dibuka
+        hitungKuotaOtomatis('tMulai', 'tSelesai', 'tKuota');
     }
 
     function closeTambah() {
         const modal = document.getElementById('modalTambah');
         modal.classList.add('hidden', 'pointer-events-none');
         modal.classList.remove('flex');
+    }
+
+    // === FUNGSI VALIDASI TULISAN MERAH (TAMBAH JADWAL) ===
+    function validateTambahJadwal() {
+        let isValid = true;
+        
+        const dokter = document.getElementById('tDokter').value;
+        const hari = document.getElementById('tHari').value;
+        const mulai = document.getElementById('tMulai').value;
+        const selesai = document.getElementById('tSelesai').value;
+
+        // Sembunyikan semua dulu
+        document.getElementById('errDokter').classList.add('hidden');
+        document.getElementById('errHari').classList.add('hidden');
+        document.getElementById('errMulai').classList.add('hidden');
+        document.getElementById('errSelesai').classList.add('hidden');
+        document.getElementById('errWaktuTambah').classList.add('hidden');
+
+        if (dokter === "" || dokter === null) {
+            document.getElementById('errDokter').classList.remove('hidden');
+            isValid = false;
+        }
+        if (hari === "" || hari === null) {
+            document.getElementById('errHari').classList.remove('hidden');
+            isValid = false;
+        }
+        if (mulai === "" || mulai === null) {
+            document.getElementById('errMulai').classList.remove('hidden');
+            isValid = false;
+        }
+        if (selesai === "" || selesai === null) {
+            document.getElementById('errSelesai').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Validasi Waktu: Jam selesai harus lebih besar dari jam mulai (hanya dicek kalau keduanya nggak kosong)
+        if (mulai !== "" && selesai !== "" && parseInt(selesai.split(':')[0]) <= parseInt(mulai.split(':')[0])) {
+            document.getElementById('errWaktuTambah').classList.remove('hidden');
+            isValid = false;
+        }
+
+        return isValid; // Kalau false, form nggak akan di-submit
+    }
+
+    // === FUNGSI VALIDASI TULISAN MERAH (EDIT JADWAL) ===
+    function validateEditJadwal() {
+        let isValid = true;
+        const mulai = document.getElementById('eMulai').value;
+        const selesai = document.getElementById('eSelesai').value;
+
+        document.getElementById('errWaktuEdit').classList.add('hidden');
+
+        if (parseInt(selesai.split(':')[0]) <= parseInt(mulai.split(':')[0])) {
+            document.getElementById('errWaktuEdit').classList.remove('hidden');
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     function openEdit(el) {
@@ -281,9 +378,14 @@
         document.getElementById('eHari').value = el.dataset.hari;
         document.getElementById('eMulai').value = el.dataset.mulai.substring(0, 5);
         document.getElementById('eSelesai').value = el.dataset.selesai.substring(0, 5);
-        document.getElementById('eKuota').value = el.dataset.kuota;
-        // AMBIL BARIS INI JUGA BIAR GA ERROR
+        
+        // Hitung ulang kuota di mode edit
+        hitungKuotaOtomatis('eMulai', 'eSelesai', 'eKuota'); 
+        
         document.getElementById('eStatus').value = el.dataset.status;
+
+        // Sembunyikan validasi error waktu saat modal edit dibuka
+        document.getElementById('errWaktuEdit').classList.add('hidden');
 
         const modal = document.getElementById('modalEdit');
         modal.classList.remove('hidden', 'pointer-events-none');
@@ -296,18 +398,62 @@
         modal.classList.remove('flex');
     }
 
-    /* SEARCH */
+    // === FUNGSI HITUNG KUOTA OTOMATIS ===
+    const PASIEN_PER_JAM = 4; // 1 jam = 60 menit. 60 / 15 menit = 4 pasien.
+
+    function hitungKuotaOtomatis(mulaiId, selesaiId, kuotaId) {
+        const mulaiEl = document.getElementById(mulaiId);
+        const selesaiEl = document.getElementById(selesaiId);
+        const kuotaEl = document.getElementById(kuotaId);
+
+        if (!mulaiEl || !selesaiEl || !kuotaEl) return;
+        if (mulaiEl.value === "" || selesaiEl.value === "") return; // Jangan hitung kalau masih kosong
+
+        // Ambil angka jamnya (contoh: "08:00" -> 8)
+        const jamMulai = parseInt(mulaiEl.value.split(':')[0]);
+        const jamSelesai = parseInt(selesaiEl.value.split(':')[0]);
+
+        if (jamSelesai > jamMulai) {
+            const selisihJam = jamSelesai - jamMulai;
+            const totalKuota = selisihJam * PASIEN_PER_JAM;
+            kuotaEl.value = totalKuota;
+        } else {
+            // Kalau jam selesai lebih kecil/sama dengan jam mulai
+            kuotaEl.value = 0;
+        }
+    }
+
+    /* SEARCH DENGAN FUNGSI DATA TIDAK DITEMUKAN */
     document.addEventListener('DOMContentLoaded', function() {
         const search = document.getElementById('searchJadwal');
 
         if (search) {
             search.addEventListener('keyup', function() {
                 let val = this.value.toLowerCase();
-                document.querySelectorAll('#tableJadwal tr').forEach(row => {
+                let visibleCount = 0;
+                
+                const rows = document.querySelectorAll('.jadwal-row');
+                const noDataRow = document.getElementById('noDataRowSearch');
+
+                rows.forEach(row => {
                     let namaEl = row.querySelector('.nama');
                     if (!namaEl) return;
-                    row.style.display = namaEl.innerText.toLowerCase().includes(val) ? '' : 'none';
+                    
+                    if (namaEl.innerText.toLowerCase().includes(val)) {
+                        row.style.display = '';
+                        visibleCount++;
+                    } else {
+                        row.style.display = 'none';
+                    }
                 });
+
+                if (noDataRow) {
+                    if (visibleCount === 0) {
+                        noDataRow.classList.remove('hidden');
+                    } else {
+                        noDataRow.classList.add('hidden');
+                    }
+                }
             });
         }
     });
