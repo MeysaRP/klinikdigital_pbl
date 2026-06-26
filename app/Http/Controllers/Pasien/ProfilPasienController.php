@@ -18,6 +18,14 @@ class ProfilPasienController extends Controller
             $kategori = 'Tenaga Kependidikan';
         }
 
+        // Label dinamis NIM / NIK
+        $labelIdentitas = '-';
+        if ($kategori === 'Mahasiswa') {
+            $labelIdentitas = 'NIM';
+        } elseif (in_array($kategori, ['Dosen', 'Tenaga Kependidikan'])) {
+            $labelIdentitas = 'NIK';
+        }
+
         $initials = 'PS';
         if ($user && $user->name) {
             $words = explode(' ', trim($user->name));
@@ -28,20 +36,22 @@ class ProfilPasienController extends Controller
         }
 
         $profil = [
-            'nama' => $user->name,
-            'email' => $user->email,
-            'tgl_lahir' => $user->tgl_lahir ?? now()->subYears(20)->format('Y-m-d'),
-            'jk' => $user->jk ?? 'Laki-laki',
-            'no_hp' => $user->no_hp ?? '-',
-            'alamat' => $user->alamat ?? '-',
-            'kategori' => $kategori,
+            'nama'         => $user->name,
+            'email'        => $user->email,
+            'no_identitas' => $user->no_identitas ?? '-',
+            'tgl_lahir'    => $user->tgl_lahir ?? now()->subYears(20)->format('Y-m-d'),
+            'jk'           => $user->jk ?? 'Laki-laki',
+            'no_hp'        => $user->no_hp ?? '-',
+            'alamat'       => $user->alamat ?? '-',
+            'kategori'     => $kategori,
         ];
 
         return view('pages.pasien.profil', [
-            'profil'      => $profil,
-            'userName'    => $user->name ?? 'Pasien',
-            'userRole'    => 'Pasien',
-            'userInitial' => $initials,
+            'profil'         => $profil,
+            'labelIdentitas' => $labelIdentitas,
+            'userName'       => $user->name ?? 'Pasien',
+            'userRole'       => 'Pasien',
+            'userInitial'    => $initials,
         ]);
     }
 

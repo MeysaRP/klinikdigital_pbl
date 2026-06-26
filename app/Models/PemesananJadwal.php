@@ -12,8 +12,10 @@ class PemesananJadwal extends Model
 {
     use HasFactory;
 
+    // Menentukan nama tabel yang digunakan oleh model ini
     protected $table = 'pemesanan_jadwals';
 
+    // Menentukan kolom-kolom yang dapat diisi secara massal
     protected $fillable = [
         'user_id',
         'dokter_id',
@@ -28,6 +30,7 @@ class PemesananJadwal extends Model
         'status',
     ];
 
+    // Menentukan atribut tambahan yang akan ditambahkan ke model saat diambil dari database
     protected $appends = [
         'slot_mulai',
         'slot_selesai',
@@ -36,6 +39,7 @@ class PemesananJadwal extends Model
     // Aksesor untuk menghitung slot mulai berdasarkan jam_mulai dan nomor_antrian
     public function getSlotMulaiAttribute()
     {
+        // Jika jam_mulai atau nomor_antrian tidak ada, kembalikan null
         if (! $this->jam_mulai || ! $this->nomor_antrian) {
             return null;
         }
@@ -43,6 +47,7 @@ class PemesananJadwal extends Model
         // Setiap pasien mendapat slot 15 menit, jadi kita hitung offset berdasarkan nomor antrian
         $offsetMinutes = max(0, ((int) $this->nomor_antrian - 1) * 15);
 
+        // Hitung slot mulai dengan menambahkan offset ke jam_mulai
         return Carbon::parse($this->jam_mulai)
             ->addMinutes($offsetMinutes)
             ->format('H:i');
@@ -50,7 +55,8 @@ class PemesananJadwal extends Model
 
     // Aksesor untuk menghitung slot selesai berdasarkan slot_mulai
     public function getSlotSelesaiAttribute()
-    {
+    {   
+        // Jika slot_mulai tidak ada, kembalikan null
         if (! $this->slot_mulai) {
             return null;
         }

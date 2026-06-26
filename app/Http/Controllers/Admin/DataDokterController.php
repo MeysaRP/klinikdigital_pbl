@@ -24,12 +24,21 @@ class DataDokterController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:dokters,email|unique:users,email',
-            'no_str' => 'nullable',
-            'no_hp' => 'nullable',
+            'no_str' => 'required',
+            'no_hp' => 'required',
             'password' => 'required|min:6',
+        ], [
+            'name.required' => 'Nama dokter wajib diisi!',
+            'email.required' => 'Email wajib diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'email.unique' => 'Email sudah digunakan!',
+            'no_str.required' => 'No. STR wajib diisi!',
+            'no_hp.required' => 'No. HP wajib diisi!',
+            'password.required' => 'Password wajib diisi!',
+            'password.min' => 'Password minimal 6 karakter!',
         ]);
 
-    // Buat user untuk login dokter
+        // Buat user untuk login dokter
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -39,8 +48,8 @@ class DataDokterController extends Controller
             'role' => 'dokter',
             'password' => Hash::make($request->password),
         ]);
-        
-    // Buat data dokter
+
+        // Buat data dokter
         $dokter = Dokter::create([
             'nama' => $request->name,
             'email' => $request->email,
@@ -53,17 +62,24 @@ class DataDokterController extends Controller
         return response()->json($dokter);
     }
 
-
     // Mengupdate data dokter
     public function update(Request $request, Dokter $dokter)
     {
         $v = $request->validate([
-            'email'   => 'required|email|unique:dokters,email,'.$dokter->id,
+            'email'   => 'required|email|unique:dokters,email,'.$dokter->id.'|unique:users,email,'.$dokter->id.',email', // Exclude email ini sendiri dari cek unique users
             'name'    => 'required',
             'no_str'  => 'required',
             'no_hp'   => 'required',
             'status'  => 'required|in:Aktif,Nonaktif',
             'password'=> 'nullable|min:6'
+        ], [
+            'email.required' => 'Email wajib diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'email.unique' => 'Email sudah digunakan!',
+            'name.required' => 'Nama dokter wajib diisi!',
+            'no_str.required' => 'No. STR wajib diisi!',
+            'no_hp.required' => 'No. HP wajib diisi!',
+            'password.min' => 'Password minimal 6 karakter!',
         ]);
 
         $user = User::where('email', $dokter->email)->first();

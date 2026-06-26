@@ -9,8 +9,10 @@ use App\Models\Jadwal;
 // Model untuk tabel 'dokters'
 class Dokter extends Model
 {
+    // Gunakan trait HasFactory untuk mendukung pembuatan instance model menggunakan factory
     use HasFactory;
-
+    
+    // Tentukan nama tabel yang digunakan
     protected $fillable = [
         'email',
         'nama',
@@ -19,7 +21,7 @@ class Dokter extends Model
         'status',
         'password',
     ];
-
+    // Tentukan atribut yang harus disembunyikan saat model dikonversi ke array atau JSON
     protected $hidden = [
         'password',
     ];

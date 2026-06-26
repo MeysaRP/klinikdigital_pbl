@@ -9,8 +9,10 @@ use App\Models\Dokter;
 // Model untuk tabel 'jadwals'
 class Jadwal extends Model
 {
+    // Tentukan nama tabel yang digunakan
     protected $table = 'jadwals';
-
+    
+    // Tentukan atribut yang dapat diisi secara massal
     protected $fillable = [
         'dokter_id',
         'hari',

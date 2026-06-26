@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PemesananJadwal;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class RiwayatMedisController extends Controller
 {
@@ -80,15 +81,21 @@ class RiwayatMedisController extends Controller
             abort(404);
         }
 
+        // Hitung masa berlaku resep (H+1 dari tanggal pemeriksaan)
+        $masaBerlaku = (int) env('RESEP_BERLAKU_HARI', 1);
+        $tanggalBerlaku = Carbon::parse($booking->tanggal)->addDays($masaBerlaku);
+        $tanggalBerlakuFormatted = $tanggalBerlaku->locale('id')->translatedFormat('d F Y');
+
         $data = [
-            'dokter'    => $booking->dokter?->nama ?? '-',
-            'tanggal'   => $booking->tanggal,
-            'pasien'    => $booking->nama_pasien ?? $booking->email,
-            'gejala'    => $this->toSafeString($booking->keluhan),
-            'diagnosa'  => $this->toSafeString($rekam->diagnosa),
-            'catatan'   => $this->toSafeString($rekam->catatan_dokter),
-            'resep'     => $this->toSafeString($rekam->resep_obat),
-            'resep_raw' => $rekam->resep_obat,
+            'dokter'          => $booking->dokter?->nama ?? '-',
+            'tanggal'         => $booking->tanggal,
+            'pasien'          => $booking->nama_pasien ?? $booking->email,
+            'gejala'          => $this->toSafeString($booking->keluhan),
+            'diagnosa'        => $this->toSafeString($rekam->diagnosa),
+            'catatan'         => $this->toSafeString($rekam->catatan_dokter),
+            'resep'           => $this->toSafeString($rekam->resep_obat),
+            'resep_raw'       => $rekam->resep_obat,
+            'tanggal_berlaku' => $tanggalBerlakuFormatted,
         ];
 
         return Pdf::loadView('pages.pasien.pdf_riwayat', compact('data'))

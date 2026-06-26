@@ -9,30 +9,36 @@ use App\Models\Dokter;
 
 class JadwalDokterController extends Controller
 {
+    // Fungsi untuk menampilkan jadwal dokter
     public function index()
     {
-
+        // Ambil data dokter berdasarkan email dari session
         $dokter = Dokter::where('email', session('email'))->first();
         $dokterId = $dokter ? $dokter->id : 0;
 
+        // Cek apakah dokter ditemukan dan role sesuai
         if (! $dokterId || session('role') !== 'dokter') {
             return redirect()->route('login')->with('error', 'Sesi habis atau akses ditolak. Silakan login ulang.');
         }
 
+        // Ambil data jadwal dokter
         $jadwals = Jadwal::withCount('pemesanan')
             ->where('dokter_id', $dokterId) 
             ->orderByRaw("FIELD(hari,'Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu')")
             ->orderBy('jam_mulai')
             ->get();
 
+        // Hitung jumlah jadwal aktif dan cuti
         $aktifCount = $jadwals->where('status', 'Aktif')->count();
         $cutiCount = $jadwals->where('status', 'Cuti')->count();
         $cutiDays = $jadwals->where('status', 'Cuti')->pluck('hari')->unique()->implode(', ');
-        
+
+        // Hitung jumlah pasien hari ini
         $pasienHariIni = PemesananJadwal::where('dokter_id', $dokterId) 
             ->where('tanggal', now()->format('Y-m-d'))
             ->count();
-
+            
+        // Kirim data ke view
         return view('pages.dokter.jadwal_saya', [
             'jadwals' => $jadwals,
             'aktifCount' => $aktifCount,

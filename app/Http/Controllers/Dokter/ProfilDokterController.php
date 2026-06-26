@@ -8,12 +8,16 @@ use App\Models\PemesananJadwal;
 
 class ProfilDokterController extends Controller
 {
+    // Fungsi untuk menampilkan profil dokter
     public function index()
     {
+        // Ambil ID dokter dari session
         $dokterId = session('id');
 
+        // Ambil data dokter berdasarkan ID
         $dokter = Dokter::find($dokterId);
 
+        // Jika dokter tidak ditemukan, redirect ke halaman login dengan pesan error
         if (!$dokter) {
             return redirect()->route('login')
                 ->with('error', 'Data dokter tidak ditemukan.');
@@ -23,7 +27,8 @@ class ProfilDokterController extends Controller
         $totalPasien = PemesananJadwal::where('dokter_id', $dokterId)
             ->whereDate('tanggal', today())
             ->count();
-
+            
+        // Kirim data ke view
         return view('pages.dokter.profil', [
             'dokter' => $dokter,
             'totalPasien' => $totalPasien,

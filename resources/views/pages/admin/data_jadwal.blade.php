@@ -1,8 +1,8 @@
 @extends('layouts.dashboard', [
-'pageTitle' => 'Data Jadwal',
-'userName' => 'Halo, ' . (session('name') ?? 'Admin'),
-'userRole' => 'Admin',
-'userInitial' => 'A'
+    'pageTitle' => 'Data Jadwal',
+    'userName' => 'Halo, ' . (session('name') ?? 'Admin'),
+    'userRole' => 'Admin',
+    'userInitial' => 'A'
 ])
 
 @section('sidebar')
@@ -47,7 +47,6 @@
                     <tr class="hover:bg-gray-50 transition">
 
                         <td class="px-5 py-3.5 font-medium nama">
-                            {{-- DEBUG: Kalau muncul "Dokter Tidak Ditemukan", berarti relasi DB bermasalah --}}
                             {{ optional($j->dokter)->nama ?? 'Dokter Tidak Ditemukan (ID: ' . $j->dokter_id . ')' }}
                         </td>
 
@@ -88,9 +87,9 @@
     </div>
 </div>
 
-{{-- ================= MODAL TAMBAH ================= --}}
+{{-- ================= MODAL TAMBAH (TANPA STATUS) ================= --}}
 <div id="modalTambah" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center z-50 pointer-events-none p-4">
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-y-auto max-h-[calc(100vh-4rem)]">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-y-auto max-h-[calc(100vh-4rem]">
 
         <form action="{{ route('data.jadwal.store') }}" method="POST">
             @csrf
@@ -150,15 +149,6 @@
                         class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition" min="1" placeholder="Contoh: 15">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
-                    <select name="status" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
-                        <option>Aktif</option>
-                        <option>Nonaktif</option>
-                        <option>Cuti</option>
-                    </select>
-                </div>
-
             </div>
 
             <div class="flex justify-center gap-4 p-6 pt-2">
@@ -176,7 +166,7 @@
     </div>
 </div>
 
-{{-- ================= MODAL EDIT ================= --}}
+{{-- ================= MODAL EDIT (ADA STATUS) ================= --}}
 <div id="modalEdit" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden items-center justify-center z-50 pointer-events-none p-4">
     <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-y-auto max-h-[calc(100vh-4rem)]">
 
@@ -236,15 +226,16 @@
                         class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition" min="1">
                 </div>
 
+                {{-- DROPDOWN STATUS HANYA ADA DI EDIT --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1">Status</label>
                     <select id="eStatus" name="status" class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition appearance-none">
-                        <option>Aktif</option>
-                        <option>Nonaktif</option>
-                        <option>Cuti</option>
+                        <option value="Aktif">Aktif</option>
+                        <option value="Nonaktif">Nonaktif</option>
+                        <option value="Cuti">Cuti</option>
                     </select>
                 </div>
-
+                
             </div>
 
             <div class="flex justify-center gap-4 p-6 pt-2">
@@ -284,7 +275,6 @@
         document.getElementById('formEdit').action =
             baseUrl.replace('__ID__', el.dataset.id);
 
-        // Mengisi ID dokter (tersembunyi) dan Nama dokter (tampilan read-only)
         document.getElementById('eDokterId').value = el.dataset.dokter;
         document.getElementById('eDokterNama').value = el.dataset.dokterNama;
 
@@ -292,6 +282,7 @@
         document.getElementById('eMulai').value = el.dataset.mulai.substring(0, 5);
         document.getElementById('eSelesai').value = el.dataset.selesai.substring(0, 5);
         document.getElementById('eKuota').value = el.dataset.kuota;
+        // AMBIL BARIS INI JUGA BIAR GA ERROR
         document.getElementById('eStatus').value = el.dataset.status;
 
         const modal = document.getElementById('modalEdit');
@@ -328,7 +319,7 @@
     Swal.fire({
         icon: 'success',
         title: 'Berhasil',
-        text: "{{ session('success ') }}",
+        text: "{{ session('success') }}",
         timer: 2000,
         showConfirmButton: false
     });
@@ -339,8 +330,8 @@
 <script>
     Swal.fire({
         icon: 'error',
-        title: 'Gagal',
-        text: "{{ session('error ') }}"
+        title: 'Gagal', 
+        text: "{{ session('error') }}"
     });
 </script>
 @endif

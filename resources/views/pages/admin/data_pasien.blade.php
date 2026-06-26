@@ -14,17 +14,36 @@
 
     <div class="space-y-5">
 
-        <!-- SEARCH -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div class="relative w-full max-w-sm">
-                <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none"
-                    stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input type="text" oninput="cariPasien(this.value)" placeholder="Cari Pasien..."
-                    class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-[#09637E]/20 focus:border-[#09637E] transition">
-            </div>
+                <!-- SEARCH & FILTER -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-4">
+            <form method="GET" class="flex flex-col sm:flex-row gap-3">
+                <!-- Search -->
+                <div class="relative w-full sm:w-1/3">
+                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" oninput="cariPasien(this.value)" placeholder="Cari nama pasien..." class="w-full border border-gray-200 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#09637E]/10 focus:border-[#09637E]/40">
+                </div>
+
+                <!-- Dropdown Kategori -->
+                <select name="kategori" class="border border-gray-200 rounded-lg px-3 py-2.5 text-sm w-full sm:w-auto">
+                    <option value="">Semua Kategori</option>
+                    <option value="Mahasiswa" {{ request('kategori') == 'Mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                    <option value="Dosen" {{ request('kategori') == 'Dosen' ? 'selected' : '' }}>Dosen</option>
+                    <option value="Tenaga Kependidikan" {{ request('kategori') == 'Tenaga Kependidikan' ? 'selected' : '' }}>Tenaga Kependidikan</option>
+                </select>
+
+                <!-- Button Filter -->
+                <button type="submit"
+                        class="bg-[#09637E] text-white px-4 py-2 rounded-lg text-sm hover:opacity-90">
+                    Filter
+                </button>
+
+                <!-- Reset -->
+                <a href="{{ route('data.pasien') }}" class="px-4 py-2 rounded-lg text-sm border border-gray-200 text-gray-600 hover:bg-gray-50">
+                    Reset
+                </a>
+            </form>
         </div>
 
         <!-- TABLE -->
@@ -36,6 +55,7 @@
                     <thead class="bg-gray-50 text-gray-500 text-xs uppercase font-semibold">
                         <tr>
                             <th class="px-5 py-3.5 text-left">ID</th>
+                            <th class="px-5 py-3.5 text-left">No. Identitas</th>
                             <th class="px-5 py-3.5 text-left">Nama</th>
                             <th class="px-5 py-3.5 text-left">Kategori</th>
                             <th class="px-5 py-3.5 text-left">No HP</th>
@@ -52,6 +72,10 @@
                                 data-nama="{{ $p->name }}">
 
                                 <td class="px-5 py-3.5 text-xs text-gray-500">{{ $p->id }}</td>
+
+                                <td class="px-5 py-3.5 text-sm text-gray-800 font-medium">
+                                    {{ $p->no_identitas ?? '-' }}
+                                </td>
 
                                 <td class="px-5 py-3.5 font-medium">
                                     {{ $p->name }}

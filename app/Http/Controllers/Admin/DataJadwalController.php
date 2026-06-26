@@ -25,8 +25,8 @@ class DataJadwalController extends Controller
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
             'kuota_pasien' => 'required|integer',
-            'status' => 'required',
         ]);
+
         Jadwal::create($request->only(
             'dokter_id',
             'hari',
@@ -35,6 +35,15 @@ class DataJadwalController extends Controller
             'kuota_pasien',
             'status'
         ));
+
+        Jadwal::create([
+            'dokter_id' => $request->dokter_id,
+            'hari' => $request->hari,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai,
+            'kuota_pasien' => $request->kuota_pasien,
+            'status' => 'Aktif',  
+        ]);
 
         return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan');
     }
@@ -47,7 +56,7 @@ class DataJadwalController extends Controller
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
             'kuota_pasien' => 'required|integer',
-            'status' => 'required',
+            'status' => 'required',  
         ]);
 
         // Mencari jadwal berdasarkan ID dan mengupdate datanya

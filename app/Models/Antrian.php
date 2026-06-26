@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Antrian extends Model
 {
+    // Tentukan nama tabel yang digunakan
     protected $fillable = [
         'pemesanan_id',
         'nomor_antrian',
