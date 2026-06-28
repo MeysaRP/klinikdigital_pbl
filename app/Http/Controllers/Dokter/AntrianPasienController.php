@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Antrian;
 use App\Models\Dokter;
 use App\Models\RekamMedis;
+use App\Models\PemesananJadwal;
 use Illuminate\Http\Request;
 
 class AntrianPasienController extends Controller
@@ -24,7 +25,8 @@ class AntrianPasienController extends Controller
         $antrians = Antrian::with('pemesanan', 'rekamMedis')
             ->whereHas('pemesanan', function($query) use ($dokterId, $tanggal) {
                 $query->where('dokter_id', $dokterId)
-                      ->where('tanggal', $tanggal);
+                      ->where('tanggal', $tanggal)
+                      ->where('status', '!=', 'Dibatalkan'); 
             })
             ->orderBy('nomor_antrian', 'asc')
             ->get();
@@ -91,5 +93,46 @@ class AntrianPasienController extends Controller
             'catatan' => $request->catatan_dokter,
             'resep' => $resepObat
         ]);
+    }
+
+    // Fungsi untuk mendapatkan riwayat pasien berdasarkan email
+    public function getRiwayatPasien(Request $request)
+    {
+        $email = $request->query('email');
+
+        // Ambil data riwayat pasien berdasarkan email 
+        $riwayat = PemesananJadwal::with(['dokter', 'antrian.rekamMedis'])
+            ->where('email', $email)
+            ->where('status', 'Selesai')
+            ->whereHas('antrian.rekamMedis')    
+            ->orderByDesc('tanggal')
+            ->get()
+            ->map(function ($item) {
+                $rekam = $item->antrian?->rekamMedis;
+
+                // Fungsi untuk mengubah array atau object menjadi string
+                $toStr = function ($val) {
+                    if (is_array($val)) {
+                        $flat = [];
+                        array_walk_recursive($val, function ($v) use (&$flat) {
+                            if (!is_array($v)) $flat[] = $v;
+                        });
+                        return count($flat) > 0 ? implode(', ', $flat) : '-';
+                    }
+                    if (is_object($val)) return json_encode((array) $val, JSON_UNESCAPED_UNICODE);
+                    return $val ?? '-';
+                };
+
+                return [
+                    'tanggal'  => date('d M Y', strtotime($item->tanggal)),
+                    'dokter'   => 'dr. ' . ($item->dokter?->nama ?? '-'),
+                    'keluhan'  => $item->keluhan ?? '-',
+                    'diagnosa' => $toStr($rekam?->diagnosa),
+                    'catatan'  => $toStr($rekam?->catatan_dokter),
+                    'resep'    => $rekam?->resep_obat ?? null,
+                ];
+            });
+
+        return response()->json($riwayat);
     }
 }

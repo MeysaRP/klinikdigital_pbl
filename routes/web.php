@@ -60,6 +60,7 @@ Route::prefix('dashboard')->middleware('auth.session')->group(function () {
 
         Route::post('/antrian/simpan-rekam-medis', [AntrianPasienController::class, 'simpanRekamMedis'])
             ->name('dokter.rekammedis.simpan');
+        Route::get('/dokter/riwayat-pasien', [AntrianPasienController::class, 'getRiwayatPasien'])->name('dokter.riwayat-pasien');
 
         Route::get('/profil', [ProfilDokterController::class, 'index'])->name('dokter.profil');
     });
