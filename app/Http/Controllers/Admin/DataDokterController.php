@@ -65,8 +65,11 @@ class DataDokterController extends Controller
     // Mengupdate data dokter
     public function update(Request $request, Dokter $dokter)
     {
+        $userLama = User::where('email', $dokter->email)->first();
+        $idUserLama = $userLama ? $userLama->id : 'NULL';
+
         $v = $request->validate([
-            'email'   => 'required|email|unique:dokters,email,'.$dokter->id.'|unique:users,email,'.$dokter->id.',email', // Exclude email ini sendiri dari cek unique users
+            'email'   => 'required|email|unique:dokters,email,'.$dokter->id.'|unique:users,email,'.$idUserLama,
             'name'    => 'required',
             'no_str'  => 'required',
             'no_hp'   => 'required',
@@ -82,8 +85,6 @@ class DataDokterController extends Controller
             'password.min' => 'Password minimal 6 karakter!',
         ]);
 
-        $user = User::where('email', $dokter->email)->first();
-
         $dokter->email = $v['email'];
         $dokter->nama = $v['name'];
         $dokter->str = $v['no_str'];
@@ -96,18 +97,18 @@ class DataDokterController extends Controller
 
         $dokter->save();
 
-        if ($user) {
-            $user->name = $v['name'];
-            $user->email = $v['email'];
-            $user->no_str = $v['no_str'];
-            $user->no_hp = $v['no_hp'];
-            $user->status = $v['status'];
+        if ($userLama) {
+            $userLama->name = $v['name'];
+            $userLama->email = $v['email'];
+            $userLama->no_str = $v['no_str'];
+            $userLama->no_hp = $v['no_hp'];
+            $userLama->status = $v['status'];
 
             if (!empty($v['password'])) {
-                $user->password = Hash::make($v['password']);
+                $userLama->password = Hash::make($v['password']);
             }
 
-            $user->save();
+            $userLama->save();
         }
 
         return response()->json($dokter);
